@@ -141,7 +141,7 @@ export function AttractionsShowcase({
       className="relative h-[550vh] bg-[#050B14]"
     >
       {/* 100vh Pinned Viewport Container with Precise Height Budgeting */}
-      <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-between bg-[#050B14] pt-14 lg:pt-16 select-none">
+      <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-between pt-28 sm:pt-32 pb-8 bg-[#050B14] select-none">
         {/* HERO BACKGROUND INTEGRATION: Deeply Darkened Park Entrance Arch Parallax */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-25 z-0">
           <motion.div
@@ -174,15 +174,15 @@ export function AttractionsShowcase({
         <div className="absolute bottom-1/4 right-1/4 w-[600px] h-[600px] bg-orange-600/10 blur-[160px] pointer-events-none rounded-full" />
 
         {/* COMPACT CINEMATIC HUD HEADER (Rows 1 & 2) */}
-        <header className="relative z-20 px-4 sm:px-8 max-w-7xl mx-auto w-full shrink-0">
+        <header className="relative z-20 px-6 sm:px-8 lg:px-10 max-w-7xl mx-auto w-full shrink-0">
           {/* Row 1: Kicker & Title (Left) + Active Realm Tracker (Right) */}
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-2.5">
             <div>
-              <div className="inline-flex items-center gap-1.5 text-xs uppercase tracking-widest text-[#FF5500] mb-0.5 font-display">
+              <div className="inline-flex items-center gap-2 text-xs font-bold tracking-widest uppercase text-[#FF5500] mb-2.5 font-display">
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>THE 8 CINEMATIC REALMS</span>
               </div>
-              <h2 className="text-xl sm:text-2xl lg:text-3xl font-black text-white tracking-tight leading-tight font-display">
+              <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight mb-2 sm:mb-3 font-display">
                 WORLD-CLASS ATTRACTIONS
               </h2>
             </div>

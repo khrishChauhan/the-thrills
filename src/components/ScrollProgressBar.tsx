@@ -2,12 +2,17 @@
 
 import React, { useEffect, useState } from "react";
 
+/**
+ * Precision Hairline Top Scroll Progress Indicator
+ * Styled like a calibrated luxury instrument needle (1.5px) with subtle ambient glow.
+ */
 export function ScrollProgressBar() {
   const [scrollProgress, setScrollProgress] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => {
-      const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
+      const totalScroll =
+        document.documentElement.scrollHeight - window.innerHeight;
       if (totalScroll > 0) {
         const currentProgress = window.scrollY / totalScroll;
         setScrollProgress(Math.min(Math.max(currentProgress, 0), 1));
@@ -23,10 +28,10 @@ export function ScrollProgressBar() {
   return (
     <div
       aria-hidden="true"
-      className="fixed top-0 left-0 right-0 h-[2.5px] z-50 pointer-events-none bg-transparent"
+      className="fixed top-0 left-0 right-0 h-[1.5px] z-50 pointer-events-none bg-transparent"
     >
       <div
-        className="h-full bg-gradient-to-r from-[#0066FF] via-[#38BDF8] to-[#FF5500] transition-transform duration-75 ease-out origin-left shadow-[0_0_8px_rgba(0,102,255,0.6)]"
+        className="h-full bg-gradient-to-r from-[#0066FF] via-[#38BDF8] to-[#FF5500] opacity-80 shadow-[0_0_8px_rgba(0,102,255,0.6)] transition-transform duration-75 origin-left"
         style={{ transform: `scaleX(${scrollProgress})` }}
       />
     </div>

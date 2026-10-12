@@ -52,147 +52,164 @@ export function Navbar({
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-40 transition-all duration-300 bg-[#050B14]/90 backdrop-blur-xl border-b border-white/[0.08] shadow-[0_4px_30px_rgba(0,0,0,0.5)] py-3">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between gap-8">
-          {/* Logo */}
-          <button
-            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="flex items-center gap-2.5 text-left focus:outline-none group shrink-0"
-          >
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#0066FF] to-[#FF5500] flex items-center justify-center p-0.5 shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform duration-200">
-              <div className="w-full h-full bg-[#050B14] rounded-[6px] flex items-center justify-center">
-                <span className="font-extrabold text-sm tracking-tighter bg-gradient-to-r from-blue-400 to-orange-400 bg-clip-text text-transparent font-display">
-                  TP
-                </span>
-              </div>
-            </div>
-            <div className="flex flex-col">
-              <span className="text-base sm:text-lg font-extrabold tracking-tight text-white whitespace-nowrap group-hover:text-blue-400 transition-colors font-display">
-                THE THRILLS
+    <header className="fixed top-0 left-0 right-0 z-40 h-[68px] flex items-center bg-[#050B14]/75 backdrop-blur-md border-b border-white/[0.06] shadow-[0_4px_30px_rgba(0,0,0,0.4)] transition-all duration-300">
+      <div className="max-w-7xl mx-auto w-full px-6 sm:px-8 lg:px-10 flex items-center justify-between">
+        {/* Logo */}
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          className="flex items-center gap-2.5 text-left focus:outline-none group shrink-0"
+        >
+          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#0066FF] to-[#FF5500] flex items-center justify-center p-0.5 shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform duration-200">
+            <div className="w-full h-full bg-[#050B14] rounded-[6px] flex items-center justify-center">
+              <span className="font-extrabold text-sm tracking-tighter bg-gradient-to-r from-blue-400 to-orange-400 bg-clip-text text-transparent font-display">
+                TP
               </span>
             </div>
+          </div>
+          <div className="flex flex-col">
+            <span className="text-base sm:text-lg font-extrabold tracking-tight text-white whitespace-nowrap group-hover:text-blue-400 transition-colors font-display">
+              THE THRILLS
+            </span>
+          </div>
+        </button>
+
+        {/* Center Nav Links with Refined 2px Glowing Micro-Indicator */}
+        <nav className="hidden md:flex items-center gap-8 lg:gap-10 text-[13px] font-medium tracking-wide">
+          <button
+            onClick={() => handleNavClick("attractions", "All 8 Realms")}
+            className={`relative py-1 whitespace-nowrap shrink-0 transition-colors duration-200 ${
+              activeSection === "attractions"
+                ? "text-white font-semibold"
+                : "text-slate-400 hover:text-white"
+            }`}
+          >
+            <span>Attractions</span>
+            {activeSection === "attractions" && (
+              <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-5 h-[2px] bg-gradient-to-r from-[#0066FF] to-[#38BDF8] rounded-full shadow-[0_0_8px_rgba(56,189,248,0.7)]" />
+            )}
+          </button>
+          <button
+            onClick={() => handleNavClick("attractions", "Water Park")}
+            className="relative py-1 whitespace-nowrap shrink-0 text-slate-400 hover:text-white transition-colors duration-200"
+          >
+            <span>Water Park</span>
+          </button>
+          <button
+            onClick={() => handleNavClick("attractions", "Resort & Dining")}
+            className="relative py-1 whitespace-nowrap shrink-0 text-slate-400 hover:text-white transition-colors duration-200"
+          >
+            <span>Resort</span>
+          </button>
+          <button
+            onClick={() => handleNavClick("attractions", "Resort & Dining")}
+            className="relative py-1 whitespace-nowrap shrink-0 text-slate-400 hover:text-white transition-colors duration-200"
+          >
+            <span>Dining</span>
+          </button>
+          <button
+            onClick={() => handleNavClick("passes")}
+            className={`relative py-1 whitespace-nowrap shrink-0 transition-colors duration-200 ${
+              activeSection === "passes"
+                ? "text-white font-semibold"
+                : "text-slate-400 hover:text-white"
+            }`}
+          >
+            <span>Passes</span>
+            {activeSection === "passes" && (
+              <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-5 h-[2px] bg-gradient-to-r from-[#0066FF] to-[#38BDF8] rounded-full shadow-[0_0_8px_rgba(56,189,248,0.7)]" />
+            )}
+          </button>
+        </nav>
+
+        {/* Right Cluster Controls */}
+        <div className="flex items-center gap-3.5 shrink-0">
+          {/* Atmosphere Sound Button */}
+          <button
+            onClick={handleAudioToggle}
+            title={
+              isAudioPlaying
+                ? "Mute ambient atmosphere sound"
+                : "Play luxury park atmosphere"
+            }
+            className={`p-2 rounded-lg transition-all border ${
+              isAudioPlaying
+                ? "text-sky-400 bg-sky-500/10 border-sky-500/30 shadow-[0_0_12px_rgba(56,189,248,0.3)]"
+                : "text-slate-400 hover:text-white hover:bg-white/[0.05] border-transparent hover:border-white/[0.08]"
+            }`}
+            aria-label="Toggle ambient atmosphere sound"
+          >
+            {isAudioPlaying ? (
+              <Volume2 className="w-4 h-4 animate-pulse" />
+            ) : (
+              <VolumeX className="w-4 h-4" />
+            )}
+            {isAudioPlaying && (
+              <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-sky-400 animate-ping" />
+            )}
           </button>
 
-          {/* Desktop Nav Links */}
-          <nav className="hidden md:flex items-center gap-7 text-sm font-medium text-slate-300">
-            <button
-              onClick={() => handleNavClick("attractions", "All 8 Realms")}
-              className={`relative py-1 whitespace-nowrap shrink-0 transition-colors duration-200 hover:text-white ${
-                activeSection === "attractions" ? "text-white font-semibold" : "text-slate-300"
-              }`}
-            >
-              Attractions
-              {activeSection === "attractions" && (
-                <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#0066FF] to-[#FF5500] rounded-full" />
-              )}
-            </button>
-            <button
-              onClick={() => handleNavClick("attractions", "Water Park")}
-              className="relative py-1 whitespace-nowrap shrink-0 transition-colors duration-200 hover:text-white text-slate-300"
-            >
-              Water Park
-            </button>
-            <button
-              onClick={() => handleNavClick("attractions", "Resort & Dining")}
-              className="relative py-1 whitespace-nowrap shrink-0 transition-colors duration-200 hover:text-white text-slate-300"
-            >
-              Resort
-            </button>
-            <button
-              onClick={() => handleNavClick("attractions", "Resort & Dining")}
-              className="relative py-1 whitespace-nowrap shrink-0 transition-colors duration-200 hover:text-white text-slate-300"
-            >
-              Dining
-            </button>
-            <button
-              onClick={() => handleNavClick("passes")}
-              className={`relative py-1 whitespace-nowrap shrink-0 transition-colors duration-200 hover:text-white ${
-                activeSection === "passes" ? "text-white font-semibold" : "text-slate-300"
-              }`}
-            >
-              Passes
-              {activeSection === "passes" && (
-                <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-[#0066FF] to-[#FF5500] rounded-full" />
-              )}
-            </button>
-          </nav>
+          {/* Ticket Notification Button */}
+          <button
+            onClick={onOpenPassViewer}
+            title="My Booked Digital Passes"
+            className="relative p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/[0.05] border border-transparent hover:border-white/[0.08] transition-all"
+            aria-label="View digital passes"
+          >
+            <Ticket className="w-4 h-4" />
+            <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-[#FF5500] shadow-[0_0_6px_#FF5500]" />
+          </button>
 
-          {/* Utility Controls */}
-          <div className="flex items-center gap-3 shrink-0">
-            {/* Audio Atmosphere Toggle */}
-            <button
-              onClick={handleAudioToggle}
-              title={
-                isAudioPlaying
-                  ? "Mute ambient atmosphere sound"
-                  : "Play luxury park atmosphere"
-              }
-              className={`p-2 rounded-lg transition-colors relative ${
-                isAudioPlaying
-                  ? "text-sky-400 bg-sky-500/10 shadow-[0_0_12px_rgba(56,189,248,0.3)]"
-                  : "text-slate-400 hover:text-white hover:bg-white/[0.06]"
-              }`}
-              aria-label="Toggle ambient atmosphere sound"
-            >
-              {isAudioPlaying ? (
-                <Volume2 className="w-4 h-4 animate-pulse" />
-              ) : (
-                <VolumeX className="w-4 h-4" />
-              )}
-              {isAudioPlaying && (
-                <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-sky-400 animate-ping" />
-              )}
-            </button>
+          {/* Gate Staff Sleek Minimalist Ghost Pill */}
+          <button
+            onClick={onOpenGateStaff}
+            title="Gate Staff Terminal"
+            className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 text-xs text-slate-300 hover:text-white bg-white/[0.03] hover:bg-white/[0.08] border border-white/[0.06] hover:border-white/[0.15] rounded-lg transition-all"
+          >
+            <ShieldCheck className="w-3.5 h-3.5 text-sky-400" />
+            <span>Gate Staff</span>
+          </button>
 
-            {/* Digital Passes Button */}
-            <button
-              onClick={onOpenPassViewer}
-              title="My Booked Digital Passes"
-              className="relative p-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/[0.06] transition-colors"
-            >
-              <Ticket className="w-4 h-4" />
-              <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-[#FF5500]" />
-            </button>
+          {/* Anodized Sapphire & Ember Flare CTA Button */}
+          <button
+            onClick={() => onOpenBooking()}
+            className="relative group overflow-hidden px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold text-white transition-all duration-300 active:scale-[0.98] whitespace-nowrap shrink-0 shadow-[0_0_20px_rgba(0,102,255,0.25)] hover:shadow-[0_0_25px_rgba(255,85,0,0.35)] border border-blue-400/30 hover:border-orange-500/50"
+          >
+            {/* Luxury Base: Deep Midnight Sapphire to Electric Cobalt */}
+            <div className="absolute inset-0 bg-gradient-to-r from-[#0052CC] via-[#0066FF] to-[#0A47B8] transition-opacity duration-300 group-hover:opacity-90" />
 
-            {/* Gate Staff Button */}
-            <button
-              onClick={onOpenGateStaff}
-              title="Gate Ticket Validator"
-              className="hidden lg:flex items-center gap-1.5 px-2.5 py-1.5 text-xs text-slate-400 hover:text-slate-200 hover:bg-white/[0.04] rounded-lg transition-colors border border-transparent hover:border-white/[0.08]"
-            >
-              <ShieldCheck className="w-3.5 h-3.5 text-blue-400" />
-              <span>Gate Staff</span>
-            </button>
+            {/* Molten Sunset Ember Edge Glow (Right Perimeter Flare) */}
+            <div className="absolute inset-0 bg-gradient-to-l from-[#FF5500]/40 via-transparent to-transparent opacity-60 group-hover:opacity-100 transition-opacity duration-300" />
 
-            {/* Gradient CTA Button */}
-            <button
-              onClick={() => onOpenBooking()}
-              className="relative group overflow-hidden px-5 py-2.5 rounded-xl font-semibold text-xs sm:text-sm text-white bg-gradient-to-r from-[#0066FF] via-[#0052CC] to-[#FF5500] shadow-[0_0_20px_rgba(0,102,255,0.35)] hover:shadow-[0_0_25px_rgba(255,85,0,0.45)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 whitespace-nowrap shrink-0"
-            >
-              <span className="relative z-10 flex items-center gap-1.5">
-                Book Tickets
-                <span className="text-white/80 font-normal">from ₹699</span>
+            {/* Specular Top Glass Inset Highlight */}
+            <div className="absolute inset-x-0 top-0 h-[1px] bg-gradient-to-r from-transparent via-white/35 to-transparent pointer-events-none" />
+
+            {/* Button Content */}
+            <span className="relative z-10 flex items-center gap-2">
+              <span>Book Tickets</span>
+              <span className="text-[11px] font-mono px-1.5 py-0.5 rounded bg-white/10 text-white/90 border border-white/10">
+                from ₹699
               </span>
-              <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
-            </button>
+            </span>
 
-            {/* Mobile menu toggle */}
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden p-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/[0.06] transition-colors"
-              aria-label="Toggle navigation menu"
-            >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
-          </div>
+            {/* Hover Sheen Sweep */}
+            <div className="absolute inset-0 bg-white/15 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out pointer-events-none" />
+          </button>
+
+          {/* Mobile menu toggle */}
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="md:hidden p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/[0.05] transition-colors"
+            aria-label="Toggle navigation menu"
+          >
+            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
         </div>
       </div>
 
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-white/[0.08] bg-[#050B14]/98 backdrop-blur-2xl px-6 py-6 mt-3 space-y-4 animate-in slide-in-from-top-4 duration-200 shadow-2xl">
-          <div className="flex flex-col space-y-3 text-base font-medium">
+        <div className="md:hidden fixed top-[68px] left-0 right-0 border-b border-white/[0.08] bg-[#050B14]/98 backdrop-blur-2xl px-6 py-6 space-y-4 animate-in slide-in-from-top-4 duration-200 shadow-2xl">
+          <div className="flex flex-col space-y-3 text-sm font-medium">
             <button
               onClick={() => handleNavClick("attractions", "All 8 Realms")}
               className="text-left text-slate-200 hover:text-white py-2 border-b border-white/[0.05]"
@@ -243,7 +260,7 @@ export function Navbar({
               }}
               className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-white/[0.06] text-slate-200 text-sm font-semibold hover:bg-white/[0.1] transition-colors"
             >
-              <ShieldCheck className="w-4 h-4 text-blue-400" />
+              <ShieldCheck className="w-3.5 h-3.5 text-sky-400" />
               <span>Gate Staff Terminal</span>
             </button>
             <button
