@@ -33,7 +33,9 @@ export function AttractionsShowcase({
   onSelectCategory,
 }: AttractionsShowcaseProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
   const [activeRealmIndex, setActiveRealmIndex] = useState(1);
+  const [maxTranslateX, setMaxTranslateX] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -43,6 +45,32 @@ export function AttractionsShowcase({
     checkMobile();
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  // Mathematical center-lock measurement for Card 8
+  useEffect(() => {
+    const updateScrollDistance = () => {
+      if (!trackRef.current) return;
+      const cards = trackRef.current.children;
+      if (cards.length === 0) return;
+
+      const lastCard = cards[cards.length - 1] as HTMLElement;
+      const viewportWidth = window.innerWidth;
+      // Center of the last card relative to the track start
+      const lastCardCenter = lastCard.offsetLeft + lastCard.offsetWidth / 2;
+      // Target translation: align lastCardCenter with viewportWidth / 2
+      const targetOffset = lastCardCenter - viewportWidth / 2;
+
+      setMaxTranslateX(Math.max(0, targetOffset));
+    };
+
+    updateScrollDistance();
+    const timer = setTimeout(updateScrollDistance, 150);
+    window.addEventListener("resize", updateScrollDistance);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("resize", updateScrollDistance);
+    };
   }, []);
 
   // Monitor scroll progression across the 550vh container
@@ -56,21 +84,25 @@ export function AttractionsShowcase({
   const opacity = useTransform(scrollYProgress, [0, 0.1], [0.35, 1]);
   const rotateX = useTransform(scrollYProgress, [0, 0.15], [16, 0]);
 
-  // Phase 2: Horizontal Translation Track (0.15 -> 0.85)
-  // Maps 8 cards horizontally across the screen
-  const x = useTransform(scrollYProgress, [0.15, 0.85], ["0%", "-87.5%"]);
+  // Phase 2: Horizontal Translation Track with Mathematical Center-Lock & Dwell Buffer
+  // Glides horizontally from 0.15 to 0.75, then firmly dwells dead-center from 0.75 to 0.90
+  const x = useTransform(
+    scrollYProgress,
+    [0.15, 0.75, 0.90],
+    [0, -maxTranslateX, -maxTranslateX]
+  );
 
-  // Track progress bar width for the HUD (0% to 100%)
-  const trackProgress = useTransform(scrollYProgress, [0.15, 0.85], ["0%", "100%"]);
+  // Track progress bar width for the HUD (0% to 100% across the glide range)
+  const trackProgress = useTransform(scrollYProgress, [0.15, 0.75], ["0%", "100%"]);
 
   // Update active realm indicator
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
     if (latest < 0.15) {
       setActiveRealmIndex(1);
-    } else if (latest >= 0.85) {
+    } else if (latest >= 0.75) {
       setActiveRealmIndex(8);
     } else {
-      const normalized = (latest - 0.15) / 0.70;
+      const normalized = (latest - 0.15) / 0.60;
       const idx = Math.min(8, Math.max(1, Math.floor(normalized * 8) + 1));
       setActiveRealmIndex(idx);
     }
@@ -91,7 +123,7 @@ export function AttractionsShowcase({
     if (firstMatchIdx !== -1) {
       const containerTop = containerRef.current.offsetTop;
       const totalScrollable = containerRef.current.offsetHeight - window.innerHeight;
-      const fraction = 0.15 + (firstMatchIdx / 7) * 0.70;
+      const fraction = 0.15 + (firstMatchIdx / 7) * 0.60;
       const targetY = containerTop + totalScrollable * fraction;
       window.scrollTo({ top: targetY, behavior: "smooth" });
     }
@@ -187,11 +219,12 @@ export function AttractionsShowcase({
             }}
             className="w-full flex items-center"
           >
-            {/* Desktop Horizontal Sliding Track */}
+            {/* Desktop Horizontal Sliding Track with Mathematical Center-Lock */}
             {!isMobile ? (
               <motion.div
+                ref={trackRef}
                 style={{ x }}
-                className="flex items-center gap-8 lg:gap-12 px-8 sm:px-16 w-max"
+                className="relative flex items-center gap-8 lg:gap-12 pl-8 sm:pl-16 pr-8 sm:pr-16 my-auto w-max"
               >
                 {ATTRACTIONS.map((attraction) => (
                   <div
