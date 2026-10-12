@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { motion } from "framer-motion";
 import { Clock, MapPin, Phone, Shield } from "lucide-react";
 
 interface FooterProps {
@@ -35,10 +36,19 @@ export function Footer({
 
   return (
     <footer className="bg-[#03070E] text-slate-400 text-xs border-t border-white/[0.08] relative overflow-hidden">
+      {/* Subtle background light beam */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-48 bg-blue-600/5 blur-[120px] pointer-events-none rounded-full" />
       {/* Ambient bottom glow */}
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-32 bg-blue-600/5 blur-[100px] pointer-events-none rounded-full" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 relative z-10">
+      {/* Soft scroll-in parallax curtain reveal */}
+      <motion.div
+        initial={{ opacity: 0.7, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-40px" }}
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 relative z-10 will-change-transform"
+      >
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8 pb-12 border-b border-white/[0.08]">
           {/* Brand Info Column */}
           <div className="lg:col-span-2 space-y-4">
@@ -202,7 +212,7 @@ export function Footer({
             </span>
           </div>
         </div>
-      </div>
+      </motion.div>
     </footer>
   );
 }
