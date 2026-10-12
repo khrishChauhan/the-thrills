@@ -19,6 +19,9 @@ module.exports = {
         electric: "#0066FF",
         flare: "#FF5500",
       },
+      backgroundImage: {
+        radial: "radial-gradient(var(--tw-gradient-stops))",
+      },
       fontFamily: {
         sans: ["var(--font-jakarta)", "system-ui", "sans-serif"],
         display: ["var(--font-outfit)", "system-ui", "sans-serif"],

@@ -118,26 +118,25 @@ export function PassesSection({ onSelectPass }: PassesSectionProps) {
     offset: ["start end", "end start"],
   });
 
-  // 1. Day Thrill Pass (Standard ₹699): moderate speed upward (60 -> -40)
-  const yStandard = useTransform(
+  // Left Card (Day Thrill Pass): Calm, steady motion
+  const leftCardY = useTransform(
     scrollYProgress,
     [0, 1],
-    isMobile ? [0, 0] : [60, -40]
+    isMobile ? [0, 0] : [40, -40]
   );
 
-  // 2. All-Access Ultra Pass (VIP ₹999): deeper parallax speed upward (130 -> -70)
-  // Visibly overtakes standard card during scroll
-  const yVip = useTransform(
+  // Right Card (All-Access Ultra Pass): Fast, pronounced acceleration
+  const rightCardY = useTransform(
     scrollYProgress,
     [0, 1],
-    isMobile ? [0, 0] : [130, -70]
+    isMobile ? [0, 0] : [130, -110]
   );
 
-  // Background Parallax for Passes Section
+  // Background Parallax Drift for Passes Section
   const bgY = useTransform(
     scrollYProgress,
     [0, 1],
-    isMobile ? ["0%", "0%"] : ["-15%", "15%"]
+    isMobile ? ["0%", "0%"] : ["-8%", "8%"]
   );
 
   const standardPass = PASSES[0];
@@ -149,17 +148,24 @@ export function PassesSection({ onSelectPass }: PassesSectionProps) {
       id="passes"
       className="py-28 sm:py-36 bg-[#050B14] relative overflow-hidden"
     >
-      {/* Background Parallax for Admission Passes */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-20 z-0">
-        <motion.div style={{ y: bgY }} className="relative w-full h-[130%] -top-[15%]">
+      {/* High-Visibility Parallax Background Backdrop */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        {/* Parallax Image */}
+        <motion.div
+          style={{ y: bgY }}
+          className="relative w-full h-[125%] -top-[12%] will-change-transform"
+        >
           <Image
             src="/images/water-promenade.jpg"
-            alt="The Thrills Park Promenade"
+            alt="The Thrills Park Backdrop"
             fill
-            className="object-cover filter blur-[1px] brightness-75"
+            priority
+            className="object-cover filter brightness-90 contrast-105 opacity-40 lg:opacity-45"
           />
         </motion.div>
-        <div className="absolute inset-0 bg-gradient-to-b from-[#050B14] via-[#050B14]/85 to-[#050B14]" />
+        {/* Soft Luxury Vignette (Keeps text razor-sharp without blacking out the photo) */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#050B14] via-[#050B14]/60 to-[#050B14]" />
+        <div className="absolute inset-0 bg-radial from-transparent via-[#050B14]/40 to-[#050B14]/90" />
       </div>
 
       {/* Ambient Radial Backlights */}
@@ -193,11 +199,9 @@ export function PassesSection({ onSelectPass }: PassesSectionProps) {
           {standardPass && (
             <motion.div
               style={{
-                y: yStandard,
-                willChange: "transform",
-                transformStyle: "preserve-3d",
+                y: leftCardY,
               }}
-              className="h-full"
+              className="will-change-transform h-full"
             >
               <PricingCard
                 pass={standardPass}
@@ -210,11 +214,9 @@ export function PassesSection({ onSelectPass }: PassesSectionProps) {
           {vipPass && (
             <motion.div
               style={{
-                y: yVip,
-                willChange: "transform",
-                transformStyle: "preserve-3d",
+                y: rightCardY,
               }}
-              className="h-full"
+              className="will-change-transform h-full"
             >
               <PricingCard
                 pass={vipPass}

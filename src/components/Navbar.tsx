@@ -1,8 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Volume2, VolumeX, Ticket, ShieldCheck, Menu, X } from "lucide-react";
-import { soundEngine } from "@/utils/audio";
+import { Ticket, ShieldCheck, Menu, X } from "lucide-react";
 
 interface NavbarProps {
   onOpenBooking: (initialTierId?: string) => void;
@@ -17,7 +16,6 @@ export function Navbar({
   onOpenGateStaff,
   onSelectCategory,
 }: NavbarProps) {
-  const [isAudioPlaying, setIsAudioPlaying] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("attractions");
 
@@ -34,11 +32,6 @@ export function Navbar({
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  const handleAudioToggle = () => {
-    const playing = soundEngine.toggle();
-    setIsAudioPlaying(playing);
-  };
 
   const handleNavClick = (sectionId: string, categoryFilter?: string) => {
     setMobileMenuOpen(false);
@@ -112,54 +105,8 @@ export function Navbar({
           </button>
         </nav>
 
-        {/* Right Cluster Controls */}
-        <div className="flex items-center gap-3.5 shrink-0">
-          {/* Atmosphere Sound Button */}
-          <button
-            onClick={handleAudioToggle}
-            title={
-              isAudioPlaying
-                ? "Mute ambient atmosphere sound"
-                : "Play luxury park atmosphere"
-            }
-            className={`p-2 rounded-lg transition-all border ${
-              isAudioPlaying
-                ? "text-sky-400 bg-sky-500/10 border-sky-500/30 shadow-[0_0_12px_rgba(56,189,248,0.3)]"
-                : "text-slate-400 hover:text-white hover:bg-white/[0.05] border-transparent hover:border-white/[0.08]"
-            }`}
-            aria-label="Toggle ambient atmosphere sound"
-          >
-            {isAudioPlaying ? (
-              <Volume2 className="w-4 h-4 animate-pulse" />
-            ) : (
-              <VolumeX className="w-4 h-4" />
-            )}
-            {isAudioPlaying && (
-              <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-sky-400 animate-ping" />
-            )}
-          </button>
-
-          {/* Ticket Notification Button */}
-          <button
-            onClick={onOpenPassViewer}
-            title="My Booked Digital Passes"
-            className="relative p-2 rounded-lg text-slate-400 hover:text-white hover:bg-white/[0.05] border border-transparent hover:border-white/[0.08] transition-all"
-            aria-label="View digital passes"
-          >
-            <Ticket className="w-4 h-4" />
-            <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-[#FF5500] shadow-[0_0_6px_#FF5500]" />
-          </button>
-
-          {/* Gate Staff Sleek Minimalist Ghost Pill */}
-          <button
-            onClick={onOpenGateStaff}
-            title="Gate Staff Terminal"
-            className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 text-xs text-slate-300 hover:text-white bg-white/[0.03] hover:bg-white/[0.08] border border-white/[0.06] hover:border-white/[0.15] rounded-lg transition-all"
-          >
-            <ShieldCheck className="w-3.5 h-3.5 text-sky-400" />
-            <span>Gate Staff</span>
-          </button>
-
+        {/* Right Action Cluster */}
+        <div className="flex items-center gap-3 shrink-0">
           {/* Anodized Sapphire & Ember Flare CTA Button */}
           <button
             onClick={() => onOpenBooking()}
