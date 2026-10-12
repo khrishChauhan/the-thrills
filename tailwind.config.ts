@@ -27,11 +27,22 @@ const config: Config = {
       animation: {
         "pulse-slow": "pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite",
         "shimmer": "shimmer 2.5s linear infinite",
+        "spotlight": "spotlight 2s ease .75s 1 forwards",
       },
       keyframes: {
         shimmer: {
           "0%": { transform: "translateX(-100%)" },
           "100%": { transform: "translateX(100%)" },
+        },
+        spotlight: {
+          "0%": {
+            opacity: "0",
+            transform: "translate(-72%, -62%) scale(0.5)",
+          },
+          "100%": {
+            opacity: "1",
+            transform: "translate(-50%, -40%) scale(1)",
+          },
         },
       },
     },
