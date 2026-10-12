@@ -9,7 +9,6 @@ import {
 } from "framer-motion";
 import { Sparkles, ArrowUpRight } from "lucide-react";
 import { ATTRACTIONS, Attraction } from "@/data/attractions";
-import { CardContainer, CardBody, CardItem } from "@/components/ui/3d-card";
 import { Spotlight } from "@/components/ui/spotlight";
 
 interface AttractionsShowcaseProps {
@@ -107,7 +106,7 @@ export function AttractionsShowcase({
       className="relative h-[550vh] bg-[#050B14]"
     >
       {/* 100vh Pinned Viewport Container with Generous Top Navbar Clearance */}
-      <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-between bg-[#050B14] pt-20 lg:pt-24 select-none">
+      <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-between bg-[#050B14] pt-16 lg:pt-20 select-none">
         {/* Aceternity Sweeping Spotlights */}
         <Spotlight
           className="-top-40 left-0 md:left-60 md:-top-20"
@@ -155,8 +154,8 @@ export function AttractionsShowcase({
             </div>
           </div>
 
-          {/* Row 2: Filter Tabs with 32px-40px bottom margin clearance */}
-          <div className="flex items-center gap-1.5 p-1 bg-white/[0.04] border border-white/[0.08] rounded-xl overflow-x-auto max-w-full mt-3 mb-8 lg:mb-10">
+          {/* Row 2: Filter Tabs with Generous Clearance */}
+          <div className="flex items-center gap-1.5 p-1 bg-white/[0.04] border border-white/[0.08] rounded-xl overflow-x-auto max-w-full mt-2 mb-6 lg:mb-8">
             {FILTER_PILLS.map((pill) => {
               const isActive = selectedFilter === pill;
               return (
@@ -176,12 +175,9 @@ export function AttractionsShowcase({
           </div>
         </header>
 
-        {/* 3D REEL TRACK: FLOATING CENTRALLY IN THE REMAINING VIEWPORT */}
-        <div
-          className="relative flex-1 flex items-center my-auto overflow-hidden w-full"
-          style={{ perspective: "1200px" }}
-        >
-          {/* Zoom & Pitch Animated Container */}
+        {/* HORIZONTAL REEL TRACK: FLOATING CENTRALLY WITH ZERO CLIPPING */}
+        <div className="relative flex-1 flex items-center my-auto overflow-hidden w-full">
+          {/* Zoom & Pitch Animated Container (Entry phase only) */}
           <motion.div
             style={{
               scale,
@@ -200,124 +196,111 @@ export function AttractionsShowcase({
                 {ATTRACTIONS.map((attraction) => (
                   <div
                     key={attraction.id}
-                    className="w-[82vw] max-w-[960px] lg:w-[920px] h-[480px] lg:h-[500px] max-h-[56vh] shrink-0"
+                    className="w-[84vw] max-w-[980px] lg:w-[940px] h-[520px] lg:h-[530px] shrink-0"
                   >
-                    <CardContainer containerClassName="h-full w-full py-0" className="h-full w-full">
-                      <CardBody className="relative h-full w-full rounded-3xl overflow-hidden border border-white/[0.08] bg-[#09111E]/80 backdrop-blur-xl transition-all duration-300 hover:border-white/[0.2] shadow-2xl p-0">
-                        <div className="grid grid-cols-1 lg:grid-cols-12 h-full items-stretch">
-                          {/* Left Column: Text & Specs (5 cols) */}
-                          <div className="lg:col-span-5 p-6 lg:p-8 flex flex-col justify-between h-full bg-[#080E1A]/60 border-r border-white/[0.06]">
-                            <div>
-                              {/* Metadata */}
-                              <CardItem
-                                translateZ="30"
-                                className="flex items-center gap-2 text-xs text-slate-400 mb-2 flex-wrap"
-                              >
-                                <span className="font-semibold text-sky-400">
-                                  {attraction.intensity}
-                                </span>
-                                <span aria-hidden="true">·</span>
-                                <span>{attraction.minHeight}</span>
-                                <span aria-hidden="true">·</span>
-                                <span>{attraction.duration}</span>
-                              </CardItem>
+                    {/* FLAT LUXURY CARD CONTAINER (NO 3D Z-AXIS ROTATION OR DISTORTION) */}
+                    <div className="group/card relative h-full w-full rounded-3xl overflow-hidden border border-white/[0.08] hover:border-white/[0.22] bg-[#09111E]/85 backdrop-blur-xl transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-[0_8px_32px_rgba(0,102,255,0.12)] shadow-2xl p-0">
+                      <div className="grid grid-cols-1 lg:grid-cols-12 h-full items-stretch">
+                        {/* LEFT COLUMN: TEXT, SPECS & UNCLIPPED BUTTONS (5 COLS) */}
+                        <div className="lg:col-span-5 p-6 lg:p-7 flex flex-col justify-between h-full overflow-hidden bg-[#080E1A]/60 border-r border-white/[0.06]">
+                          {/* Top Content Block */}
+                          <div className="flex-1 flex flex-col justify-start">
+                            {/* Meta row */}
+                            <div className="text-[11px] text-slate-400 mb-1.5 flex items-center gap-1.5 flex-wrap">
+                              <span className="font-semibold text-sky-400">
+                                {attraction.intensity}
+                              </span>
+                              <span aria-hidden="true">·</span>
+                              <span>{attraction.minHeight}</span>
+                              <span aria-hidden="true">·</span>
+                              <span>{attraction.duration}</span>
+                            </div>
 
-                              {/* Title & Subtitle */}
-                              <CardItem translateZ="40">
-                                <h3 className="text-xl lg:text-2xl font-extrabold text-white tracking-tight mb-0.5 font-display">
-                                  {attraction.title}
-                                </h3>
-                                <p className="text-xs lg:text-sm font-semibold text-[#FF5500] mb-2 font-display">
-                                  {attraction.subtitle}
-                                </p>
-                              </CardItem>
+                            {/* Title & Subtitle */}
+                            <h3 className="text-xl lg:text-2xl font-black text-white leading-tight tracking-tight mb-1 font-display">
+                              {attraction.title}
+                            </h3>
+                            <p className="text-xs lg:text-sm font-semibold text-[#FF5500] leading-snug mb-2 font-display">
+                              {attraction.subtitle}
+                            </p>
 
-                              {/* Description */}
-                              <CardItem translateZ="20">
-                                <p className="text-xs lg:text-sm text-slate-300 line-clamp-2 lg:line-clamp-3 leading-relaxed mb-4 font-light">
-                                  {attraction.description}
-                                </p>
-                              </CardItem>
+                            {/* Description */}
+                            <p className="text-xs text-slate-300 leading-relaxed font-light mb-3 line-clamp-2 lg:line-clamp-3">
+                              {attraction.description}
+                            </p>
 
-                              {/* Highlights */}
-                              <CardItem translateZ="35" className="space-y-1.5 mb-4">
-                                <div className="text-[10px] uppercase tracking-wider text-slate-400 font-semibold mb-1">
-                                  Key Highlights
-                                </div>
+                            {/* Highlights Section */}
+                            <div className="mt-1">
+                              <div className="text-[10px] font-bold tracking-wider uppercase text-slate-400 mb-1.5 font-display">
+                                Key Highlights
+                              </div>
+                              <div className="space-y-1 mb-2">
                                 {attraction.highlights.map((highlight, hIdx) => (
                                   <div
                                     key={hIdx}
-                                    className="flex items-center gap-2 text-xs text-slate-200"
+                                    className="text-[11px] lg:text-xs text-slate-200 flex items-center gap-2"
                                   >
                                     <span className="w-1.5 h-1.5 rounded-full bg-blue-400 shrink-0" />
                                     <span>{highlight}</span>
                                   </div>
                                 ))}
-                              </CardItem>
+                              </div>
                             </div>
-
-                            {/* Action Buttons */}
-                            <CardItem
-                              translateZ="80"
-                              className="flex items-center gap-3 pt-3 border-t border-white/[0.08] w-full"
-                            >
-                              <button
-                                onClick={() => onOpenSpecs(attraction)}
-                                className="flex-1 py-2 px-4 rounded-xl text-xs font-semibold text-white bg-white/[0.08] hover:bg-white/[0.14] border border-white/[0.12] transition-colors flex items-center justify-center gap-1 group/btn"
-                              >
-                                <span>Overview &amp; Specs</span>
-                                <ArrowUpRight className="w-3.5 h-3.5 text-slate-300 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
-                              </button>
-                              <button
-                                onClick={() => onBookPass(attraction)}
-                                className="py-2 px-4 rounded-xl text-xs font-semibold text-white bg-gradient-to-r from-[#0066FF] to-[#FF5500] hover:opacity-95 shadow-md shadow-blue-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all whitespace-nowrap"
-                              >
-                                Book Pass
-                              </button>
-                            </CardItem>
                           </div>
 
-                          {/* Right Column: Vector Art Visual (7 cols) */}
-                          <div className="lg:col-span-7 h-full relative overflow-hidden bg-[#0A1118]">
-                            <CardItem
-                              translateZ="60"
-                              className="w-full h-full relative"
+                          {/* BOTTOM ACTION BUTTONS (SHRINK-0 GUARANTEES ZERO CLIPPING) */}
+                          <div className="shrink-0 pt-3 border-t border-white/[0.08] flex items-center gap-2.5 w-full">
+                            <button
+                              onClick={() => onOpenSpecs(attraction)}
+                              className="flex-1 py-2.5 px-3 rounded-xl text-xs font-semibold text-white bg-white/[0.08] hover:bg-white/[0.14] border border-white/[0.1] transition-colors flex items-center justify-center gap-1.5 group/btn"
                             >
-                              <div
-                                className={`relative w-full h-full overflow-hidden ${attraction.bgClass}`}
-                              >
-                                <div
-                                  className={`absolute inset-0 ${attraction.radialClass}`}
-                                />
-                                {attraction.hasGrid && (
-                                  <div className="absolute inset-0 opacity-40 mix-blend-screen bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:24px_24px]" />
-                                )}
-                                <div
-                                  className="absolute inset-0 w-full h-full pointer-events-none"
-                                  dangerouslySetInnerHTML={{
-                                    __html: attraction.svg,
-                                  }}
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-[#050B14] via-transparent to-black/50 pointer-events-none" />
-                                <div className="absolute inset-0 bg-gradient-to-r from-[#050B14]/80 via-transparent to-[#050B14]/70 pointer-events-none" />
-                              </div>
-
-                              {/* Badges with text-[11px] */}
-                              <div className="absolute top-4 left-4 z-20">
-                                <span className="px-2.5 py-1 rounded-md text-[11px] font-bold bg-[#050B14]/85 text-white border border-white/10 backdrop-blur-md shadow-lg">
-                                  {attraction.tagBadge}
-                                </span>
-                              </div>
-                              <div className="absolute bottom-4 right-4 z-20">
-                                <span className="px-2.5 py-1 rounded-md text-[11px] font-mono bg-[#050B14]/80 text-sky-400 border border-white/10 shadow-lg">
-                                  {attraction.scheduleBadge}
-                                </span>
-                              </div>
-                            </CardItem>
+                              <span>Full Overview &amp; Specs</span>
+                              <ArrowUpRight className="w-3.5 h-3.5 text-slate-300 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
+                            </button>
+                            <button
+                              onClick={() => onBookPass(attraction)}
+                              className="py-2.5 px-4 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-[#0066FF] to-[#FF5500] hover:opacity-95 shadow-md shadow-blue-500/20 whitespace-nowrap active:scale-95 transition-all"
+                            >
+                              Book Pass
+                            </button>
                           </div>
                         </div>
-                      </CardBody>
-                    </CardContainer>
+
+                        {/* RIGHT COLUMN: VECTOR ART VISUAL (7 COLS) */}
+                        <div className="lg:col-span-7 h-full w-full relative overflow-hidden bg-[#0A1118]">
+                          <div
+                            className={`relative w-full h-full overflow-hidden ${attraction.bgClass}`}
+                          >
+                            <div
+                              className={`absolute inset-0 ${attraction.radialClass}`}
+                            />
+                            {attraction.hasGrid && (
+                              <div className="absolute inset-0 opacity-40 mix-blend-screen bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:24px_24px]" />
+                            )}
+                            <div
+                              className="absolute inset-0 w-full h-full pointer-events-none"
+                              dangerouslySetInnerHTML={{
+                                __html: attraction.svg,
+                              }}
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-[#050B14] via-transparent to-black/50 pointer-events-none" />
+                            <div className="absolute inset-0 bg-gradient-to-r from-[#050B14]/80 via-transparent to-[#050B14]/70 pointer-events-none" />
+                          </div>
+
+                          {/* Badges */}
+                          <div className="absolute top-4 left-4 z-20">
+                            <span className="px-2.5 py-1 rounded-md text-[11px] font-bold bg-[#050B14]/85 text-white border border-white/10 backdrop-blur-md shadow-lg">
+                              {attraction.tagBadge}
+                            </span>
+                          </div>
+                          <div className="absolute bottom-4 right-4 z-20">
+                            <span className="px-2.5 py-1 rounded-md text-[11px] font-mono bg-[#050B14]/80 text-sky-400 border border-white/10 shadow-lg">
+                              {attraction.scheduleBadge}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 ))}
               </motion.div>
@@ -377,7 +360,7 @@ export function AttractionsShowcase({
         </div>
 
         {/* BOTTOM HUD & MICRO-INDICATORS */}
-        <div className="relative z-20 pb-5 lg:pb-6 pt-3 px-4 sm:px-8 max-w-7xl mx-auto w-full flex items-center justify-between text-xs text-slate-500">
+        <div className="relative z-20 pb-4 lg:pb-5 pt-2 px-4 sm:px-8 max-w-7xl mx-auto w-full flex items-center justify-between text-xs text-slate-500">
           <div className="flex items-center gap-2">
             <span className="inline-block w-2 h-2 rounded-full bg-[#0066FF] animate-pulse" />
             <span className="text-[11px] text-slate-400 font-mono">
