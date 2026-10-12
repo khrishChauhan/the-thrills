@@ -54,23 +54,14 @@ export function Navbar({
   return (
     <header className="fixed top-0 left-0 right-0 z-40 h-[68px] flex items-center bg-[#050B14]/75 backdrop-blur-md border-b border-white/[0.06] shadow-[0_4px_30px_rgba(0,0,0,0.4)] transition-all duration-300">
       <div className="max-w-7xl mx-auto w-full px-6 sm:px-8 lg:px-10 flex items-center justify-between">
-        {/* Logo */}
+        {/* Brand Name */}
         <button
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          className="flex items-center gap-2.5 text-left focus:outline-none group shrink-0"
+          className="flex items-center text-left focus:outline-none group shrink-0"
         >
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#0066FF] to-[#FF5500] flex items-center justify-center p-0.5 shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform duration-200">
-            <div className="w-full h-full bg-[#050B14] rounded-[6px] flex items-center justify-center">
-              <span className="font-extrabold text-sm tracking-tighter bg-gradient-to-r from-blue-400 to-orange-400 bg-clip-text text-transparent font-display">
-                TP
-              </span>
-            </div>
-          </div>
-          <div className="flex flex-col">
-            <span className="text-base sm:text-lg font-extrabold tracking-tight text-white whitespace-nowrap group-hover:text-blue-400 transition-colors font-display">
-              THE THRILLS
-            </span>
-          </div>
+          <span className="text-base sm:text-lg font-extrabold tracking-tight text-white whitespace-nowrap group-hover:text-blue-400 transition-colors font-display">
+            THE THRILLS
+          </span>
         </button>
 
         {/* Center Nav Links with Refined 2px Glowing Micro-Indicator */}
