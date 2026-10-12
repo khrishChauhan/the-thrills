@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import { X, Sparkles, Shield, Clock, Ruler, Gauge, ArrowRight } from "lucide-react";
 import { Attraction } from "@/data/attractions";
 
@@ -40,17 +41,20 @@ export function AttractionModal({
         {/* Scrollable content */}
         <div className="overflow-y-auto pr-2 space-y-6">
           {/* Header Banner */}
-          <div className="relative h-48 sm:h-64 rounded-2xl overflow-hidden border border-white/[0.1]">
-            <div className={`absolute inset-0 ${attraction.bgClass}`} />
-            <div className={`absolute inset-0 ${attraction.radialClass}`} />
-            {attraction.hasGrid && (
-              <div className="absolute inset-0 opacity-40 mix-blend-screen bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:24px_24px]" />
-            )}
-            <div
-              className="absolute inset-0 w-full h-full pointer-events-none"
-              dangerouslySetInnerHTML={{ __html: attraction.svg }}
+          <div className="relative h-48 sm:h-64 rounded-2xl overflow-hidden border border-white/[0.1] bg-[#0A1118]">
+            <Image
+              src={attraction.image}
+              alt={attraction.title}
+              fill
+              className="object-cover"
+              priority
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#080E1A] via-[#080E1A]/40 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#080E1A] via-[#080E1A]/40 to-transparent pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#080E1A]/70 via-transparent to-[#080E1A]/40 pointer-events-none" />
+            <div
+              className="absolute inset-0 opacity-20 mix-blend-color pointer-events-none"
+              style={{ backgroundColor: attraction.accentColor }}
+            />
 
             <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between">
               <div>

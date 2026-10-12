@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useRef, useState, useEffect } from "react";
+import Image from "next/image";
 import { motion, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion";
 import { Ticket, Zap, Shield } from "lucide-react";
 import { PASSES, ASSURANCE_BADGES, PassTier, AssuranceBadge } from "@/data/passes";
@@ -132,6 +133,13 @@ export function PassesSection({ onSelectPass }: PassesSectionProps) {
     isMobile ? [0, 0] : [130, -70]
   );
 
+  // Background Parallax for Passes Section
+  const bgY = useTransform(
+    scrollYProgress,
+    [0, 1],
+    isMobile ? ["0%", "0%"] : ["-15%", "15%"]
+  );
+
   const standardPass = PASSES[0];
   const vipPass = PASSES[1];
 
@@ -141,6 +149,19 @@ export function PassesSection({ onSelectPass }: PassesSectionProps) {
       id="passes"
       className="py-28 sm:py-36 bg-[#050B14] relative overflow-hidden"
     >
+      {/* Background Parallax for Admission Passes */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-20 z-0">
+        <motion.div style={{ y: bgY }} className="relative w-full h-[130%] -top-[15%]">
+          <Image
+            src="/images/water-promenade.jpg"
+            alt="The Thrills Park Promenade"
+            fill
+            className="object-cover filter blur-[1px] brightness-75"
+          />
+        </motion.div>
+        <div className="absolute inset-0 bg-gradient-to-b from-[#050B14] via-[#050B14]/85 to-[#050B14]" />
+      </div>
+
       {/* Ambient Radial Backlights */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[850px] h-[550px] bg-gradient-to-r from-blue-600/10 via-orange-600/10 to-sky-600/10 blur-[180px] pointer-events-none rounded-full" />
 

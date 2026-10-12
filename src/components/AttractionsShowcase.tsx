@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useRef, useState, useEffect } from "react";
+import Image from "next/image";
 import {
   motion,
   useScroll,
@@ -10,6 +11,7 @@ import {
 import { Sparkles, ArrowUpRight } from "lucide-react";
 import { ATTRACTIONS, Attraction } from "@/data/attractions";
 import { Spotlight } from "@/components/ui/spotlight";
+import { ParallaxCardImage } from "@/components/ui/ParallaxCardImage";
 
 interface AttractionsShowcaseProps {
   onOpenSpecs: (attraction: Attraction) => void;
@@ -83,6 +85,7 @@ export function AttractionsShowcase({
   const scale = useTransform(scrollYProgress, [0, 0.15], [0.75, 1]);
   const opacity = useTransform(scrollYProgress, [0, 0.1], [0.35, 1]);
   const rotateX = useTransform(scrollYProgress, [0, 0.15], [16, 0]);
+  const heroBgY = useTransform(scrollYProgress, [0, 0.5], isMobile ? [0, 0] : [0, 100]);
 
   // Phase 2: Horizontal Translation Track with Mathematical Center-Lock & Dwell Buffer
   // Glides horizontally from 0.15 to 0.75, then firmly dwells dead-center from 0.75 to 0.90
@@ -139,13 +142,30 @@ export function AttractionsShowcase({
     >
       {/* 100vh Pinned Viewport Container with Precise Height Budgeting */}
       <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-between bg-[#050B14] pt-14 lg:pt-16 select-none">
+        {/* HERO BACKGROUND INTEGRATION: Deeply Darkened Park Entrance Arch Parallax */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-25 z-0">
+          <motion.div
+            style={{ y: heroBgY }}
+            className="relative w-full h-[125%] -top-[12.5%]"
+          >
+            <Image
+              src="/images/park-entrance-arch.jpg"
+              alt="The Thrills Grand Park Entrance Arch"
+              fill
+              className="object-cover filter brightness-50"
+              priority
+            />
+          </motion.div>
+          <div className="absolute inset-0 bg-gradient-to-b from-[#050B14]/85 via-[#050B14]/65 to-[#050B14]" />
+        </div>
+
         {/* Aceternity Sweeping Spotlights */}
         <Spotlight
-          className="-top-40 left-0 md:left-60 md:-top-20"
+          className="-top-40 left-0 md:left-60 md:-top-20 z-[1]"
           fill="#0066FF"
         />
         <Spotlight
-          className="-top-40 right-0 md:right-40 md:-top-20"
+          className="-top-40 right-0 md:right-40 md:-top-20 z-[1]"
           fill="#FF5500"
         />
 
@@ -299,38 +319,15 @@ export function AttractionsShowcase({
                           </div>
                         </div>
 
-                        {/* RIGHT COLUMN: VECTOR ART VISUAL (7 COLS) */}
+                        {/* RIGHT COLUMN: REAL PHOTOGRAPHY PARALLAX CARD IMAGE (7 COLS) */}
                         <div className="lg:col-span-7 h-full w-full relative overflow-hidden bg-[#0A1118]">
-                          <div
-                            className={`relative w-full h-full overflow-hidden ${attraction.bgClass}`}
-                          >
-                            <div
-                              className={`absolute inset-0 ${attraction.radialClass}`}
-                            />
-                            {attraction.hasGrid && (
-                              <div className="absolute inset-0 opacity-40 mix-blend-screen bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:24px_24px]" />
-                            )}
-                            <div
-                              className="absolute inset-0 w-full h-full pointer-events-none"
-                              dangerouslySetInnerHTML={{
-                                __html: attraction.svg,
-                              }}
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-[#050B14] via-transparent to-black/50 pointer-events-none" />
-                            <div className="absolute inset-0 bg-gradient-to-r from-[#050B14]/80 via-transparent to-[#050B14]/70 pointer-events-none" />
-                          </div>
-
-                          {/* Badges - 100% visible inside frame */}
-                          <div className="absolute top-3 left-3 z-20">
-                            <span className="px-2 py-0.5 rounded-md text-[10px] sm:text-[11px] font-bold bg-[#050B14]/85 text-white border border-white/10 backdrop-blur-md shadow-lg">
-                              {attraction.tagBadge}
-                            </span>
-                          </div>
-                          <div className="absolute bottom-3 right-3 z-20">
-                            <span className="px-2 py-0.5 rounded-md text-[10px] sm:text-[11px] font-mono bg-[#050B14]/80 text-sky-400 border border-white/10 shadow-lg">
-                              {attraction.scheduleBadge}
-                            </span>
-                          </div>
+                          <ParallaxCardImage
+                            src={attraction.image}
+                            alt={attraction.title}
+                            badgeTopLeft={attraction.tagBadge}
+                            badgeBottomRight={attraction.scheduleBadge}
+                            accentColor={attraction.accentColor}
+                          />
                         </div>
                       </div>
                     </div>
@@ -345,20 +342,14 @@ export function AttractionsShowcase({
                     key={attraction.id}
                     className="w-[85vw] max-w-[380px] shrink-0 snap-center rounded-3xl overflow-hidden border border-white/[0.08] bg-[#09111E]/95 backdrop-blur-xl shadow-2xl p-5"
                   >
-                    <div className="relative h-40 rounded-2xl overflow-hidden mb-3">
-                      <div
-                        className={`absolute inset-0 ${attraction.bgClass}`}
+                    <div className="relative h-44 rounded-2xl overflow-hidden mb-3">
+                      <ParallaxCardImage
+                        src={attraction.image}
+                        alt={attraction.title}
+                        badgeTopLeft={attraction.tagBadge}
+                        badgeBottomRight={attraction.scheduleBadge}
+                        accentColor={attraction.accentColor}
                       />
-                      <div
-                        className={`absolute inset-0 ${attraction.radialClass}`}
-                      />
-                      <div
-                        className="absolute inset-0 w-full h-full pointer-events-none"
-                        dangerouslySetInnerHTML={{ __html: attraction.svg }}
-                      />
-                      <span className="absolute top-3 left-3 px-2 py-0.5 rounded text-[10px] font-bold bg-[#050B14]/85 text-white border border-white/10">
-                        {attraction.tagBadge}
-                      </span>
                     </div>
 
                     <div className="text-[11px] text-sky-400 font-semibold mb-1">

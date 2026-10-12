@@ -41,6 +41,8 @@ export interface AttractionSpecs {
 export interface Attraction {
   id: string;
   number: number;
+  image: string;
+  accentColor: string;
   title: string;
   subtitle: string;
   category: "Adrenaline" | "Sensory Houses" | "Water Park" | "Resort & Dining";
@@ -63,6 +65,8 @@ export const ATTRACTIONS: Attraction[] = [
   {
     "id": "fun-zone",
     "number": 1,
+    "image": "/images/attractions-complex.jpg",
+    "accentColor": "#0066FF",
     "title": "Fun Zone",
     "subtitle": "High-Velocity Adrenaline & Gravity-Defying Loops",
     "category": "Adrenaline",
@@ -97,6 +101,8 @@ export const ATTRACTIONS: Attraction[] = [
   {
     "id": "mirror-house",
     "number": 2,
+    "image": "/images/concept-facades.jpg",
+    "accentColor": "#00D2FF",
     "title": "Mirror House",
     "subtitle": "Infinite Reflections & Mind-Bending Labyrinths",
     "category": "Sensory Houses",
@@ -129,6 +135,8 @@ export const ATTRACTIONS: Attraction[] = [
   {
     "id": "horror-house",
     "number": 3,
+    "image": "/images/concept-facades.jpg",
+    "accentColor": "#DC2626",
     "title": "Horror House",
     "subtitle": "The Crypt of Whispers: Cinematic Psychological Dread",
     "category": "Sensory Houses",
@@ -160,6 +168,8 @@ export const ATTRACTIONS: Attraction[] = [
   {
     "id": "illusion-house",
     "number": 4,
+    "image": "/images/vip-reception.jpg",
+    "accentColor": "#8B5CF6",
     "title": "Illusion House",
     "subtitle": "Defying Physics with Perspective & Anti-Gravity Rooms",
     "category": "Sensory Houses",
@@ -191,6 +201,8 @@ export const ATTRACTIONS: Attraction[] = [
   {
     "id": "theatre-7d",
     "number": 5,
+    "image": "/images/concept-facades.jpg",
+    "accentColor": "#2563EB",
     "title": "7D Theatre",
     "subtitle": "Hyper-Immersive Cinema with Full Physical Sensation",
     "category": "Adrenaline",
@@ -221,6 +233,8 @@ export const ATTRACTIONS: Attraction[] = [
   {
     "id": "water-park",
     "number": 6,
+    "image": "/images/waterfall-lagoon.jpg",
+    "accentColor": "#0284C7",
     "title": "Water Park: Atlantis Lagoon",
     "subtitle": "Tropical Oasis of Colossal Wave Pools & Freefall Slides",
     "category": "Water Park",
@@ -251,6 +265,8 @@ export const ATTRACTIONS: Attraction[] = [
   {
     "id": "sanctuary-resort",
     "number": 7,
+    "image": "/images/resort-amphitheater.jpg",
+    "accentColor": "#D97706",
     "title": "The Thrills Sanctuary Resort",
     "subtitle": "Five-Star Luxury Villas & Serene Botanical Haven",
     "category": "Resort & Dining",
@@ -281,6 +297,8 @@ export const ATTRACTIONS: Attraction[] = [
   {
     "id": "carousel-bistro",
     "number": 8,
+    "image": "/images/thrill-grill-exterior.jpg",
+    "accentColor": "#EA580C",
     "title": "The Grand Carousel Bistro",
     "subtitle": "Artisanal Culinary Experiences with Parkside Panoramas",
     "category": "Resort & Dining",
