@@ -98,6 +98,20 @@ export function AttractionsShowcase({
   // Track progress bar width for the HUD (0% to 100% across the glide range)
   const trackProgress = useTransform(scrollYProgress, [0.15, 0.75], ["0%", "100%"]);
 
+  // Section 1: Dynamic Multi-Color Gradient Parallax
+  // Electric Blue / Cyan Orb (Top Right): Drifts down and inwards with pulsing scale
+  const blueOrbX = useTransform(scrollYProgress, [0, 1], ["0px", "-220px"]);
+  const blueOrbY = useTransform(scrollYProgress, [0, 1], ["0px", "160px"]);
+  const blueOrbScale = useTransform(scrollYProgress, [0, 0.5, 1], [1, 1.3, 0.95]);
+
+  // Sunset Flare Orange Orb (Bottom Left): Drifts up and across
+  const orangeOrbX = useTransform(scrollYProgress, [0, 1], ["0px", "240px"]);
+  const orangeOrbY = useTransform(scrollYProgress, [0, 1], ["0px", "-180px"]);
+  const orangeOrbScale = useTransform(scrollYProgress, [0, 0.5, 1], [0.95, 1.35, 1]);
+
+  // Central Aurora Mesh (Deep Midnight Nebula): Subtle breathing rotation
+  const auraRotate = useTransform(scrollYProgress, [0, 1], [0, 45]);
+
   // Update active realm indicator
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
     if (latest < 0.15) {
@@ -169,9 +183,24 @@ export function AttractionsShowcase({
           fill="#FF5500"
         />
 
-        {/* High-blur Radial Ambient Lights */}
-        <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-blue-600/10 blur-[150px] pointer-events-none rounded-full" />
-        <div className="absolute bottom-1/4 right-1/4 w-[600px] h-[600px] bg-orange-600/10 blur-[160px] pointer-events-none rounded-full" />
+        {/* Multi-Color Parallax Aurora Atmosphere */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+          {/* Blue/Cyan Nebula Orb */}
+          <motion.div
+            style={{ x: blueOrbX, y: blueOrbY, scale: blueOrbScale }}
+            className="absolute -top-10 right-0 w-[550px] lg:w-[700px] h-[550px] lg:h-[700px] bg-gradient-to-br from-[#0066FF]/20 via-[#38BDF8]/15 to-transparent rounded-full blur-[140px] will-change-transform"
+          />
+          {/* Molten Orange / Amber Flare Orb */}
+          <motion.div
+            style={{ x: orangeOrbX, y: orangeOrbY, scale: orangeOrbScale }}
+            className="absolute -bottom-10 left-0 w-[600px] lg:w-[750px] h-[600px] lg:h-[750px] bg-gradient-to-tr from-[#FF5500]/18 via-[#FFAA00]/12 to-transparent rounded-full blur-[160px] will-change-transform"
+          />
+          {/* Central Depth Core */}
+          <motion.div
+            style={{ rotate: auraRotate }}
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-blue-900/10 rounded-full blur-[180px] will-change-transform"
+          />
+        </div>
 
         {/* COMPACT CINEMATIC HUD HEADER (Rows 1 & 2) */}
         <header className="relative z-20 px-6 sm:px-8 lg:px-10 max-w-7xl mx-auto w-full shrink-0">

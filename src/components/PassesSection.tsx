@@ -132,11 +132,18 @@ export function PassesSection({ onSelectPass }: PassesSectionProps) {
     isMobile ? [0, 0] : [130, -110]
   );
 
-  // Background Parallax Drift for Passes Section
+  // Heavy vertical counter-drift: starts high and glides down across the screen
   const bgY = useTransform(
     scrollYProgress,
     [0, 1],
-    isMobile ? ["0%", "0%"] : ["-8%", "8%"]
+    isMobile ? ["0%", "0%"] : ["-18%", "18%"]
+  );
+
+  // Cinematic camera zoom: subtle focal expansion
+  const bgScale = useTransform(
+    scrollYProgress,
+    [0, 0.5, 1],
+    isMobile ? [1, 1, 1] : [1.12, 1.02, 1.12]
   );
 
   const standardPass = PASSES[0];
@@ -150,22 +157,22 @@ export function PassesSection({ onSelectPass }: PassesSectionProps) {
     >
       {/* High-Visibility Parallax Background Backdrop */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-        {/* Parallax Image */}
+        {/* Animated Parallax Photo Container */}
         <motion.div
-          style={{ y: bgY }}
-          className="relative w-full h-[125%] -top-[12%] will-change-transform"
+          style={{ y: bgY, scale: bgScale }}
+          className="relative w-full h-[140%] -top-[20%] will-change-transform"
         >
           <Image
             src="/images/water-promenade.jpg"
             alt="The Thrills Park Backdrop"
             fill
             priority
-            className="object-cover filter brightness-90 contrast-105 opacity-40 lg:opacity-45"
+            className="object-cover filter brightness-95 contrast-105 opacity-45 lg:opacity-50"
           />
         </motion.div>
-        {/* Soft Luxury Vignette (Keeps text razor-sharp without blacking out the photo) */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#050B14] via-[#050B14]/60 to-[#050B14]" />
-        <div className="absolute inset-0 bg-radial from-transparent via-[#050B14]/40 to-[#050B14]/90" />
+        {/* Precision Atmospheric Vignettes */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#050B14] via-[#050B14]/50 to-[#050B14]" />
+        <div className="absolute inset-0 bg-radial from-transparent via-[#050B14]/30 to-[#050B14]/85" />
       </div>
 
       {/* Ambient Radial Backlights */}
