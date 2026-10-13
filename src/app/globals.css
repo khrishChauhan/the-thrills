@@ -21,7 +21,7 @@
 
 html {
   scroll-behavior: smooth;
-  overflow-x: hidden;
+  overflow-x: clip;
   max-width: 100%;
 }
 
@@ -63,7 +63,7 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--ink);
-  overflow-x: hidden;
+  overflow-x: clip;
   max-width: 100%;
 }
 
@@ -1110,6 +1110,7 @@ button {
 }
 
 .attractions-sticky-stage {
+  position: -webkit-sticky;
   position: sticky;
   top: 85px;
   height: calc(100dvh - 85px);
@@ -3100,11 +3101,23 @@ button {
   }
 
   /* Attractions Horizontal Reel (#attractions) */
+  .attractions-pinned-section {
+    height: 420vh;
+    margin-top: 8px;
+    margin-bottom: 24px;
+  }
   .attractions-sticky-stage {
+    position: -webkit-sticky;
+    position: sticky;
     top: 68px;
     height: calc(100dvh - 68px);
-    gap: 10px;
-    padding: 10px 0 72px;
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 8px 0 16px; /* Remove the excessive 72px bottom padding */
   }
   .attractions-stage-header {
     flex-direction: row;
@@ -3144,9 +3157,10 @@ button {
   .clay-card {
     width: 86vw;
     max-width: 360px;
-    height: clamp(340px, 54vh, 430px);
+    height: clamp(330px, 52vh, 415px);
     border-radius: 28px;
     padding: 0;
+    flex-shrink: 0;
   }
   .clay-card-inner {
     grid-template-columns: 1fr;

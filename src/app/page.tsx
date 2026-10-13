@@ -258,7 +258,7 @@ export default function HomePage() {
   const [activeField, setActiveField] = useState<string | null>(null);
 
   useEffect(() => {
-    const updateResponsiveMetrics = () => {
+    const updateMetrics = () => {
       const vw = window.innerWidth;
       setIsDesktopPricing(vw > 950);
       if (vw <= 480) {
@@ -284,12 +284,17 @@ export default function HomePage() {
       setMaxTranslateX(Math.max(0, lastCardCenter - firstCardCenter));
     };
 
-    updateResponsiveMetrics();
-    const timer = setTimeout(updateResponsiveMetrics, 150);
-    window.addEventListener("resize", updateResponsiveMetrics);
+    updateMetrics();
+    const timer1 = setTimeout(updateMetrics, 120);
+    const timer2 = setTimeout(updateMetrics, 450);
+    window.addEventListener("resize", updateMetrics);
+    window.addEventListener("orientationchange", updateMetrics);
+
     return () => {
-      clearTimeout(timer);
-      window.removeEventListener("resize", updateResponsiveMetrics);
+      clearTimeout(timer1);
+      clearTimeout(timer2);
+      window.removeEventListener("resize", updateMetrics);
+      window.removeEventListener("orientationchange", updateMetrics);
     };
   }, []);
 
