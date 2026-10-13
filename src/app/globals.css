@@ -841,7 +841,8 @@ button {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 28px 0 28px;
+  gap: 18px;
+  padding: 24px 0 28px;
   background:
     radial-gradient(
       circle at 20% 50%,
@@ -864,7 +865,7 @@ button {
   width: 100%;
   flex-shrink: 0;
   z-index: 5;
-  margin-bottom: 14px;
+  margin-bottom: 4px;
 }
 
 .attractions-stage-header .kicker {
@@ -943,9 +944,11 @@ button {
 .attractions-reel-viewport {
   position: relative;
   flex: 1;
+  min-height: 0;
   display: flex;
   align-items: center;
   width: 100%;
+  padding: 10px 0 14px;
   perspective: 1200px;
 }
 
@@ -971,9 +974,7 @@ button {
 .clay-card {
   width: 84vw;
   max-width: 1020px;
-  height: 64vh;
-  max-height: 520px;
-  min-height: 410px;
+  height: clamp(360px, 53vh, 465px);
   flex-shrink: 0;
   background: #ffffff;
   border-radius: 38px;
@@ -1099,8 +1100,8 @@ button {
 
 .clay-emoji-pedestal {
   position: relative;
-  width: 210px;
-  height: 210px;
+  width: 195px;
+  height: 195px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.28);
   display: grid;
@@ -1134,7 +1135,7 @@ button {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 12px 10px 12px 4px;
+  padding: 8px 10px 8px 4px;
   height: 100%;
 }
 
@@ -1149,11 +1150,11 @@ button {
   align-items: center;
   gap: 6px;
   border-radius: 12px;
-  padding: 7px 13px;
+  padding: 6px 12px;
   background: #f1ecff;
   color: #644cc7;
   font-size: 12px;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
   box-shadow:
     inset 0 3px 5px rgba(255, 255, 255, 0.9),
     inset 0 -3px 6px rgba(113, 74, 212, 0.16),
@@ -1161,32 +1162,32 @@ button {
 }
 
 .clay-info h3 {
-  font-size: clamp(26px, 3.1vw, 38px);
+  font-size: clamp(24px, 2.9vw, 35px);
   line-height: 1.12;
   letter-spacing: 0.015em;
   color: var(--navy);
-  margin: 0 0 12px;
+  margin: 0 0 10px;
 }
 
 .clay-info p {
   color: var(--muted);
-  font-size: 15px;
-  line-height: 1.65;
-  margin: 0 0 18px;
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0 0 14px;
 }
 
 .clay-chips {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 16px;
+  gap: 9px;
+  margin-bottom: 12px;
 }
 
 .clay-chip {
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  padding: 9px 14px;
+  padding: 8px 13px;
   border-radius: 16px;
   background: #f6f8ff;
   color: var(--ink);
@@ -1203,13 +1204,13 @@ button {
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding-top: 18px;
+  padding-top: 14px;
   border-top: 2px dashed var(--line);
   margin-top: auto;
 }
 
 .price {
-  font-size: 28px;
+  font-size: 26px;
   color: #5741c5;
   line-height: 1;
 }
@@ -1242,6 +1243,8 @@ button {
   gap: 16px;
   width: 100%;
   flex-shrink: 0;
+  margin-top: 8px;
+  padding-top: 6px;
   z-index: 5;
 }
 
@@ -1683,7 +1686,7 @@ button {
   }
   .clay-card {
     width: 88vw;
-    height: 62vh;
+    height: clamp(355px, 53vh, 455px);
   }
   .clay-card-inner {
     grid-template-columns: 1fr 1fr;
@@ -1787,6 +1790,7 @@ button {
   .attractions-sticky-stage {
     top: 72px;
     height: calc(100dvh - 72px);
+    gap: 12px;
     padding: 10px 0 74px;
   }
   .attractions-stage-header {
@@ -1821,9 +1825,7 @@ button {
   .clay-card {
     width: 88vw;
     max-width: 390px;
-    height: 62vh;
-    max-height: 465px;
-    min-height: 365px;
+    height: clamp(340px, 54vh, 430px);
     border-radius: 30px;
   }
   .clay-card-inner {
