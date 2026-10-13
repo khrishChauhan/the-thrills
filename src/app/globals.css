@@ -743,22 +743,60 @@ button {
   bottom: -1px;
   left: 0;
   width: 100%;
-  height: 50px;
-  background: var(--bg);
-  z-index: 6;
-  clip-path: polygon(
-    0 64%,
-    10% 84%,
-    20% 50%,
-    32% 75%,
-    45% 40%,
-    60% 70%,
-    73% 44%,
-    85% 68%,
-    100% 32%,
-    100% 100%,
-    0 100%
-  );
+  height: 56px;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 3;
+  line-height: 0;
+}
+
+.wave-track {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 100%;
+  display: block;
+  will-change: transform;
+}
+
+.wave-track-back {
+  z-index: 1;
+  animation: waveFlowBackMorph 18s linear infinite;
+}
+
+.wave-track-front {
+  z-index: 2;
+  animation: waveFlowRight 12s linear infinite;
+}
+
+@keyframes waveFlowRight {
+  0% {
+    transform: translate3d(-50%, 0, 0);
+  }
+  100% {
+    transform: translate3d(0%, 0, 0);
+  }
+}
+
+@keyframes waveFlowBackMorph {
+  0% {
+    transform: translate3d(-50%, 0, 0) scaleY(1);
+  }
+  50% {
+    transform: translate3d(-25%, 2px, 0) scaleY(1.08);
+  }
+  100% {
+    transform: translate3d(0%, 0, 0) scaleY(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wave-track-back,
+  .wave-track-front {
+    animation: none !important;
+    transform: translate3d(0, 0, 0);
+  }
 }
 
 .section {

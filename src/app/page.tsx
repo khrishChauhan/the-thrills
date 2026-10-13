@@ -802,7 +802,31 @@ export default function HomePage() {
                 </motion.div>
               </div>
             </div>
-            <div className="wave"></div>
+            <div className="wave" aria-hidden="true">
+              {/* Back Atmospheric Wave Layer (Translucent Lavender-White) */}
+              <svg
+                className="wave-track wave-track-back"
+                viewBox="0 0 2880 100"
+                preserveAspectRatio="none"
+              >
+                <path
+                  d="M0,58 C180,22 360,84 540,42 C720,14 900,78 1080,36 C1260,8 1350,76 1440,58 C1620,22 1800,84 1980,42 C2160,14 2340,78 2520,36 C2700,8 2790,76 2880,58 L2880,100 L0,100 Z"
+                  fill="rgba(235, 228, 255, 0.26)"
+                />
+              </svg>
+
+              {/* Front Main Wave Layer (Solid var(--bg) #f7f9ff) */}
+              <svg
+                className="wave-track wave-track-front"
+                viewBox="0 0 2880 100"
+                preserveAspectRatio="none"
+              >
+                <path
+                  d="M0,64 L144,84 L288,50 L461,75 L648,40 L864,70 L1051,44 L1224,68 L1340,34 L1440,64 L1584,84 L1728,50 L1901,75 L2088,40 L2304,70 L2491,44 L2664,68 L2780,34 L2880,64 L2880,100 L0,100 Z"
+                  fill="var(--bg)"
+                />
+              </svg>
+            </div>
           </div>
         </section>
 
