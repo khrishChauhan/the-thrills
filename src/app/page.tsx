@@ -1,6 +1,107 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useMotionValueEvent,
+} from "framer-motion";
+
+interface AttractionItem {
+  id: number;
+  emoji: string;
+  visualClass: string;
+  indexLabel: string;
+  topBadge: string;
+  zoneTag: string;
+  title: string;
+  description: string;
+  chips: string[];
+  price?: string;
+  isDiscoverCard?: boolean;
+}
+
+const ATTRACTIONS_DATA: AttractionItem[] = [
+  {
+    id: 1,
+    emoji: "🎮",
+    visualClass: "clay-visual-1",
+    indexLabel: "#01 ATTRACTION",
+    topBadge: "⭐ POPULAR",
+    zoneTag: "✦ THRILLS ADVENTURE ZONE",
+    title: "Fun Zone",
+    description:
+      "A vibrant space packed with playful moments. Jump into action-packed games, interactive challenges, and non-stop excitement for kids, teens, and adults alike.",
+    chips: ["🎯 Arcade Challenges", "👨‍👩‍👧‍👦 All Ages Fun", "⚡ High Energy"],
+    price: "₹100",
+  },
+  {
+    id: 2,
+    emoji: "🪞",
+    visualClass: "clay-visual-2",
+    indexLabel: "#02 ATTRACTION",
+    topBadge: "🎟️ ₹100 ENTRY",
+    zoneTag: "✦ OPTICAL WONDER ZONE",
+    title: "Mirror House",
+    description:
+      "Explore a world of playful reflections. Wander through dazzling mirror corridors and hilarious optical reflections that turn every step into a fun surprise.",
+    chips: ["✨ Endless Reflections", "📸 Picture Perfect", "🤩 Laugh Out Loud"],
+    price: "₹100",
+  },
+  {
+    id: 3,
+    emoji: "👻",
+    visualClass: "clay-visual-3",
+    indexLabel: "#03 ATTRACTION",
+    topBadge: "🔥 THRILL SEEKERS",
+    zoneTag: "✦ SPOOKY MYSTERY ZONE",
+    title: "Horror House",
+    description:
+      "For brave hearts who love a spooky surprise. Step inside eerie corridors filled with playful scares, mysterious shadows, and heart-racing thrills!",
+    chips: ["🕯️ Spooky Surprises", "🔊 Eerie Sound FX", "💓 Brave Hearts"],
+    price: "₹100",
+  },
+  {
+    id: 4,
+    emoji: "🌀",
+    visualClass: "clay-visual-4",
+    indexLabel: "#04 ATTRACTION",
+    topBadge: "🌟 MUST VISIT",
+    zoneTag: "✦ MIND-BENDING ZONE",
+    title: "Illusion House",
+    description:
+      "Let your eyes play tricks on your imagination. Experience gravity-defying rooms, perspective puzzles, and mind-bending visual wonders.",
+    chips: ["🧠 Mind-Bending", "📷 Trick Photos", "🎪 Family Favorite"],
+    price: "₹100",
+  },
+  {
+    id: 5,
+    emoji: "🎬",
+    visualClass: "clay-visual-5",
+    indexLabel: "#05 ATTRACTION",
+    topBadge: "🎬 7D MOTION",
+    zoneTag: "✦ IMMERSIVE CINEMA ZONE",
+    title: "7D Theatre",
+    description:
+      "An immersive entertainment experience. Strap in for thrilling 3D visuals paired with motion seats and exciting multi-sensory theatre effects.",
+    chips: ["🕶️ 3D Cinema", "💺 Motion Seats", "💨 Sensory Effects"],
+    price: "₹100",
+  },
+  {
+    id: 6,
+    emoji: "🏖️",
+    visualClass: "clay-visual-6",
+    indexLabel: "#06 FULL PARK",
+    topBadge: "☀️ ALL-DAY JOY",
+    zoneTag: "✦ COMPLETE PARK EXPERIENCE",
+    title: "And More Fun!",
+    description:
+      "Explore the park and make a day of it. From refreshing water splashes to relaxing hangout zones, there is always more joy waiting around every corner.",
+    chips: ["🌊 Water & Pool Fun", "🎉 Group Outings", "☀️ Full Day Joy"],
+    isDiscoverCard: true,
+  },
+];
 
 export default function HomePage() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -11,6 +112,88 @@ export default function HomePage() {
   const [galleryPreviews, setGalleryPreviews] = useState<
     [string | null, string | null, string | null]
   >([null, null, null]);
+
+  // Pinned Attractions Scroll Reel State & Refs
+  const attractionsSectionRef = useRef<HTMLElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(1);
+  const [maxTranslateX, setMaxTranslateX] = useState(0);
+
+  useEffect(() => {
+    const updateScrollDistance = () => {
+      if (!trackRef.current) return;
+      const cards = trackRef.current.children;
+      if (cards.length === 0) return;
+
+      const firstCard = cards[0] as HTMLElement;
+      const lastCard = cards[cards.length - 1] as HTMLElement;
+
+      const firstCardCenter = firstCard.offsetLeft + firstCard.offsetWidth / 2;
+      const lastCardCenter = lastCard.offsetLeft + lastCard.offsetWidth / 2;
+
+      setMaxTranslateX(Math.max(0, lastCardCenter - firstCardCenter));
+    };
+
+    updateScrollDistance();
+    const timer = setTimeout(updateScrollDistance, 150);
+    window.addEventListener("resize", updateScrollDistance);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("resize", updateScrollDistance);
+    };
+  }, []);
+
+  const { scrollYProgress } = useScroll({
+    target: attractionsSectionRef,
+    offset: ["start start", "end end"],
+  });
+
+  // Phase 1: Zoom-in entry (0 -> 0.16) & subtle exit settle (0.90 -> 1.0)
+  const scale = useTransform(
+    scrollYProgress,
+    [0, 0.16, 0.9, 1],
+    [0.76, 1, 1, 0.94]
+  );
+  const opacity = useTransform(scrollYProgress, [0, 0.1], [0.55, 1]);
+  const rotateX = useTransform(scrollYProgress, [0, 0.16], [10, 0]);
+
+  // Phase 2: Horizontal card-by-card glide (0.16 -> 0.86) & dwell buffer (0.86 -> 0.95)
+  const x = useTransform(
+    scrollYProgress,
+    [0.16, 0.86, 0.95],
+    [0, -maxTranslateX, -maxTranslateX]
+  );
+
+  // Clay progress bar fill width
+  const progressWidth = useTransform(
+    scrollYProgress,
+    [0.16, 0.86],
+    ["0%", "100%"]
+  );
+
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    if (latest <= 0.16) {
+      setActiveIndex(1);
+    } else if (latest >= 0.86) {
+      setActiveIndex(6);
+    } else {
+      const normalized = (latest - 0.16) / 0.7;
+      const idx = Math.min(6, Math.max(1, Math.round(normalized * 5) + 1));
+      setActiveIndex(idx);
+    }
+  });
+
+  const scrollToCard = (index: number) => {
+    if (!attractionsSectionRef.current) return;
+    const sectionTop = attractionsSectionRef.current.offsetTop;
+    const scrollableDistance =
+      attractionsSectionRef.current.offsetHeight - window.innerHeight;
+    const targetProgress = 0.16 + (index / 5) * 0.7;
+    window.scrollTo({
+      top: sectionTop + scrollableDistance * targetProgress,
+      behavior: "smooth",
+    });
+  };
 
   const handleSelectPackage = (value: string) => {
     setSelectedPackage(value);
@@ -177,9 +360,15 @@ export default function HomePage() {
           </div>
         </div>
 
-        <section className="section" id="attractions">
-          <div className="container">
-            <div className="sectionhead">
+        {/* 3D CLAYMORPHIC PINNED ZOOM-IN & HORIZONTAL SCROLL REEL */}
+        <section
+          ref={attractionsSectionRef}
+          className="attractions-pinned-section"
+          id="attractions"
+        >
+          <div className="attractions-sticky-stage">
+            {/* Compact Header Inside Sticky Stage */}
+            <div className="container attractions-stage-header">
               <div>
                 <div className="kicker">Discover the excitement</div>
                 <h2>
@@ -191,85 +380,132 @@ export default function HomePage() {
                   attraction below is listed at ₹100.
                 </p>
               </div>
-              <span className="label">5 attractions</span>
+
+              <div className="clay-hud-box">
+                <div className="clay-counter-pill">
+                  <span className="clay-counter-dot" />
+                  <span>
+                    0{activeIndex} / 06 • 5 Attractions + More
+                  </span>
+                </div>
+                <div className="clay-progress-track">
+                  <motion.div
+                    className="clay-progress-fill"
+                    style={{ width: progressWidth }}
+                  />
+                </div>
+              </div>
             </div>
 
-            <div className="cards">
-              <article className="attraction">
-                <div className="visual">
-                  <span className="big">🎮</span>
-                </div>
-                <div className="info">
-                  <h3>Fun Zone</h3>
-                  <p>A vibrant space packed with playful moments.</p>
-                  <div className="price">
-                    ₹100 <small>/ attraction</small>
-                  </div>
-                </div>
-              </article>
+            {/* 80%–90% Screen 3D Claymorphic Horizontal Reel */}
+            <div className="attractions-reel-viewport">
+              <motion.div
+                className="attractions-zoom-wrapper"
+                style={{
+                  scale,
+                  opacity,
+                  rotateX,
+                  transformOrigin: "center center",
+                }}
+              >
+                <motion.div
+                  ref={trackRef}
+                  className="attractions-horizontal-track"
+                  style={{ x }}
+                >
+                  {ATTRACTIONS_DATA.map((item, idx) => (
+                    <article
+                      key={item.id}
+                      className={`clay-card${
+                        activeIndex === idx + 1 ? " is-active" : ""
+                      }`}
+                    >
+                      <div className="clay-card-inner">
+                        {/* Left / Top: 3D Clay Visual Stage */}
+                        <div className={`clay-visual ${item.visualClass}`}>
+                          <div className="clay-ring-1" />
+                          <div className="clay-ring-2" />
+                          <span className="clay-pill-left">
+                            {item.indexLabel}
+                          </span>
+                          <span className="clay-pill-right">
+                            {item.topBadge}
+                          </span>
+                          <div className="clay-emoji-pedestal">
+                            <span className="clay-emoji">{item.emoji}</span>
+                          </div>
+                        </div>
 
-              <article className="attraction">
-                <div className="visual">
-                  <span className="big">🪞</span>
-                </div>
-                <div className="info">
-                  <h3>Mirror House</h3>
-                  <p>Explore a world of playful reflections.</p>
-                  <div className="price">
-                    ₹100 <small>/ attraction</small>
-                  </div>
-                </div>
-              </article>
+                        {/* Right / Bottom: Tactile Clay Info Stage */}
+                        <div className="clay-info">
+                          <div className="clay-info-top">
+                            <span className="clay-zone-tag">
+                              {item.zoneTag}
+                            </span>
+                            <h3>{item.title}</h3>
+                            <p>{item.description}</p>
 
-              <article className="attraction">
-                <div className="visual">
-                  <span className="big">👻</span>
-                </div>
-                <div className="info">
-                  <h3>Horror House</h3>
-                  <p>For brave hearts who love a spooky surprise.</p>
-                  <div className="price">
-                    ₹100 <small>/ attraction</small>
-                  </div>
-                </div>
-              </article>
+                            <div className="clay-chips">
+                              {item.chips.map((chip) => (
+                                <span key={chip} className="clay-chip">
+                                  {chip}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
 
-              <article className="attraction">
-                <div className="visual">
-                  <span className="big">🌀</span>
-                </div>
-                <div className="info">
-                  <h3>Illusion House</h3>
-                  <p>Let your eyes play tricks on your imagination.</p>
-                  <div className="price">
-                    ₹100 <small>/ attraction</small>
-                  </div>
-                </div>
-              </article>
+                          <div className="clay-card-footer">
+                            {item.isDiscoverCard ? (
+                              <>
+                                <span className="label">Discover the park</span>
+                                <a href="#pricing" className="btn btn-purple">
+                                  View Full Packages →
+                                </a>
+                              </>
+                            ) : (
+                              <>
+                                <div className="price">
+                                  {item.price} <small>/ attraction</small>
+                                </div>
+                                <a
+                                  href="#contact"
+                                  className="btn btn-purple"
+                                  onClick={() =>
+                                    handleSelectPackage("Individual Attractions")
+                                  }
+                                >
+                                  Book This Ride →
+                                </a>
+                              </>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </article>
+                  ))}
+                </motion.div>
+              </motion.div>
+            </div>
 
-              <article className="attraction">
-                <div className="visual">
-                  <span className="big">🎬</span>
-                </div>
-                <div className="info">
-                  <h3>7D Theatre</h3>
-                  <p>An immersive entertainment experience.</p>
-                  <div className="price">
-                    ₹100 <small>/ attraction</small>
-                  </div>
-                </div>
-              </article>
-
-              <article className="attraction">
-                <div className="visual">
-                  <span className="big">🏖️</span>
-                </div>
-                <div className="info">
-                  <h3>And More Fun!</h3>
-                  <p>Explore the park and make a day of it.</p>
-                  <div className="label">Discover the park</div>
-                </div>
-              </article>
+            {/* Bottom Stage Controls */}
+            <div className="container attractions-stage-footer">
+              <div className="clay-dots" role="tablist" aria-label="Attractions">
+                {ATTRACTIONS_DATA.map((item, idx) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    aria-label={`Jump to ${item.title}`}
+                    className={`clay-dot${
+                      activeIndex === idx + 1 ? " active" : ""
+                    }`}
+                    onClick={() => scrollToCard(idx)}
+                  />
+                ))}
+              </div>
+              <div className="clay-scroll-hint">
+                <span>↕</span>
+                <span>Scroll down to glide through all 6 cards</span>
+              </div>
             </div>
           </div>
         </section>
