@@ -684,7 +684,7 @@ export default function HomePage() {
                     ONLY!
                   </span>
                   <span className="ride2">
-                    <FerrisWheel size={88} strokeWidth={1.8} />
+                    <FerrisWheel size={42} strokeWidth={2.2} />
                   </span>
                   <span className="ride">
                     <Waves size={140} strokeWidth={1.8} />
