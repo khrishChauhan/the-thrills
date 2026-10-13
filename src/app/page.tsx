@@ -2,15 +2,36 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import {
-  motion,
+   motion,
   useScroll,
   useTransform,
   useMotionValueEvent,
 } from "framer-motion";
+import {
+  MapPin,
+  Sparkles,
+  Ticket,
+  FerrisWheel,
+  Waves,
+  Camera,
+  Gamepad2,
+  Ghost,
+  Orbit,
+  Clapperboard,
+  Palmtree,
+  Building2,
+  Heart,
+  Mail,
+  Star,
+  Menu,
+  X,
+  ArrowUpRight,
+  ArrowRight,
+} from "lucide-react";
 
 interface AttractionItem {
   id: number;
-  emoji: string;
+  icon: React.ReactNode;
   visualClass: string;
   indexLabel: string;
   topBadge: string;
@@ -25,80 +46,80 @@ interface AttractionItem {
 const ATTRACTIONS_DATA: AttractionItem[] = [
   {
     id: 1,
-    emoji: "🎮",
+    icon: <Gamepad2 size={88} strokeWidth={1.8} />,
     visualClass: "clay-visual-1",
     indexLabel: "#01 ATTRACTION",
-    topBadge: "⭐ POPULAR",
+    topBadge: "POPULAR",
     zoneTag: "✦ THRILLS ADVENTURE ZONE",
     title: "Fun Zone",
     description:
       "A vibrant space packed with playful moments. Jump into action-packed games, interactive challenges, and non-stop excitement for kids, teens, and adults alike.",
-    chips: ["🎯 Arcade Challenges", "👨‍👩‍👧‍👦 All Ages Fun", "⚡ High Energy"],
+    chips: ["Arcade Challenges", "All Ages Fun", "High Energy"],
     price: "₹100",
   },
   {
     id: 2,
-    emoji: "🪞",
+    icon: <Sparkles size={88} strokeWidth={1.8} />,
     visualClass: "clay-visual-2",
     indexLabel: "#02 ATTRACTION",
-    topBadge: "🎟️ ₹100 ENTRY",
+    topBadge: "₹100 ENTRY",
     zoneTag: "✦ OPTICAL WONDER ZONE",
     title: "Mirror House",
     description:
       "Explore a world of playful reflections. Wander through dazzling mirror corridors and hilarious optical reflections that turn every step into a fun surprise.",
-    chips: ["✨ Endless Reflections", "📸 Picture Perfect", "🤩 Laugh Out Loud"],
+    chips: ["Endless Reflections", "Picture Perfect", "Laugh Out Loud"],
     price: "₹100",
   },
   {
     id: 3,
-    emoji: "👻",
+    icon: <Ghost size={88} strokeWidth={1.8} />,
     visualClass: "clay-visual-3",
     indexLabel: "#03 ATTRACTION",
-    topBadge: "🔥 THRILL SEEKERS",
+    topBadge: "THRILL SEEKERS",
     zoneTag: "✦ SPOOKY MYSTERY ZONE",
     title: "Horror House",
     description:
       "For brave hearts who love a spooky surprise. Step inside eerie corridors filled with playful scares, mysterious shadows, and heart-racing thrills!",
-    chips: ["🕯️ Spooky Surprises", "🔊 Eerie Sound FX", "💓 Brave Hearts"],
+    chips: ["Spooky Surprises", "Eerie Sound FX", "Brave Hearts"],
     price: "₹100",
   },
   {
     id: 4,
-    emoji: "🌀",
+    icon: <Orbit size={88} strokeWidth={1.8} />,
     visualClass: "clay-visual-4",
     indexLabel: "#04 ATTRACTION",
-    topBadge: "🌟 MUST VISIT",
+    topBadge: "MUST VISIT",
     zoneTag: "✦ MIND-BENDING ZONE",
     title: "Illusion House",
     description:
       "Let your eyes play tricks on your imagination. Experience gravity-defying rooms, perspective puzzles, and mind-bending visual wonders.",
-    chips: ["🧠 Mind-Bending", "📷 Trick Photos", "🎪 Family Favorite"],
+    chips: ["Mind-Bending", "Trick Photos", "Family Favorite"],
     price: "₹100",
   },
   {
     id: 5,
-    emoji: "🎬",
+    icon: <Clapperboard size={88} strokeWidth={1.8} />,
     visualClass: "clay-visual-5",
     indexLabel: "#05 ATTRACTION",
-    topBadge: "🎬 7D MOTION",
+    topBadge: "7D MOTION",
     zoneTag: "✦ IMMERSIVE CINEMA ZONE",
     title: "7D Theatre",
     description:
       "An immersive entertainment experience. Strap in for thrilling 3D visuals paired with motion seats and exciting multi-sensory theatre effects.",
-    chips: ["🕶️ 3D Cinema", "💺 Motion Seats", "💨 Sensory Effects"],
+    chips: ["3D Cinema", "Motion Seats", "Sensory Effects"],
     price: "₹100",
   },
   {
     id: 6,
-    emoji: "🏖️",
+    icon: <Palmtree size={88} strokeWidth={1.8} />,
     visualClass: "clay-visual-6",
     indexLabel: "#06 FULL PARK",
-    topBadge: "☀️ ALL-DAY JOY",
+    topBadge: "ALL-DAY JOY",
     zoneTag: "✦ COMPLETE PARK EXPERIENCE",
     title: "And More Fun!",
     description:
       "Explore the park and make a day of it. From refreshing water splashes to relaxing hangout zones, there is always more joy waiting around every corner.",
-    chips: ["🌊 Water & Pool Fun", "🎉 Group Outings", "☀️ Full Day Joy"],
+    chips: ["Water & Pool Fun", "Group Outings", "Full Day Joy"],
     isDiscoverCard: true,
   },
 ];
@@ -272,7 +293,7 @@ export default function HomePage() {
           </nav>
 
           <a className="btn btn-purple" href="#contact">
-            Plan Your Visit →
+            Plan Your Visit <ArrowRight size={16} />
           </a>
 
           <button
@@ -280,7 +301,7 @@ export default function HomePage() {
             aria-label="Toggle menu"
             onClick={() => setMenuOpen((prev) => !prev)}
           >
-            ☰
+            {menuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
       </header>
@@ -290,7 +311,8 @@ export default function HomePage() {
           <div className="container hero-main">
             <div>
               <div className="eyebrow">
-                📍 Begusarai, Bihar &nbsp; • &nbsp; Adventure awaits
+                <MapPin size={14} /> Begusarai, Bihar &nbsp; • &nbsp; Adventure
+                awaits
               </div>
               <h1>
                 LET THE
@@ -303,7 +325,7 @@ export default function HomePage() {
               </p>
               <div className="hero-actions">
                 <a className="btn btn-yellow" href="#attractions">
-                  Explore Attractions ↗
+                  Explore Attractions <ArrowUpRight size={16} />
                 </a>
                 <a className="btn btn-white" href="#pricing">
                   View Packages
@@ -322,14 +344,24 @@ export default function HomePage() {
                   <br />
                   ONLY!
                 </span>
-                <span className="ride2">🎡</span>
-                <span className="ride">🌊</span>
+                <span className="ride2">
+                  <FerrisWheel size={88} strokeWidth={1.8} />
+                </span>
+                <span className="ride">
+                  <Waves size={140} strokeWidth={1.8} />
+                </span>
               </div>
               <div className="float one">
-                <b>🎉</b> Make happy memories
+                <b>
+                  <Sparkles size={18} color="var(--purple)" />
+                </b>{" "}
+                Make happy memories
               </div>
               <div className="float two">
-                <b>🎟️</b> Fun starts here!
+                <b>
+                  <Ticket size={18} color="var(--pink)" />
+                </b>{" "}
+                Fun starts here!
               </div>
             </div>
           </div>
@@ -338,21 +370,27 @@ export default function HomePage() {
 
         <div className="container featurestrip">
           <div className="feature">
-            <div className="ico">🎢</div>
+            <div className="ico">
+              <FerrisWheel size={26} color="var(--purple)" strokeWidth={2.2} />
+            </div>
             <div>
               <strong>Exciting Attractions</strong>
               <span>Something fun for everyone</span>
             </div>
           </div>
           <div className="feature">
-            <div className="ico">📸</div>
+            <div className="ico">
+              <Camera size={26} color="var(--purple)" strokeWidth={2.2} />
+            </div>
             <div>
               <strong>Picture-Perfect Moments</strong>
               <span>Capture memories together</span>
             </div>
           </div>
           <div className="feature">
-            <div className="ico">📍</div>
+            <div className="ico">
+              <MapPin size={26} color="var(--purple)" strokeWidth={2.2} />
+            </div>
             <div>
               <strong>In Begusarai</strong>
               <span>Find your next day out</span>
@@ -432,7 +470,7 @@ export default function HomePage() {
                             {item.topBadge}
                           </span>
                           <div className="clay-emoji-pedestal">
-                            <span className="clay-emoji">{item.emoji}</span>
+                            <span className="clay-emoji">{item.icon}</span>
                           </div>
                         </div>
 
@@ -459,7 +497,7 @@ export default function HomePage() {
                               <>
                                 <span className="label">Discover the park</span>
                                 <a href="#pricing" className="btn btn-purple">
-                                  View Full Packages →
+                                  View Full Packages <ArrowRight size={16} />
                                 </a>
                               </>
                             ) : (
@@ -474,7 +512,7 @@ export default function HomePage() {
                                     handleSelectPackage("Individual Attractions")
                                   }
                                 >
-                                  Book This Ride →
+                                  Book This Ride <ArrowRight size={16} />
                                 </a>
                               </>
                             )}
@@ -541,12 +579,14 @@ export default function HomePage() {
                   className="btn btn-purple"
                   onClick={() => handleSelectPackage("Without Food — ₹699")}
                 >
-                  Enquire About This Package →
+                  Enquire About This Package <ArrowRight size={16} />
                 </a>
               </div>
 
               <div className="package featured">
-                <div className="ribbon">⭐ FEATURED</div>
+                <div className="ribbon">
+                  <Star size={12} fill="currentColor" /> FEATURED
+                </div>
                 <span className="label">WITH MEAL</span>
                 <h3>With Food</h3>
                 <p>Fun park booking package with lunch or dinner.</p>
@@ -563,7 +603,7 @@ export default function HomePage() {
                   className="btn btn-purple"
                   onClick={() => handleSelectPackage("With Food — ₹999")}
                 >
-                  Enquire About This Package →
+                  Enquire About This Package <ArrowRight size={16} />
                 </a>
               </div>
             </div>
@@ -579,7 +619,9 @@ export default function HomePage() {
         <section className="section about" id="about">
           <div className="container aboutgrid">
             <div className="aboutimage">
-              <span className="illustration">🎡</span>
+              <span className="illustration">
+                <FerrisWheel size={150} color="#ffffff" strokeWidth={1.5} />
+              </span>
             </div>
             <div>
               <div className="kicker">Who we are</div>
@@ -594,7 +636,9 @@ export default function HomePage() {
                 families, friends and groups.
               </p>
               <div className="mini">
-                <span>🏢</span>
+                <span>
+                  <Building2 size={22} color="var(--purple)" />
+                </span>
                 <div>
                   <strong>Powered by Kali Charan Infra Pvt. Ltd.</strong>
                   <small>
@@ -603,7 +647,9 @@ export default function HomePage() {
                 </div>
               </div>
               <div className="mini">
-                <span>💛</span>
+                <span>
+                  <Heart size={22} color="var(--pink)" />
+                </span>
                 <div>
                   <strong>Fun For Every Occasion</strong>
                   <small>
@@ -634,7 +680,9 @@ export default function HomePage() {
 
             <div className="gallerygrid">
               <label className="photobox">
-                <span>📷</span>
+                <span>
+                  <Camera size={36} color="var(--navy)" strokeWidth={1.8} />
+                </span>
                 <strong>Park Overview</strong>
                 <small>Click to upload a photo</small>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -651,7 +699,9 @@ export default function HomePage() {
               </label>
 
               <label className="photobox">
-                <span>💦</span>
+                <span>
+                  <Waves size={36} color="var(--navy)" strokeWidth={1.8} />
+                </span>
                 <strong>Water &amp; Pool Area</strong>
                 <small>Click to upload a photo</small>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -668,7 +718,9 @@ export default function HomePage() {
               </label>
 
               <label className="photobox">
-                <span>🎠</span>
+                <span>
+                  <FerrisWheel size={36} color="var(--navy)" strokeWidth={1.8} />
+                </span>
                 <strong>Attractions</strong>
                 <small>Click to upload a photo</small>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -705,13 +757,22 @@ export default function HomePage() {
                 enquiry using the form.
               </p>
               <div className="details">
-                <span>📍</span> Begusarai, Bihar, India
+                <span>
+                  <MapPin size={20} color="var(--mint)" />
+                </span>{" "}
+                Begusarai, Bihar, India
               </div>
               <div className="details">
-                <span>✉️</span> kcsinfra2023@gmail.com
+                <span>
+                  <Mail size={20} color="var(--mint)" />
+                </span>{" "}
+                kcsinfra2023@gmail.com
               </div>
               <div className="details">
-                <span>🏢</span> Powered by Kali Charan Infra Pvt. Ltd.
+                <span>
+                  <Building2 size={20} color="var(--mint)" />
+                </span>{" "}
+                Powered by Kali Charan Infra Pvt. Ltd.
               </div>
               <p
                 style={{
@@ -725,7 +786,7 @@ export default function HomePage() {
             </div>
 
             <form className="formbox" id="enquiry" onSubmit={handleSendEnquiry}>
-              <h3>Plan Your Visit 🎟️</h3>
+              <h3>Plan Your Visit</h3>
               <p>
                 Fill in the details. Your email app will open with the message
                 ready to send.
@@ -778,7 +839,7 @@ export default function HomePage() {
               />
 
               <button className="btn btn-yellow" type="submit">
-                Prepare Email Enquiry ↗
+                Prepare Email Enquiry <ArrowUpRight size={16} />
               </button>
               <p className="helper">
                 Your email application will open; sending is completed from
@@ -801,7 +862,7 @@ export default function HomePage() {
 
       <div className="stickybar">
         <a className="btn btn-yellow" href="#contact">
-          🎟️ Plan Your Visit
+          Plan Your Visit
         </a>
       </div>
     </>
