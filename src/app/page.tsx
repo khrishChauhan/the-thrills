@@ -29,6 +29,7 @@ import {
   X,
   ArrowUpRight,
   ArrowRight,
+  CheckCircle2,
 } from "lucide-react";
 
 interface AttractionItem {
@@ -151,6 +152,12 @@ export default function HomePage() {
   // Pinned Pricing ("Unfold Your Fun") State & Refs
   const pricingSectionRef = useRef<HTMLElement>(null);
   const [isDesktopPricing, setIsDesktopPricing] = useState(true);
+
+  // Contact Section Parallax, Tilt & Living Form State
+  const contactSectionRef = useRef<HTMLElement>(null);
+  const [enquiryPrepared, setEnquiryPrepared] = useState(false);
+  const [activeField, setActiveField] = useState<string | null>(null);
+  const [formTilt, setFormTilt] = useState({ rotateX: 0, rotateY: 0 });
 
   useEffect(() => {
     const updateResponsiveMetrics = () => {
@@ -512,6 +519,30 @@ export default function HomePage() {
   const pricingBgRing1Y = useTransform(pricingScrollProgress, [0, 1], [36, -42]);
   const pricingBgRing2Y = useTransform(pricingScrollProgress, [0, 1], [-28, 38]);
 
+  // Contact Section Scroll Parallax & Desktop Pointer Tilt
+  const { scrollYProgress: contactScrollProgress } = useScroll({
+    target: contactSectionRef,
+    offset: ["start end", "end start"],
+  });
+  const contactRing1Y = useTransform(contactScrollProgress, [0, 1], [48, -56]);
+  const contactRing2Y = useTransform(contactScrollProgress, [0, 1], [-36, 44]);
+  const contactRibbonY = useTransform(contactScrollProgress, [0, 1], [28, -28]);
+
+  const handleFormMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (prefersReducedMotion || !isDesktopPricing) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const nx = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
+    const ny = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
+    setFormTilt({
+      rotateX: Number((-ny * 2.5).toFixed(2)),
+      rotateY: Number((nx * 2.5).toFixed(2)),
+    });
+  };
+
+  const handleFormMouseLeave = () => {
+    setFormTilt({ rotateX: 0, rotateY: 0 });
+  };
+
   const handleSelectPackage = (value: string) => {
     setSelectedPackage(value);
   };
@@ -546,6 +577,7 @@ export default function HomePage() {
     const date = visitDate || "Not specified";
     const subject = "The Thrills Fun Park - Booking Enquiry";
     const body = `Hello The Thrills Fun Park Team,\n\nI would like to enquire about a visit.\n\nName: ${trimmedName}\nPhone: ${trimmedPhone}\nInterested in: ${pkg}\nPreferred date: ${date}\n\nPlease share booking details.\n\nThank you.`;
+    setEnquiryPrepared(true);
     window.location.href = `mailto:kcsinfra2023@gmail.com?subject=${encodeURIComponent(
       subject
     )}&body=${encodeURIComponent(body)}`;
@@ -1283,108 +1315,363 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="section contact" id="contact">
+        <section
+          className="section contact"
+          id="contact"
+          ref={contactSectionRef}
+        >
+          {/* Ambient Spotlights, Parallax 3D Clay Shapes & Flowing Mint Ribbon */}
+          <div className="contact-bg-decor" aria-hidden="true">
+            <div className="contact-bg-glow contact-bg-glow-purple" />
+            <div className="contact-bg-glow contact-bg-glow-mint" />
+
+            <motion.div
+              className="contact-clay-ring contact-clay-ring-left"
+              style={{ y: prefersReducedMotion ? 0 : contactRing1Y }}
+            />
+            <motion.div
+              className="contact-clay-ring contact-clay-ring-right"
+              style={{ y: prefersReducedMotion ? 0 : contactRing2Y }}
+            />
+            <motion.div
+              className="contact-clay-sphere"
+              style={{ y: prefersReducedMotion ? 0 : contactRing2Y }}
+            />
+
+            <motion.div
+              className="contact-ribbon-wrap"
+              style={{ y: prefersReducedMotion ? 0 : contactRibbonY }}
+            >
+              <svg
+                className="contact-ribbon-svg"
+                viewBox="0 0 1440 420"
+                preserveAspectRatio="none"
+              >
+                <path
+                  className="contact-ribbon-path-lavender"
+                  d="M-80,310 C220,180 480,380 780,230 C1060,90 1260,290 1520,150"
+                  fill="none"
+                  stroke="#714ad4"
+                  strokeOpacity="0.18"
+                  strokeWidth="3.5"
+                  strokeLinecap="round"
+                />
+                <path
+                  className="contact-ribbon-path-mint"
+                  d="M-60,260 C240,390 520,120 820,270 C1100,400 1280,160 1520,240"
+                  fill="none"
+                  stroke="var(--mint)"
+                  strokeOpacity="0.28"
+                  strokeWidth="4"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </motion.div>
+          </div>
+
           <div className="container contactgrid">
-            <div>
-              <div className="kicker">Get in touch</div>
+            {/* Left Column: Coordinated Staggered Split Reveal */}
+            <motion.div
+              className="contact-copy-col"
+              initial={prefersReducedMotion ? false : "hidden"}
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.25 }}
+              variants={{
+                hidden: {},
+                visible: {
+                  transition: {
+                    staggerChildren: 0.09,
+                  },
+                },
+              }}
+            >
+              <motion.div
+                className="kicker"
+                variants={{
+                  hidden: { opacity: 0, y: 16 },
+                  visible: {
+                    opacity: 1,
+                    y: 0,
+                    transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] },
+                  },
+                }}
+              >
+                Get in touch
+              </motion.div>
+
               <h2>
-                Let&apos;s Make Your Next Day{" "}
-                <span style={{ color: "var(--yellow)" }}>Amazing!</span>
+                <span className="contact-heading-line">
+                  <motion.span
+                    className="contact-heading-line-inner"
+                    variants={{
+                      hidden: { y: "105%", opacity: 0 },
+                      visible: {
+                        y: "0%",
+                        opacity: 1,
+                        transition: {
+                          duration: 0.55,
+                          ease: [0.22, 1, 0.36, 1],
+                        },
+                      },
+                    }}
+                  >
+                    Let&apos;s Make Your Next Day{" "}
+                  </motion.span>
+                </span>
+                <span className="contact-heading-line">
+                  <motion.span
+                    className="contact-heading-line-inner"
+                    style={{ color: "var(--yellow)" }}
+                    variants={{
+                      hidden: { y: "105%", opacity: 0 },
+                      visible: {
+                        y: "0%",
+                        opacity: 1,
+                        transition: {
+                          duration: 0.55,
+                          ease: [0.22, 1, 0.36, 1],
+                        },
+                      },
+                    }}
+                  >
+                    Amazing!
+                  </motion.span>
+                </span>
               </h2>
-              <p className="lede">
+
+              <motion.p
+                className="lede"
+                variants={{
+                  hidden: { opacity: 0, y: 18 },
+                  visible: {
+                    opacity: 1,
+                    y: 0,
+                    transition: { duration: 0.48, ease: [0.22, 1, 0.36, 1] },
+                  },
+                }}
+              >
                 Have a question about our attractions or packages? Send an
                 enquiry using the form.
-              </p>
-              <div className="details">
-                <span>
+              </motion.p>
+
+              <motion.div
+                className="details"
+                variants={{
+                  hidden: { opacity: 0, x: -18 },
+                  visible: {
+                    opacity: 1,
+                    x: 0,
+                    transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] },
+                  },
+                }}
+              >
+                <span className="contact-clay-ico">
                   <MapPin size={20} color="var(--mint)" />
                 </span>{" "}
                 Begusarai, Bihar, India
-              </div>
-              <div className="details">
-                <span>
+              </motion.div>
+
+              <motion.div
+                className="details"
+                variants={{
+                  hidden: { opacity: 0, x: -18 },
+                  visible: {
+                    opacity: 1,
+                    x: 0,
+                    transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] },
+                  },
+                }}
+              >
+                <span className="contact-clay-ico">
                   <Mail size={20} color="var(--mint)" />
                 </span>{" "}
                 kcsinfra2023@gmail.com
-              </div>
-              <div className="details">
-                <span>
+              </motion.div>
+
+              <motion.div
+                className="details"
+                variants={{
+                  hidden: { opacity: 0, x: -18 },
+                  visible: {
+                    opacity: 1,
+                    x: 0,
+                    transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] },
+                  },
+                }}
+              >
+                <span className="contact-clay-ico">
                   <Building2 size={20} color="var(--mint)" />
                 </span>{" "}
                 Powered by Kali Charan Infra Pvt. Ltd.
-              </div>
-              <p
+              </motion.div>
+
+              <motion.p
                 style={{
                   fontSize: "12px",
                   color: "#b7c4e7",
                   marginTop: "35px",
                 }}
+                variants={{
+                  hidden: { opacity: 0, y: 12 },
+                  visible: {
+                    opacity: 1,
+                    y: 0,
+                    transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] },
+                  },
+                }}
               >
                 This demo does not accept payments or confirm reservations.
-              </p>
-            </div>
+              </motion.p>
+            </motion.div>
 
-            <form className="formbox" id="enquiry" onSubmit={handleSendEnquiry}>
-              <h3>Plan Your Visit</h3>
-              <p>
-                Fill in the details. Your email app will open with the message
-                ready to send.
-              </p>
-
-              <div className="fields">
-                <div>
-                  <label htmlFor="name">Your Name</label>
-                  <input
-                    id="name"
-                    placeholder="Enter your name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    required
-                  />
-                </div>
-                <div>
-                  <label htmlFor="phone">Phone Number</label>
-                  <input
-                    id="phone"
-                    placeholder="Your number"
-                    inputMode="tel"
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    required
-                  />
-                </div>
-              </div>
-
-              <label htmlFor="package">Interested In</label>
-              <select
-                id="package"
-                value={selectedPackage}
-                onChange={(e) => setSelectedPackage(e.target.value)}
+            {/* Right Column: Floating 3D Clay Form Stage */}
+            <motion.div
+              className="contact-form-stage"
+              initial={prefersReducedMotion ? false : { opacity: 0, y: 32 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.58, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <div
+                className="contact-form-tilt-wrap"
+                onMouseMove={handleFormMouseMove}
+                onMouseLeave={handleFormMouseLeave}
+                style={{
+                  transform:
+                    prefersReducedMotion || !isDesktopPricing
+                      ? undefined
+                      : `rotateX(${formTilt.rotateX}deg) rotateY(${formTilt.rotateY}deg)`,
+                }}
               >
-                <option value="General Enquiry">General Enquiry</option>
-                <option value="Without Food — ₹699">Without Food — ₹699</option>
-                <option value="With Food — ₹999">With Food — ₹999</option>
-                <option value="Individual Attractions">
-                  Individual Attractions
-                </option>
-              </select>
+                {/* Decorative 3D Clay Admission Ticket Badge behind .formbox */}
+                <div className="contact-vip-stub" aria-hidden="true">
+                  <span className="contact-vip-stub-icon">
+                    <Ticket size={14} strokeWidth={2.4} />
+                  </span>
+                  <span>VIP GUEST ENQUIRY</span>
+                </div>
 
-              <label htmlFor="visit">Preferred Visit Date (optional)</label>
-              <input
-                id="visit"
-                type="date"
-                value={visitDate}
-                onChange={(e) => setVisitDate(e.target.value)}
-              />
+                <form
+                  className="formbox"
+                  id="enquiry"
+                  onSubmit={handleSendEnquiry}
+                >
+                  <h3>Plan Your Visit</h3>
+                  <p>
+                    Fill in the details. Your email app will open with the
+                    message ready to send.
+                  </p>
 
-              <button className="btn btn-yellow" type="submit">
-                Prepare Email Enquiry <ArrowUpRight size={16} />
-              </button>
-              <p className="helper">
-                Your email application will open; sending is completed from
-                there.
-              </p>
-            </form>
+                  <div className="fields">
+                    <div className="field-group">
+                      <label
+                        htmlFor="name"
+                        className={
+                          activeField === "name" ? "field-label-active" : ""
+                        }
+                      >
+                        Your Name
+                      </label>
+                      <input
+                        id="name"
+                        placeholder="Enter your name"
+                        value={name}
+                        onFocus={() => setActiveField("name")}
+                        onBlur={() => setActiveField(null)}
+                        onChange={(e) => setName(e.target.value)}
+                        required
+                      />
+                    </div>
+                    <div className="field-group">
+                      <label
+                        htmlFor="phone"
+                        className={
+                          activeField === "phone" ? "field-label-active" : ""
+                        }
+                      >
+                        Phone Number
+                      </label>
+                      <input
+                        id="phone"
+                        placeholder="Your number"
+                        inputMode="tel"
+                        value={phone}
+                        onFocus={() => setActiveField("phone")}
+                        onBlur={() => setActiveField(null)}
+                        onChange={(e) => setPhone(e.target.value)}
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="field-group">
+                    <label
+                      htmlFor="package"
+                      className={
+                        activeField === "package" ? "field-label-active" : ""
+                      }
+                    >
+                      Interested In
+                    </label>
+                    <select
+                      id="package"
+                      value={selectedPackage}
+                      onFocus={() => setActiveField("package")}
+                      onBlur={() => setActiveField(null)}
+                      onChange={(e) => setSelectedPackage(e.target.value)}
+                    >
+                      <option value="General Enquiry">General Enquiry</option>
+                      <option value="Without Food — ₹699">
+                        Without Food — ₹699
+                      </option>
+                      <option value="With Food — ₹999">With Food — ₹999</option>
+                      <option value="Individual Attractions">
+                        Individual Attractions
+                      </option>
+                    </select>
+                  </div>
+
+                  <div className="field-group">
+                    <label
+                      htmlFor="visit"
+                      className={
+                        activeField === "visit" ? "field-label-active" : ""
+                      }
+                    >
+                      Preferred Visit Date (optional)
+                    </label>
+                    <input
+                      id="visit"
+                      type="date"
+                      value={visitDate}
+                      onFocus={() => setActiveField("visit")}
+                      onBlur={() => setActiveField(null)}
+                      onChange={(e) => setVisitDate(e.target.value)}
+                    />
+                  </div>
+
+                  <button className="btn btn-yellow" type="submit">
+                    Prepare Email Enquiry{" "}
+                    <ArrowUpRight size={16} className="cta-arrow-icon" />
+                  </button>
+
+                  {enquiryPrepared && (
+                    <div className="enquiry-feedback-banner" role="status">
+                      <CheckCircle2 size={16} className="enquiry-feedback-ico" />
+                      <span>
+                        Your email app has been opened with your enquiry details
+                        ready — please press Send in your mail app.
+                      </span>
+                    </div>
+                  )}
+
+                  <p className="helper">
+                    Your email application will open; sending is completed from
+                    there.
+                  </p>
+                </form>
+              </div>
+            </motion.div>
           </div>
         </section>
       </main>

@@ -1817,10 +1817,125 @@ button {
 .contact {
   background: var(--navy);
   color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Ambient Lighting, Parallax 3D Clay Shapes & Flowing Mint Ribbon */
+.contact-bg-decor {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.contact-bg-glow {
+  position: absolute;
+  border-radius: 50%;
+}
+
+.contact-bg-glow-purple {
+  width: 620px;
+  height: 620px;
+  right: -6%;
+  top: -8%;
+  background: radial-gradient(
+    circle,
+    rgba(113, 74, 212, 0.22) 0%,
+    rgba(113, 74, 212, 0) 70%
+  );
+}
+
+.contact-bg-glow-mint {
+  width: 540px;
+  height: 540px;
+  left: -8%;
+  bottom: -10%;
+  background: radial-gradient(
+    circle,
+    rgba(125, 230, 201, 0.12) 0%,
+    rgba(125, 230, 201, 0) 70%
+  );
+}
+
+.contact-clay-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 22px solid #1c2759;
+  box-shadow:
+    0 20px 44px rgba(5, 9, 28, 0.45),
+    inset 0 5px 10px rgba(125, 148, 235, 0.18),
+    inset 0 -6px 12px rgba(7, 11, 32, 0.65);
+}
+
+.contact-clay-ring-left {
+  width: 210px;
+  height: 210px;
+  left: -72px;
+  top: 12%;
+}
+
+.contact-clay-ring-right {
+  width: 240px;
+  height: 240px;
+  right: -84px;
+  bottom: 8%;
+  border-color: #232f68;
+}
+
+.contact-clay-sphere {
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #253472;
+  left: 44%;
+  top: 14%;
+  box-shadow:
+    0 14px 28px rgba(5, 9, 28, 0.45),
+    inset 0 5px 10px rgba(125, 230, 201, 0.25),
+    inset 0 -6px 12px rgba(8, 13, 38, 0.65);
+}
+
+.contact-ribbon-wrap {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 16%;
+  height: 360px;
+  pointer-events: none;
+}
+
+.contact-ribbon-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  animation: contactRibbonFloat 14s ease-in-out infinite alternate;
+}
+
+@keyframes contactRibbonFloat {
+  0% {
+    transform: translate3d(-12px, -6px, 0) scaleY(0.97);
+  }
+  100% {
+    transform: translate3d(12px, 8px, 0) scaleY(1.03);
+  }
 }
 
 .contact .kicker {
   color: var(--mint);
+}
+
+.contact-heading-line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 4px;
+}
+
+.contact-heading-line-inner {
+  display: inline-block;
+  will-change: transform, opacity;
 }
 
 .contact .lede {
@@ -1828,6 +1943,8 @@ button {
 }
 
 .contactgrid {
+  position: relative;
+  z-index: 2;
   display: grid;
   grid-template-columns: 0.92fr 1.08fr;
   gap: 68px;
@@ -1837,28 +1954,93 @@ button {
 .details {
   display: flex;
   align-items: center;
-  gap: 14px;
-  margin: 22px 0;
+  gap: 16px;
+  margin: 20px 0;
   color: #e1e7ff;
   font-weight: 600;
   font-size: 15px;
 }
 
-.details span {
+.details span.contact-clay-ico {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: #1c2759;
+  border: 2px solid #2b3a78;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+  box-shadow:
+    0 10px 22px rgba(6, 10, 30, 0.4),
+    inset 0 3px 6px rgba(255, 255, 255, 0.14),
+    inset 0 -4px 8px rgba(7, 11, 32, 0.6);
+  transition: transform 0.22s ease;
+}
+
+.details:hover span.contact-clay-ico {
+  transform: translateY(-2px) scale(1.04);
+}
+
+/* Right Column: Perspective & Floating 3D Clay Form Stage */
+.contact-form-stage {
+  perspective: 1100px;
+  position: relative;
+}
+
+.contact-form-tilt-wrap {
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Decorative 3D Clay Ticket Badge Behind .formbox */
+.contact-vip-stub {
+  position: absolute;
+  top: -18px;
+  right: 26px;
+  z-index: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 15px;
+  border-radius: 15px;
+  background: var(--purple);
+  color: #ffffff;
+  border: 3px solid #ffffff;
+  font-family: var(--font-marker);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transform: rotate(5deg);
+  box-shadow:
+    0 14px 28px rgba(6, 10, 32, 0.42),
+    inset 0 -4px 7px rgba(42, 20, 105, 0.45),
+    inset 0 3px 6px rgba(255, 255, 255, 0.45);
+  pointer-events: none;
+}
+
+.contact-vip-stub-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding-right: 6px;
+  border-right: 2px dashed rgba(255, 255, 255, 0.4);
 }
 
 .formbox {
-  background: white;
+  position: relative;
+  z-index: 1;
+  background: #ffffff;
   color: var(--ink);
   padding: 38px;
-  border-radius: 28px;
+  border-radius: 32px;
+  border: 4px solid #ffffff;
   box-shadow:
-    0 24px 50px rgba(8, 12, 34, 0.35),
-    inset 0 -8px 16px rgba(214, 222, 248, 0.7),
-    inset 0 4px 10px rgba(255, 255, 255, 1);
+    0 28px 60px rgba(6, 10, 32, 0.45),
+    0 10px 24px rgba(113, 74, 212, 0.14),
+    inset 0 -9px 18px rgba(214, 222, 248, 0.72),
+    inset 0 5px 12px rgba(255, 255, 255, 1);
 }
 
 .formbox h3 {
@@ -1883,28 +2065,111 @@ button {
   font-size: 12px;
   font-weight: 800;
   margin: 14px 0 7px;
+  color: var(--ink);
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.formbox label.field-label-active {
+  color: var(--purple);
+  transform: translateX(2px);
 }
 
 .formbox input,
 .formbox select {
   width: 100%;
-  padding: 14px 12px;
-  border: 1px solid #dfe4f3;
-  border-radius: 11px;
-  background: #fafbfe;
+  padding: 14px 14px;
+  border: 2px solid #dfe5f7;
+  border-radius: 14px;
+  background: #f6f8ff;
   color: var(--ink);
-  outline-color: var(--purple);
+  font-weight: 600;
+  outline: none;
+  box-shadow:
+    inset 0 2px 5px rgba(20, 29, 71, 0.06),
+    inset 0 -2px 4px rgba(255, 255, 255, 0.9);
+  transition:
+    border-color 0.22s ease,
+    background-color 0.22s ease,
+    box-shadow 0.22s ease,
+    transform 0.22s ease;
 }
 
-.formbox button {
+.formbox input:focus,
+.formbox input:focus-visible,
+.formbox select:focus,
+.formbox select:focus-visible {
+  border-color: var(--purple);
+  background: #ffffff;
+  box-shadow:
+    0 0 0 4px rgba(113, 74, 212, 0.14),
+    0 8px 18px rgba(27, 36, 80, 0.06),
+    inset 0 2px 4px rgba(255, 255, 255, 1);
+}
+
+.formbox button.btn-yellow {
   width: 100%;
   margin-top: 22px;
+  transition:
+    transform 0.22s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.formbox button.btn-yellow .cta-arrow-icon {
+  transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.formbox button.btn-yellow:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 16px 32px rgba(255, 206, 70, 0.38),
+    inset 0 -4px 8px rgba(204, 142, 0, 0.32),
+    inset 0 3px 6px rgba(255, 255, 255, 0.85);
+}
+
+.formbox button.btn-yellow:hover .cta-arrow-icon {
+  transform: translate(3px, -3px);
+}
+
+.formbox button.btn-yellow:active {
+  transform: translateY(1px);
+}
+
+.enquiry-feedback-banner {
+  margin-top: 14px;
+  padding: 11px 14px;
+  border-radius: 14px;
+  background: #eefaf6;
+  border: 2px solid #9fe6d1;
+  color: #14352d;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.45;
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  box-shadow:
+    0 8px 18px rgba(20, 29, 71, 0.06),
+    inset 0 2px 4px rgba(255, 255, 255, 0.9);
+}
+
+.enquiry-feedback-ico {
+  color: #1f9d7b;
+  flex-shrink: 0;
+  margin-top: 1px;
 }
 
 .formbox .helper {
   font-size: 11px;
   margin-top: 14px;
   text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contact-ribbon-svg {
+    animation: none !important;
+  }
 }
 
 .footer {
