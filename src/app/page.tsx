@@ -1007,8 +1007,7 @@ export default function HomePage() {
                 style={prefersReducedMotion ? undefined : { y: heroCopyY }}
               >
                 <div className="eyebrow">
-                  <MapPin size={14} /> Begusarai, Bihar &nbsp; • &nbsp; Adventure
-                  awaits
+                  <MapPin size={14} /> Begusarai, Bihar · Adventure awaits
                 </div>
                 <h1>
                   LET THE
