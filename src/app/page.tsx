@@ -770,85 +770,29 @@ export default function HomePage() {
             <span className="brandmark" aria-hidden="true">
               <svg
                 className="brandmark-svg"
-                viewBox="0 0 44 44"
+                viewBox="0 0 36 36"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                {/* Balanced squircle badge in warm sunny yellow with crisp navy structural rim */}
                 <rect
-                  x="1.25"
-                  y="1.25"
-                  width="41.5"
-                  height="41.5"
-                  rx="12"
+                  x="1.5"
+                  y="1.5"
+                  width="33"
+                  height="33"
+                  rx="8"
                   fill="#FFCE46"
                   stroke="#141D47"
-                  strokeWidth="2.2"
+                  strokeWidth="2"
                 />
-                {/* Subtle top inner specular highlight arc */}
                 <path
-                  d="M6 12C6 7.58172 9.58172 4 14 4H30C34.4183 4 38 7.58172 38 12"
-                  stroke="#FFF6D6"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                />
-                {/* Ferris wheel outer structural ring */}
-                <circle
-                  cx="22"
-                  cy="22"
-                  r="11.5"
+                  d="M 18 7 Q 18 18 29 18 Q 18 18 18 29 Q 18 18 7 18 Q 18 18 18 7 Z"
                   fill="#141D47"
-                />
-                <circle
-                  cx="22"
-                  cy="22"
-                  r="8.75"
-                  stroke="#FFCE46"
-                  strokeWidth="1.5"
-                  strokeDasharray="3.2 2.6"
-                />
-                {/* 4 diagonal purple accent spokes */}
-                <path
-                  d="M14.2 14.2L29.8 29.8M29.8 14.2L14.2 29.8"
-                  stroke="#9D7BFF"
-                  strokeWidth="1.75"
-                  strokeLinecap="round"
-                />
-                {/* 4 cardinal geometric sunburst star blades in warm yellow & white */}
-                <path
-                  d="M22 6.5L24.35 18.65L36.5 22L24.35 25.35L22 37.5L19.65 25.35L7.5 22L19.65 18.65L22 6.5Z"
-                  fill="#FFFFFF"
-                  stroke="#141D47"
-                  strokeWidth="1.4"
-                  strokeLinejoin="round"
-                />
-                {/* 4 cardinal gondola perimeter nodes */}
-                <circle cx="22" cy="6.5" r="2.1" fill="#714AD4" stroke="#141D47" strokeWidth="1.2" />
-                <circle cx="37.5" cy="22" r="2.1" fill="#714AD4" stroke="#141D47" strokeWidth="1.2" />
-                <circle cx="22" cy="37.5" r="2.1" fill="#714AD4" stroke="#141D47" strokeWidth="1.2" />
-                <circle cx="6.5" cy="22" r="2.1" fill="#714AD4" stroke="#141D47" strokeWidth="1.2" />
-                {/* Center hub */}
-                <circle
-                  cx="22"
-                  cy="22"
-                  r="3.8"
-                  fill="#141D47"
-                />
-                <circle
-                  cx="22"
-                  cy="22"
-                  r="1.9"
-                  fill="#FF7196"
                 />
               </svg>
             </span>
             <span className="brand-copy">
               <span className="brand-title">THE THRILLS</span>
-              <small className="brand-tagline">
-                <span className="brand-tagline-rule" aria-hidden="true" />
-                FUN PARK
-                <span className="brand-tagline-rule" aria-hidden="true" />
-              </small>
+              <small className="brand-tagline">FUN PARK</small>
             </span>
           </a>
 
@@ -2244,57 +2188,29 @@ export default function HomePage() {
             <span className="brandmark brandmark-sm" aria-hidden="true">
               <svg
                 className="brandmark-svg"
-                viewBox="0 0 44 44"
+                viewBox="0 0 36 36"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
                 <rect
-                  x="1.25"
-                  y="1.25"
-                  width="41.5"
-                  height="41.5"
-                  rx="12"
+                  x="1.5"
+                  y="1.5"
+                  width="33"
+                  height="33"
+                  rx="8"
                   fill="#FFCE46"
                   stroke="#FFFFFF"
-                  strokeWidth="2.2"
-                />
-                <circle cx="22" cy="22" r="11.5" fill="#141D47" />
-                <circle
-                  cx="22"
-                  cy="22"
-                  r="8.75"
-                  stroke="#FFCE46"
-                  strokeWidth="1.5"
-                  strokeDasharray="3.2 2.6"
+                  strokeWidth="2"
                 />
                 <path
-                  d="M14.2 14.2L29.8 29.8M29.8 14.2L14.2 29.8"
-                  stroke="#9D7BFF"
-                  strokeWidth="1.75"
-                  strokeLinecap="round"
+                  d="M 18 7 Q 18 18 29 18 Q 18 18 18 29 Q 18 18 7 18 Q 18 18 18 7 Z"
+                  fill="#141D47"
                 />
-                <path
-                  d="M22 6.5L24.35 18.65L36.5 22L24.35 25.35L22 37.5L19.65 25.35L7.5 22L19.65 18.65L22 6.5Z"
-                  fill="#FFFFFF"
-                  stroke="#141D47"
-                  strokeWidth="1.4"
-                  strokeLinejoin="round"
-                />
-                <circle cx="22" cy="6.5" r="2.1" fill="#714AD4" stroke="#FFFFFF" strokeWidth="1.2" />
-                <circle cx="37.5" cy="22" r="2.1" fill="#714AD4" stroke="#FFFFFF" strokeWidth="1.2" />
-                <circle cx="22" cy="37.5" r="2.1" fill="#714AD4" stroke="#FFFFFF" strokeWidth="1.2" />
-                <circle cx="6.5" cy="22" r="2.1" fill="#714AD4" stroke="#FFFFFF" strokeWidth="1.2" />
-                <circle cx="22" cy="22" r="3.8" fill="#141D47" />
-                <circle cx="22" cy="22" r="1.9" fill="#FF7196" />
               </svg>
             </span>
             <span className="brand-copy">
               <span className="brand-title">THE THRILLS</span>
-              <small className="brand-tagline">
-                <span className="brand-tagline-rule" aria-hidden="true" />
-                FUN PARK
-                <span className="brand-tagline-rule" aria-hidden="true" />
-              </small>
+              <small className="brand-tagline">FUN PARK</small>
             </span>
           </a>
           <span>Powered by Kali Charan Infra Pvt. Ltd. · Begusarai, Bihar</span>
