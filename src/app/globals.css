@@ -1322,6 +1322,120 @@ button {
    ============================================================ */
 .pricing {
   background: #eef1fc;
+  position: relative;
+}
+
+.pricing-pinned-section {
+  height: 250vh;
+  padding: 0;
+  position: relative;
+}
+
+.pricing-pinned-section.pricing-unpinned {
+  height: auto;
+  padding: 112px 0;
+}
+
+.pricing-sticky-stage {
+  position: sticky;
+  top: 85px;
+  min-height: calc(100dvh - 85px);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 0 48px;
+  overflow: hidden;
+}
+
+.pricing-pinned-section.pricing-unpinned .pricing-sticky-stage {
+  position: relative;
+  top: 0;
+  min-height: auto;
+  padding: 0;
+}
+
+/* Multi-Layer Parallax Background Clay Objects & Soft Glows */
+.pricing-bg-decor {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.pricing-bg-glow {
+  position: absolute;
+  border-radius: 50%;
+}
+
+.pricing-bg-glow-violet {
+  width: 520px;
+  height: 520px;
+  left: 6%;
+  top: 10%;
+  background: radial-gradient(
+    circle,
+    rgba(125, 91, 227, 0.14) 0%,
+    rgba(125, 91, 227, 0) 70%
+  );
+}
+
+.pricing-bg-glow-yellow {
+  width: 480px;
+  height: 480px;
+  right: 6%;
+  bottom: 8%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 206, 70, 0.18) 0%,
+    rgba(255, 206, 70, 0) 70%
+  );
+}
+
+.pricing-clay-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 22px solid #e3e8fb;
+  box-shadow:
+    0 18px 36px rgba(27, 36, 80, 0.07),
+    inset 0 6px 10px rgba(255, 255, 255, 0.9),
+    inset 0 -6px 12px rgba(185, 198, 240, 0.65);
+}
+
+.pricing-clay-ring-left {
+  width: 190px;
+  height: 190px;
+  left: -48px;
+  bottom: 12%;
+}
+
+.pricing-clay-ring-right {
+  width: 220px;
+  height: 220px;
+  right: -64px;
+  top: 12%;
+  border-color: #ebe3ff;
+}
+
+.pricing-clay-sphere {
+  position: absolute;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: #fff2c2;
+  right: 14%;
+  top: 15%;
+  box-shadow:
+    0 12px 24px rgba(27, 36, 80, 0.08),
+    inset 0 -6px 10px rgba(226, 178, 45, 0.35),
+    inset 0 6px 10px rgba(255, 255, 255, 0.95);
+}
+
+.pricing-stage-container {
+  position: relative;
+  z-index: 2;
+  width: 100%;
 }
 
 .packages {
@@ -1329,33 +1443,97 @@ button {
   grid-template-columns: repeat(2, 1fr);
   gap: 32px;
   max-width: 940px;
-  margin: 48px auto 0;
+  margin: 34px auto 0;
+  perspective: 1200px;
+}
+
+.package-motion-slot {
+  position: relative;
+  will-change: transform;
+  transform-style: preserve-3d;
+}
+
+/* Decorative 3D Clay Admission Ticket Stub peeking from behind Package B */
+.clay-admit-stub {
+  position: absolute;
+  top: -18px;
+  right: -14px;
+  z-index: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 15px;
+  border-radius: 16px;
+  background: #ffce46;
+  color: #142054;
+  border: 3px solid #ffffff;
+  font-family: var(--font-marker);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  box-shadow:
+    0 14px 28px rgba(20, 29, 71, 0.16),
+    inset 0 -4px 7px rgba(180, 125, 0, 0.28),
+    inset 0 3px 6px rgba(255, 255, 255, 0.85);
+  pointer-events: none;
+}
+
+.clay-admit-stub-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding-right: 6px;
+  border-right: 2px dashed rgba(20, 32, 84, 0.3);
 }
 
 .package {
-  background: white;
-  border: 3px solid #ffffff;
-  padding: 42px 38px;
-  border-radius: 30px;
+  background: #ffffff;
+  border: 4px solid #ffffff;
+  padding: clamp(28px, 3.6vh, 38px) 36px;
+  border-radius: 32px;
   position: relative;
+  z-index: 1;
+  transition:
+    transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.28s cubic-bezier(0.22, 1, 0.36, 1);
   box-shadow:
-    0 18px 40px rgba(27, 36, 80, 0.08),
-    inset 0 -8px 14px rgba(214, 222, 248, 0.65),
-    inset 0 4px 10px rgba(255, 255, 255, 1);
+    0 24px 52px rgba(27, 36, 80, 0.12),
+    0 8px 20px rgba(113, 74, 212, 0.07),
+    inset 0 -9px 16px rgba(214, 222, 248, 0.7),
+    inset 0 5px 12px rgba(255, 255, 255, 1);
+}
+
+.package:hover {
+  transform: translateY(-6px);
+  box-shadow:
+    0 30px 62px rgba(27, 36, 80, 0.16),
+    0 10px 24px rgba(113, 74, 212, 0.11),
+    inset 0 -9px 16px rgba(214, 222, 248, 0.7),
+    inset 0 5px 12px rgba(255, 255, 255, 1);
 }
 
 .package.featured {
   border-color: #7d5be3;
   box-shadow:
-    0 22px 48px rgba(85, 70, 170, 0.18),
-    inset 0 -8px 14px rgba(214, 222, 248, 0.65),
-    inset 0 4px 10px rgba(255, 255, 255, 1);
+    0 26px 56px rgba(85, 70, 170, 0.2),
+    0 8px 20px rgba(113, 74, 212, 0.1),
+    inset 0 -9px 16px rgba(214, 222, 248, 0.7),
+    inset 0 5px 12px rgba(255, 255, 255, 1);
+}
+
+.package.featured:hover {
+  transform: translateY(-6px);
+  box-shadow:
+    0 32px 66px rgba(85, 70, 170, 0.25),
+    0 12px 26px rgba(113, 74, 212, 0.14),
+    inset 0 -9px 16px rgba(214, 222, 248, 0.7),
+    inset 0 5px 12px rgba(255, 255, 255, 1);
 }
 
 .ribbon {
   position: absolute;
   right: 24px;
-  top: -14px;
+  top: -15px;
   display: inline-flex;
   align-items: center;
   gap: 5px;
@@ -1371,31 +1549,31 @@ button {
 
 .package h3 {
   font-size: 26px;
-  margin: 10px 0 8px;
+  margin: 8px 0 6px;
 }
 
 .package p {
   color: var(--muted);
   font-size: 14px;
-  line-height: 1.6;
+  line-height: 1.55;
 }
 
 .package .amount {
   font-family: var(--font-display);
-  font-size: 52px;
+  font-size: clamp(42px, 4.8vh, 52px);
   letter-spacing: 0.015em;
   color: var(--navy);
-  margin: 22px 0;
+  margin: 16px 0;
 }
 
 .package ul {
   list-style: none;
   padding: 0;
-  margin: 0 0 30px;
+  margin: 0 0 24px;
 }
 
 .package li {
-  padding: 10px 0;
+  padding: 9px 0;
   border-bottom: 1px solid #eef0f9;
   font-size: 14px;
 }
@@ -1415,9 +1593,9 @@ button {
   font-size: 12px;
   color: var(--muted);
   text-align: center;
-  margin: 36px auto 0;
+  margin: 28px auto 0;
   max-width: 760px;
-  line-height: 1.8;
+  line-height: 1.75;
 }
 
 .aboutgrid {
@@ -1717,6 +1895,22 @@ button {
   .clay-emoji-pedestal {
     width: 165px;
     height: 165px;
+  }
+  .pricing-pinned-section {
+    height: auto;
+    padding: 88px 0;
+  }
+  .pricing-sticky-stage {
+    position: relative;
+    top: 0;
+    min-height: auto;
+    padding: 0;
+  }
+  .clay-admit-stub {
+    top: -16px;
+    right: 12px;
+    font-size: 10px;
+    padding: 7px 12px;
   }
   .contactgrid {
     gap: 32px;

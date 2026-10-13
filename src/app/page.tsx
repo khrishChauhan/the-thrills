@@ -148,9 +148,14 @@ export default function HomePage() {
   const [activeIndex, setActiveIndex] = useState(1);
   const [maxTranslateX, setMaxTranslateX] = useState(0);
 
+  // Pinned Pricing ("Unfold Your Fun") State & Refs
+  const pricingSectionRef = useRef<HTMLElement>(null);
+  const [isDesktopPricing, setIsDesktopPricing] = useState(true);
+
   useEffect(() => {
     const updateResponsiveMetrics = () => {
       const vw = window.innerWidth;
+      setIsDesktopPricing(vw > 950);
       if (vw <= 480) {
         setFanSpreadFactor(0.52);
       } else if (vw <= 740) {
@@ -417,6 +422,90 @@ export default function HomePage() {
       behavior: "smooth",
     });
   };
+
+  // =========================================================================
+  // Pricing ("Unfold Your Fun") 4-Scene Scroll-Scrubbed Transforms (0.00 -> 1.00)
+  // Scene 1 (0.00 -> 0.22): Package A rises centered; Package B tucked behind
+  // Scene 2 (0.22 -> 0.48): Package B slides right & upward from behind Package A
+  // Scene 3 (0.48 -> 0.78): Both cards unfold smoothly into 2-column grid
+  // Scene 4 (0.78 -> 1.00): Final side-by-side dwell before unpinning to #about
+  // =========================================================================
+  const shouldUnfoldPricing = !prefersReducedMotion && isDesktopPricing;
+
+  const { scrollYProgress: pricingScrollProgress } = useScroll({
+    target: pricingSectionRef,
+    offset: ["start start", "end end"],
+  });
+
+  // Package A (Without Food — ₹699, Left Column, Foreground z-index: 3)
+  const pkgAX = useTransform(
+    pricingScrollProgress,
+    [0, 0.22, 0.48, 0.78, 1],
+    [243, 243, 196, 0, 0]
+  );
+  const pkgAY = useTransform(
+    pricingScrollProgress,
+    [0, 0.22, 0.48, 0.78, 1],
+    [28, 0, 4, 0, 0]
+  );
+  const pkgARotateX = useTransform(
+    pricingScrollProgress,
+    [0, 0.22, 0.78, 1],
+    [8, 0, 0, 0]
+  );
+  const pkgARotateZ = useTransform(
+    pricingScrollProgress,
+    [0, 0.22, 0.48, 0.78, 1],
+    [0, 0, -2.5, 0, 0]
+  );
+  const pkgAScale = useTransform(
+    pricingScrollProgress,
+    [0, 0.22, 0.48, 0.78, 1],
+    [0.96, 1, 0.99, 1, 1]
+  );
+
+  // Package B (With Food — ₹999, Right Column, Behind Package A z-index: 2)
+  const pkgBX = useTransform(
+    pricingScrollProgress,
+    [0, 0.22, 0.48, 0.78, 1],
+    [-216, -216, -112, 0, 0]
+  );
+  const pkgBY = useTransform(
+    pricingScrollProgress,
+    [0, 0.22, 0.48, 0.78, 1],
+    [24, -6, -14, 0, 0]
+  );
+  const pkgBRotateZ = useTransform(
+    pricingScrollProgress,
+    [0, 0.22, 0.48, 0.78, 1],
+    [2.5, 3, 5.5, 0, 0]
+  );
+  const pkgBScale = useTransform(
+    pricingScrollProgress,
+    [0, 0.22, 0.48, 0.78, 1],
+    [0.9, 0.92, 0.97, 1, 1]
+  );
+
+  // Decorative 3D Clay Admission Ticket Stub peeking from Package B
+  const admitStubX = useTransform(
+    pricingScrollProgress,
+    [0, 0.22, 0.48, 0.78, 1],
+    [-18, -6, 16, 8, 8]
+  );
+  const admitStubY = useTransform(
+    pricingScrollProgress,
+    [0, 0.22, 0.48, 0.78, 1],
+    [18, 6, -16, -10, -10]
+  );
+  const admitStubRotate = useTransform(
+    pricingScrollProgress,
+    [0, 0.22, 0.48, 0.78, 1],
+    [4, 7, 13, 8, 8]
+  );
+
+  // Parallax Background Clay Rings & Spheres
+  const pricingBgRing1Y = useTransform(pricingScrollProgress, [0, 1], [36, -42]);
+  const pricingBgRing2Y = useTransform(pricingScrollProgress, [0, 1], [-28, 38]);
 
   const handleSelectPackage = (value: string) => {
     setSelectedPackage(value);
@@ -897,71 +986,142 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="section pricing" id="pricing">
-          <div className="container">
-            <div style={{ textAlign: "center" }}>
-              <div className="kicker">Choose your experience</div>
-              <h2>
-                Packages Made for{" "}
-                <span style={{ color: "var(--purple)" }}>Fun</span>
-              </h2>
-              <p className="lede" style={{ margin: "auto" }}>
-                Two ways to enjoy The Thrills Fun Park. Choose the package that
-                suits your visit.
+        <section
+          className={`section pricing pricing-pinned-section${
+            !shouldUnfoldPricing ? " pricing-unpinned" : ""
+          }`}
+          id="pricing"
+          ref={pricingSectionRef}
+        >
+          <div className="pricing-sticky-stage">
+            {/* Multi-Layer Parallax Background Objects (Pure 3D Clay) */}
+            <div className="pricing-bg-decor" aria-hidden="true">
+              <div className="pricing-bg-glow pricing-bg-glow-violet" />
+              <div className="pricing-bg-glow pricing-bg-glow-yellow" />
+              <motion.div
+                className="pricing-clay-ring pricing-clay-ring-left"
+                style={{ y: shouldUnfoldPricing ? pricingBgRing1Y : 0 }}
+              />
+              <motion.div
+                className="pricing-clay-ring pricing-clay-ring-right"
+                style={{ y: shouldUnfoldPricing ? pricingBgRing2Y : 0 }}
+              />
+              <motion.div
+                className="pricing-clay-sphere pricing-clay-sphere-top"
+                style={{ y: shouldUnfoldPricing ? pricingBgRing2Y : 0 }}
+              />
+            </div>
+
+            <div className="container pricing-stage-container">
+              <div className="pricing-header" style={{ textAlign: "center" }}>
+                <div className="kicker">Choose your experience</div>
+                <h2>
+                  Packages Made for{" "}
+                  <span style={{ color: "var(--purple)" }}>Fun</span>
+                </h2>
+                <p className="lede" style={{ margin: "auto" }}>
+                  Two ways to enjoy The Thrills Fun Park. Choose the package
+                  that suits your visit.
+                </p>
+              </div>
+
+              <div className="packages packages-unfold-stage">
+                {/* Package A (Without Food — ₹699): Foreground Layer (z-index: 3) */}
+                <motion.div
+                  className="package-motion-slot package-slot-a"
+                  style={{
+                    x: shouldUnfoldPricing ? pkgAX : 0,
+                    y: shouldUnfoldPricing ? pkgAY : 0,
+                    rotateX: shouldUnfoldPricing ? pkgARotateX : 0,
+                    rotateZ: shouldUnfoldPricing ? pkgARotateZ : 0,
+                    scale: shouldUnfoldPricing ? pkgAScale : 1,
+                    zIndex: 3,
+                  }}
+                >
+                  <div className="package">
+                    <span className="label">STANDARD</span>
+                    <h3>Without Food</h3>
+                    <p>Fun park booking package without meals.</p>
+                    <div className="amount">₹699</div>
+                    <ul>
+                      <li>Fun park booking package</li>
+                      <li>Locker included free</li>
+                      <li>Swimming costume included free</li>
+                      <li>Take your provided costume home</li>
+                    </ul>
+                    <a
+                      href="#contact"
+                      className="btn btn-purple"
+                      onClick={() =>
+                        handleSelectPackage("Without Food — ₹699")
+                      }
+                    >
+                      Enquire About This Package <ArrowRight size={16} />
+                    </a>
+                  </div>
+                </motion.div>
+
+                {/* Package B (With Food — ₹999): Emerges from Behind Package A (z-index: 2) */}
+                <motion.div
+                  className="package-motion-slot package-slot-b"
+                  style={{
+                    x: shouldUnfoldPricing ? pkgBX : 0,
+                    y: shouldUnfoldPricing ? pkgBY : 0,
+                    rotateZ: shouldUnfoldPricing ? pkgBRotateZ : 0,
+                    scale: shouldUnfoldPricing ? pkgBScale : 1,
+                    zIndex: 2,
+                  }}
+                >
+                  {/* Decorative 3D Clay Admission Ticket Stub peeking from behind Package B */}
+                  <motion.div
+                    className="clay-admit-stub"
+                    aria-hidden="true"
+                    style={{
+                      x: shouldUnfoldPricing ? admitStubX : 0,
+                      y: shouldUnfoldPricing ? admitStubY : 0,
+                      rotate: shouldUnfoldPricing ? admitStubRotate : 8,
+                    }}
+                  >
+                    <span className="clay-admit-stub-icon">
+                      <Ticket size={14} strokeWidth={2.4} />
+                    </span>
+                    <span className="clay-admit-stub-text">
+                      ADMIT ONE • ALL DAY FUN
+                    </span>
+                  </motion.div>
+
+                  <div className="package featured">
+                    <div className="ribbon">
+                      <Star size={12} fill="currentColor" /> FEATURED
+                    </div>
+                    <span className="label">WITH MEAL</span>
+                    <h3>With Food</h3>
+                    <p>Fun park booking package with lunch or dinner.</p>
+                    <div className="amount">₹999</div>
+                    <ul>
+                      <li>Fun park booking package</li>
+                      <li>Lunch or dinner included</li>
+                      <li>Locker included free</li>
+                      <li>Swimming costume included free</li>
+                      <li>Take your provided costume home</li>
+                    </ul>
+                    <a
+                      href="#contact"
+                      className="btn btn-purple"
+                      onClick={() => handleSelectPackage("With Food — ₹999")}
+                    >
+                      Enquire About This Package <ArrowRight size={16} />
+                    </a>
+                  </div>
+                </motion.div>
+              </div>
+
+              <p className="note">
+                Demo prices supplied for website design. Confirm whether package
+                prices are per person, which attractions are included, and other
+                booking conditions before making the website public.
               </p>
             </div>
-
-            <div className="packages">
-              <div className="package">
-                <span className="label">STANDARD</span>
-                <h3>Without Food</h3>
-                <p>Fun park booking package without meals.</p>
-                <div className="amount">₹699</div>
-                <ul>
-                  <li>Fun park booking package</li>
-                  <li>Locker included free</li>
-                  <li>Swimming costume included free</li>
-                  <li>Take your provided costume home</li>
-                </ul>
-                <a
-                  href="#contact"
-                  className="btn btn-purple"
-                  onClick={() => handleSelectPackage("Without Food — ₹699")}
-                >
-                  Enquire About This Package <ArrowRight size={16} />
-                </a>
-              </div>
-
-              <div className="package featured">
-                <div className="ribbon">
-                  <Star size={12} fill="currentColor" /> FEATURED
-                </div>
-                <span className="label">WITH MEAL</span>
-                <h3>With Food</h3>
-                <p>Fun park booking package with lunch or dinner.</p>
-                <div className="amount">₹999</div>
-                <ul>
-                  <li>Fun park booking package</li>
-                  <li>Lunch or dinner included</li>
-                  <li>Locker included free</li>
-                  <li>Swimming costume included free</li>
-                  <li>Take your provided costume home</li>
-                </ul>
-                <a
-                  href="#contact"
-                  className="btn btn-purple"
-                  onClick={() => handleSelectPackage("With Food — ₹999")}
-                >
-                  Enquire About This Package <ArrowRight size={16} />
-                </a>
-              </div>
-            </div>
-
-            <p className="note">
-              Demo prices supplied for website design. Confirm whether package
-              prices are per person, which attractions are included, and other
-              booking conditions before making the website public.
-            </p>
           </div>
         </section>
 
