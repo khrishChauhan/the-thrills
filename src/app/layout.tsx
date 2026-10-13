@@ -1,36 +1,29 @@
-import type { Metadata } from "next";
-import { Plus_Jakarta_Sans, Outfit, JetBrains_Mono } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { DM_Sans, Outfit } from "next/font/google";
 import "./globals.css";
-import SmoothScroll from "@/components/providers/SmoothScroll";
 
-const jakarta = Plus_Jakarta_Sans({
+const dmSans = DM_Sans({
   subsets: ["latin"],
-  variable: "--font-jakarta",
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-dm-sans",
   display: "swap",
 });
 
 const outfit = Outfit({
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800", "900"],
   variable: "--font-outfit",
   display: "swap",
 });
 
-const jetbrains = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-mono",
-  display: "swap",
-});
+export const viewport: Viewport = {
+  themeColor: "#10173c",
+};
 
 export const metadata: Metadata = {
-  title: "The Thrills Fun Park — Cinematic Experience",
+  title: "The Thrills Fun Park | Demo Website",
   description:
-    "Ultra-premium cinematic digital experience for The Thrills Fun Park featuring world-class rides, water park, luxury resort, fine dining, and seamless QR ticketing.",
-  openGraph: {
-    title: "The Thrills Fun Park — Cinematic Experience",
-    description:
-      "Ultra-premium cinematic digital experience for The Thrills Fun Park featuring world-class rides, water park, luxury resort, fine dining, and seamless QR ticketing.",
-    type: "website",
-  },
+    "The Thrills Fun Park — fun-filled experiences in Begusarai, Bihar. Preview website.",
 };
 
 export default function RootLayout({
@@ -39,13 +32,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`dark ${jakarta.variable} ${outfit.variable} ${jetbrains.variable}`}
-    >
-      <body className="bg-[#050B14] text-slate-100 antialiased selection:bg-[#0066FF] selection:text-white">
-        <SmoothScroll>{children}</SmoothScroll>
-      </body>
+    <html lang="en" className={`${dmSans.variable} ${outfit.variable}`}>
+      <body>{children}</body>
     </html>
   );
 }
