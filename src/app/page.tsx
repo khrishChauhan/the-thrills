@@ -249,6 +249,9 @@ export default function HomePage() {
   const pricingSectionRef = useRef<HTMLElement>(null);
   const [isDesktopPricing, setIsDesktopPricing] = useState(true);
 
+  // About Us Section Ref for Subtle Ring Parallax
+  const aboutSectionRef = useRef<HTMLElement>(null);
+
   // Contact Section Parallax & Living Form State
   const contactSectionRef = useRef<HTMLElement>(null);
   const [enquiryPrepared, setEnquiryPrepared] = useState(false);
@@ -613,6 +616,19 @@ export default function HomePage() {
   // Parallax Background Clay Rings & Spheres
   const pricingBgRing1Y = useTransform(pricingScrollProgress, [0, 1], [36, -42]);
   const pricingBgRing2Y = useTransform(pricingScrollProgress, [0, 1], [-28, 38]);
+
+  // About Us Section Subtle Ring & Glow Scroll Parallax
+  const { scrollYProgress: aboutScrollProgress } = useScroll({
+    target: aboutSectionRef,
+    offset: ["start end", "end start"],
+  });
+  const aboutRingPrimaryY = useTransform(aboutScrollProgress, [0, 1], [18, -18]);
+  const aboutRingSecondaryY = useTransform(
+    aboutScrollProgress,
+    [0, 1],
+    [-14, 14]
+  );
+  const aboutGlowY = useTransform(aboutScrollProgress, [0, 1], [8, -8]);
 
   // Contact Section Restrained Scroll Parallax
   const { scrollYProgress: contactScrollProgress } = useScroll({
@@ -1342,26 +1358,169 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="section about" id="about">
+        <section
+          className="section about"
+          id="about"
+          ref={aboutSectionRef}
+        >
           <div className="container aboutgrid">
-            <div className="aboutimage">
-              <span className="illustration">
-                <FerrisWheel size={150} color="#ffffff" strokeWidth={1.5} />
-              </span>
-            </div>
-            <div>
-              <div className="kicker">Who we are</div>
-              <h2>
+            <motion.div
+              className="aboutimage"
+              initial={prefersReducedMotion ? false : { opacity: 0, y: 22 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.25 }}
+              transition={{ duration: 0.58, ease: [0.22, 1, 0.36, 1] }}
+            >
+              {/* Layer 2: Dominant & Secondary Translucent Floating Rings */}
+              <motion.span
+                className="about-ring about-ring-primary"
+                aria-hidden="true"
+                style={{
+                  y:
+                    prefersReducedMotion || !isDesktopPricing
+                      ? 0
+                      : aboutRingPrimaryY,
+                }}
+              />
+              <motion.span
+                className="about-ring about-ring-secondary"
+                aria-hidden="true"
+                style={{
+                  y:
+                    prefersReducedMotion || !isDesktopPricing
+                      ? 0
+                      : aboutRingSecondaryY,
+                }}
+              />
+
+              {/* Layer 3: Soft Ambient Radial Glow Behind Central Symbol */}
+              <motion.span
+                className="about-central-glow"
+                aria-hidden="true"
+                style={{
+                  y:
+                    prefersReducedMotion || !isDesktopPricing ? 0 : aboutGlowY,
+                }}
+              />
+
+              {/* Layer 4: Subtle Amusement-Park Orbital Arch & Light Nodes */}
+              <svg
+                className="about-arch-svg"
+                viewBox="0 0 320 320"
+                aria-hidden="true"
+              >
+                <circle
+                  cx="160"
+                  cy="160"
+                  r="116"
+                  fill="none"
+                  stroke="rgba(255, 255, 255, 0.28)"
+                  strokeWidth="1.5"
+                  strokeDasharray="6 8"
+                />
+                <path
+                  d="M 56 160 A 104 104 0 0 1 264 160"
+                  fill="none"
+                  stroke="rgba(255, 255, 255, 0.22)"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+                <circle cx="160" cy="44" r="4.5" fill="rgba(255, 255, 255, 0.72)" />
+                <circle cx="62" cy="100" r="3.5" fill="rgba(255, 245, 214, 0.65)" />
+                <circle cx="258" cy="100" r="3.5" fill="rgba(255, 245, 214, 0.65)" />
+                <circle cx="242" cy="242" r="3" fill="rgba(255, 255, 255, 0.5)" />
+              </svg>
+
+              {/* Layer 5: Central Ferris-Wheel Symbol */}
+              <motion.span
+                className="illustration"
+                initial={
+                  prefersReducedMotion ? false : { opacity: 0, scale: 0.94 }
+                }
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true, amount: 0.25 }}
+                transition={{
+                  duration: 0.55,
+                  delay: 0.08,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+              >
+                <span className="about-wheel-medallion" aria-hidden="true" />
+                <FerrisWheel size={146} color="#ffffff" strokeWidth={1.5} />
+              </motion.span>
+            </motion.div>
+
+            {/* Right Column: Simple, Elegant Fade-Up Content Reveal */}
+            <motion.div
+              className="about-copy-col"
+              initial={prefersReducedMotion ? false : "hidden"}
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.25 }}
+              variants={{
+                hidden: {},
+                visible: {
+                  transition: {
+                    staggerChildren: 0.08,
+                  },
+                },
+              }}
+            >
+              <motion.div
+                className="kicker"
+                variants={{
+                  hidden: { opacity: 0, y: 14 },
+                  visible: {
+                    opacity: 1,
+                    y: 0,
+                    transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] },
+                  },
+                }}
+              >
+                Who we are
+              </motion.div>
+
+              <motion.h2
+                variants={{
+                  hidden: { opacity: 0, y: 16 },
+                  visible: {
+                    opacity: 1,
+                    y: 0,
+                    transition: { duration: 0.48, ease: [0.22, 1, 0.36, 1] },
+                  },
+                }}
+              >
                 Good Times.{" "}
                 <span style={{ color: "var(--purple)" }}>Great Memories.</span>
-              </h2>
-              <p className="lede">
+              </motion.h2>
+
+              <motion.p
+                className="lede"
+                variants={{
+                  hidden: { opacity: 0, y: 16 },
+                  visible: {
+                    opacity: 1,
+                    y: 0,
+                    transition: { duration: 0.48, ease: [0.22, 1, 0.36, 1] },
+                  },
+                }}
+              >
                 Welcome to <strong>The Thrills Fun Park</strong>, a destination
                 for fun and entertainment in Begusarai, Bihar. We aim to bring
                 together exciting attractions and memorable experiences for
                 families, friends and groups.
-              </p>
-              <div className="mini">
+              </motion.p>
+
+              <motion.div
+                className="mini"
+                variants={{
+                  hidden: { opacity: 0, y: 14 },
+                  visible: {
+                    opacity: 1,
+                    y: 0,
+                    transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] },
+                  },
+                }}
+              >
                 <span>
                   <Building2 size={22} color="var(--purple)" />
                 </span>
@@ -1371,8 +1530,19 @@ export default function HomePage() {
                     Our company proudly presents The Thrills Fun Park.
                   </small>
                 </div>
-              </div>
-              <div className="mini">
+              </motion.div>
+
+              <motion.div
+                className="mini"
+                variants={{
+                  hidden: { opacity: 0, y: 14 },
+                  visible: {
+                    opacity: 1,
+                    y: 0,
+                    transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] },
+                  },
+                }}
+              >
                 <span>
                   <Heart size={22} color="var(--pink)" />
                 </span>
@@ -1383,8 +1553,8 @@ export default function HomePage() {
                     your loved ones.
                   </small>
                 </div>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
           </div>
         </section>
 
