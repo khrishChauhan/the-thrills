@@ -740,6 +740,45 @@ export default function HomePage() {
     };
   }, [lightboxIndex, filteredGalleryItems.length]);
 
+  // Mobile Navigation Drawer Refs & Focus Management
+  const drawerRef = useRef<HTMLElement>(null);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const firstDrawerLinkRef = useRef<HTMLAnchorElement>(null);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const focusTimer = setTimeout(() => {
+      firstDrawerLinkRef.current?.focus();
+    }, 40);
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        setMenuOpen(false);
+        menuButtonRef.current?.focus();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      clearTimeout(focusTimer);
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [menuOpen]);
+
+  const closeDrawer = () => {
+    setMenuOpen(false);
+    menuButtonRef.current?.focus();
+  };
+
+  const handleNavClick = () => {
+    setMenuOpen(false);
+  };
+
   const handleSendEnquiry = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const trimmedName = name.trim();
@@ -759,6 +798,135 @@ export default function HomePage() {
       <div className="demo">
         ✦ DESIGN PREVIEW — DEMO WEBSITE · NOT AN OFFICIAL LIVE BOOKING SITE ✦
       </div>
+
+      {/* Accessible Left-Side Slide-In Mobile Navigation Drawer */}
+      <div
+        className={`drawer-backdrop${menuOpen ? " is-open" : ""}`}
+        onClick={closeDrawer}
+        aria-hidden="true"
+      />
+
+      <aside
+        id="mobile-drawer"
+        ref={drawerRef}
+        className={`drawer-panel${menuOpen ? " is-open" : ""}`}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Site navigation"
+        tabIndex={-1}
+      >
+        <div className="drawer-header">
+          <a
+            className="brand"
+            href="#home"
+            onClick={handleNavClick}
+            aria-label="The Thrills Fun Park — Home"
+          >
+            <span className="brandmark brandmark-sm" aria-hidden="true">
+              <svg
+                className="brandmark-svg"
+                viewBox="0 0 36 36"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <rect
+                  x="1.5"
+                  y="1.5"
+                  width="33"
+                  height="33"
+                  rx="8"
+                  fill="#FFCE46"
+                  stroke="#141D47"
+                  strokeWidth="2"
+                />
+                <path
+                  d="M 18 7 Q 18 18 29 18 Q 18 18 18 29 Q 18 18 7 18 Q 18 18 18 7 Z"
+                  fill="#141D47"
+                />
+              </svg>
+            </span>
+            <span className="brand-copy">
+              <span className="brand-title">THE THRILLS</span>
+              <small className="brand-tagline">FUN PARK</small>
+            </span>
+          </a>
+
+          <button
+            className="drawer-close-btn"
+            onClick={closeDrawer}
+            aria-label="Close navigation menu"
+          >
+            <X size={20} />
+          </button>
+        </div>
+
+        <div className="drawer-divider" aria-hidden="true" />
+
+        <nav className="drawer-nav" aria-label="Mobile Navigation Links">
+          <a
+            ref={firstDrawerLinkRef}
+            href="#home"
+            onClick={handleNavClick}
+            className="drawer-link"
+          >
+            <span>Home</span>
+            <span className="drawer-link-arrow">→</span>
+          </a>
+          <a
+            href="#attractions"
+            onClick={handleNavClick}
+            className="drawer-link"
+          >
+            <span>Attractions</span>
+            <span className="drawer-link-arrow">→</span>
+          </a>
+          <a
+            href="#pricing"
+            onClick={handleNavClick}
+            className="drawer-link"
+          >
+            <span>Packages</span>
+            <span className="drawer-link-arrow">→</span>
+          </a>
+          <a
+            href="#about"
+            onClick={handleNavClick}
+            className="drawer-link"
+          >
+            <span>About Us</span>
+            <span className="drawer-link-arrow">→</span>
+          </a>
+          <a
+            href="#gallery"
+            onClick={handleNavClick}
+            className="drawer-link"
+          >
+            <span>Gallery</span>
+            <span className="drawer-link-arrow">→</span>
+          </a>
+          <a
+            href="#contact"
+            onClick={handleNavClick}
+            className="drawer-link"
+          >
+            <span>Contact</span>
+            <span className="drawer-link-arrow">→</span>
+          </a>
+        </nav>
+
+        <div className="drawer-footer">
+          <a
+            className="btn btn-yellow drawer-cta"
+            href="#contact"
+            onClick={handleNavClick}
+          >
+            Plan Your Visit <ArrowRight size={16} />
+          </a>
+          <p className="drawer-location">
+            <MapPin size={13} /> Begusarai, Bihar · Open 10 AM – 7 PM
+          </p>
+        </div>
+      </aside>
 
       <header className="header">
         <div className="container nav">
@@ -796,34 +964,27 @@ export default function HomePage() {
             </span>
           </a>
 
-          <nav className={`links${menuOpen ? " show" : ""}`} id="links">
-            <a href="#home" onClick={() => setMenuOpen(false)}>
-              Home
-            </a>
-            <a href="#attractions" onClick={() => setMenuOpen(false)}>
-              Attractions
-            </a>
-            <a href="#pricing" onClick={() => setMenuOpen(false)}>
-              Packages
-            </a>
-            <a href="#about" onClick={() => setMenuOpen(false)}>
-              About Us
-            </a>
-            <a href="#gallery" onClick={() => setMenuOpen(false)}>
-              Gallery
-            </a>
-            <a href="#contact" onClick={() => setMenuOpen(false)}>
-              Contact
-            </a>
+          {/* Desktop Navigation Links */}
+          <nav className="links" id="links" aria-label="Main Navigation">
+            <a href="#home">Home</a>
+            <a href="#attractions">Attractions</a>
+            <a href="#pricing">Packages</a>
+            <a href="#about">About Us</a>
+            <a href="#gallery">Gallery</a>
+            <a href="#contact">Contact</a>
           </nav>
 
           <a className="btn btn-purple" href="#contact">
             Plan Your Visit <ArrowRight size={16} />
           </a>
 
+          {/* Accessible Mobile Menu Hamburger Button */}
           <button
+            ref={menuButtonRef}
             className="menu"
-            aria-label="Toggle menu"
+            aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-drawer"
             onClick={() => setMenuOpen((prev) => !prev)}
           >
             {menuOpen ? <X size={24} /> : <Menu size={24} />}
