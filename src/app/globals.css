@@ -1902,7 +1902,7 @@ button {
   position: absolute;
   left: 0;
   right: 0;
-  top: 16%;
+  top: 18%;
   height: 360px;
   pointer-events: none;
 }
@@ -1911,15 +1911,15 @@ button {
   width: 100%;
   height: 100%;
   display: block;
-  animation: contactRibbonFloat 14s ease-in-out infinite alternate;
+  animation: contactRibbonFloat 22s ease-in-out infinite alternate;
 }
 
 @keyframes contactRibbonFloat {
   0% {
-    transform: translate3d(-12px, -6px, 0) scaleY(0.97);
+    transform: translate3d(-8px, -4px, 0);
   }
   100% {
-    transform: translate3d(12px, 8px, 0) scaleY(1.03);
+    transform: translate3d(8px, 4px, 0);
   }
 }
 
@@ -1979,19 +1979,12 @@ button {
 }
 
 .details:hover span.contact-clay-ico {
-  transform: translateY(-2px) scale(1.04);
+  transform: translateY(-2px);
 }
 
-/* Right Column: Perspective & Floating 3D Clay Form Stage */
+/* Right Column: Stable Elevated 3D Clay Form Stage */
 .contact-form-stage {
-  perspective: 1100px;
   position: relative;
-}
-
-.contact-form-tilt-wrap {
-  position: relative;
-  transform-style: preserve-3d;
-  transition: transform 0.22s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* Decorative 3D Clay Ticket Badge Behind .formbox */
@@ -2036,9 +2029,21 @@ button {
   padding: 38px;
   border-radius: 32px;
   border: 4px solid #ffffff;
+  transition:
+    transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.28s cubic-bezier(0.22, 1, 0.36, 1);
   box-shadow:
     0 28px 60px rgba(6, 10, 32, 0.45),
-    0 10px 24px rgba(113, 74, 212, 0.14),
+    0 10px 26px rgba(113, 74, 212, 0.16),
+    inset 0 -9px 18px rgba(214, 222, 248, 0.72),
+    inset 0 5px 12px rgba(255, 255, 255, 1);
+}
+
+.formbox:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 32px 68px rgba(6, 10, 32, 0.5),
+    0 12px 30px rgba(113, 74, 212, 0.22),
     inset 0 -9px 18px rgba(214, 222, 248, 0.72),
     inset 0 5px 12px rgba(255, 255, 255, 1);
 }
@@ -2169,6 +2174,10 @@ button {
 @media (prefers-reduced-motion: reduce) {
   .contact-ribbon-svg {
     animation: none !important;
+  }
+  .formbox:hover,
+  .details:hover span.contact-clay-ico {
+    transform: none !important;
   }
 }
 

@@ -153,11 +153,10 @@ export default function HomePage() {
   const pricingSectionRef = useRef<HTMLElement>(null);
   const [isDesktopPricing, setIsDesktopPricing] = useState(true);
 
-  // Contact Section Parallax, Tilt & Living Form State
+  // Contact Section Parallax & Living Form State
   const contactSectionRef = useRef<HTMLElement>(null);
   const [enquiryPrepared, setEnquiryPrepared] = useState(false);
   const [activeField, setActiveField] = useState<string | null>(null);
-  const [formTilt, setFormTilt] = useState({ rotateX: 0, rotateY: 0 });
 
   useEffect(() => {
     const updateResponsiveMetrics = () => {
@@ -519,29 +518,14 @@ export default function HomePage() {
   const pricingBgRing1Y = useTransform(pricingScrollProgress, [0, 1], [36, -42]);
   const pricingBgRing2Y = useTransform(pricingScrollProgress, [0, 1], [-28, 38]);
 
-  // Contact Section Scroll Parallax & Desktop Pointer Tilt
+  // Contact Section Restrained Scroll Parallax
   const { scrollYProgress: contactScrollProgress } = useScroll({
     target: contactSectionRef,
     offset: ["start end", "end start"],
   });
-  const contactRing1Y = useTransform(contactScrollProgress, [0, 1], [48, -56]);
-  const contactRing2Y = useTransform(contactScrollProgress, [0, 1], [-36, 44]);
-  const contactRibbonY = useTransform(contactScrollProgress, [0, 1], [28, -28]);
-
-  const handleFormMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (prefersReducedMotion || !isDesktopPricing) return;
-    const rect = e.currentTarget.getBoundingClientRect();
-    const nx = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
-    const ny = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
-    setFormTilt({
-      rotateX: Number((-ny * 2.5).toFixed(2)),
-      rotateY: Number((nx * 2.5).toFixed(2)),
-    });
-  };
-
-  const handleFormMouseLeave = () => {
-    setFormTilt({ rotateX: 0, rotateY: 0 });
-  };
+  const contactRing1Y = useTransform(contactScrollProgress, [0, 1], [18, -18]);
+  const contactRing2Y = useTransform(contactScrollProgress, [0, 1], [-14, 14]);
+  const contactRibbonY = useTransform(contactScrollProgress, [0, 1], [10, -10]);
 
   const handleSelectPackage = (value: string) => {
     setSelectedPackage(value);
@@ -1352,8 +1336,8 @@ export default function HomePage() {
                   d="M-80,310 C220,180 480,380 780,230 C1060,90 1260,290 1520,150"
                   fill="none"
                   stroke="#714ad4"
-                  strokeOpacity="0.18"
-                  strokeWidth="3.5"
+                  strokeOpacity="0.11"
+                  strokeWidth="3"
                   strokeLinecap="round"
                 />
                 <path
@@ -1361,8 +1345,8 @@ export default function HomePage() {
                   d="M-60,260 C240,390 520,120 820,270 C1100,400 1280,160 1520,240"
                   fill="none"
                   stroke="var(--mint)"
-                  strokeOpacity="0.28"
-                  strokeWidth="4"
+                  strokeOpacity="0.15"
+                  strokeWidth="3.5"
                   strokeLinecap="round"
                 />
               </svg>
@@ -1524,153 +1508,156 @@ export default function HomePage() {
               </motion.p>
             </motion.div>
 
-            {/* Right Column: Floating 3D Clay Form Stage */}
+            {/* Right Column: Stable Elevated 3D Clay Form Stage */}
             <motion.div
               className="contact-form-stage"
-              initial={prefersReducedMotion ? false : { opacity: 0, y: 32 }}
+              initial={prefersReducedMotion ? false : { opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.58, ease: [0.22, 1, 0.36, 1] }}
             >
-              <div
-                className="contact-form-tilt-wrap"
-                onMouseMove={handleFormMouseMove}
-                onMouseLeave={handleFormMouseLeave}
-                style={{
-                  transform:
-                    prefersReducedMotion || !isDesktopPricing
-                      ? undefined
-                      : `rotateX(${formTilt.rotateX}deg) rotateY(${formTilt.rotateY}deg)`,
+              {/* Decorative 3D Clay Admission Ticket Badge behind .formbox */}
+              <motion.div
+                className="contact-vip-stub"
+                aria-hidden="true"
+                initial={
+                  prefersReducedMotion
+                    ? false
+                    : { opacity: 0, y: 10, rotate: 2 }
+                }
+                whileInView={{ opacity: 1, y: 0, rotate: 5 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{
+                  duration: 0.5,
+                  delay: 0.14,
+                  ease: [0.22, 1, 0.36, 1],
                 }}
               >
-                {/* Decorative 3D Clay Admission Ticket Badge behind .formbox */}
-                <div className="contact-vip-stub" aria-hidden="true">
-                  <span className="contact-vip-stub-icon">
-                    <Ticket size={14} strokeWidth={2.4} />
-                  </span>
-                  <span>VIP GUEST ENQUIRY</span>
-                </div>
+                <span className="contact-vip-stub-icon">
+                  <Ticket size={14} strokeWidth={2.4} />
+                </span>
+                <span>VIP GUEST ENQUIRY</span>
+              </motion.div>
 
-                <form
-                  className="formbox"
-                  id="enquiry"
-                  onSubmit={handleSendEnquiry}
-                >
-                  <h3>Plan Your Visit</h3>
-                  <p>
-                    Fill in the details. Your email app will open with the
-                    message ready to send.
-                  </p>
+              <form
+                className="formbox"
+                id="enquiry"
+                onSubmit={handleSendEnquiry}
+              >
+                <h3>Plan Your Visit</h3>
+                <p>
+                  Fill in the details. Your email app will open with the message
+                  ready to send.
+                </p>
 
-                  <div className="fields">
-                    <div className="field-group">
-                      <label
-                        htmlFor="name"
-                        className={
-                          activeField === "name" ? "field-label-active" : ""
-                        }
-                      >
-                        Your Name
-                      </label>
-                      <input
-                        id="name"
-                        placeholder="Enter your name"
-                        value={name}
-                        onFocus={() => setActiveField("name")}
-                        onBlur={() => setActiveField(null)}
-                        onChange={(e) => setName(e.target.value)}
-                        required
-                      />
-                    </div>
-                    <div className="field-group">
-                      <label
-                        htmlFor="phone"
-                        className={
-                          activeField === "phone" ? "field-label-active" : ""
-                        }
-                      >
-                        Phone Number
-                      </label>
-                      <input
-                        id="phone"
-                        placeholder="Your number"
-                        inputMode="tel"
-                        value={phone}
-                        onFocus={() => setActiveField("phone")}
-                        onBlur={() => setActiveField(null)}
-                        onChange={(e) => setPhone(e.target.value)}
-                        required
-                      />
-                    </div>
-                  </div>
-
+                <div className="fields">
                   <div className="field-group">
                     <label
-                      htmlFor="package"
+                      htmlFor="name"
                       className={
-                        activeField === "package" ? "field-label-active" : ""
+                        activeField === "name" ? "field-label-active" : ""
                       }
                     >
-                      Interested In
-                    </label>
-                    <select
-                      id="package"
-                      value={selectedPackage}
-                      onFocus={() => setActiveField("package")}
-                      onBlur={() => setActiveField(null)}
-                      onChange={(e) => setSelectedPackage(e.target.value)}
-                    >
-                      <option value="General Enquiry">General Enquiry</option>
-                      <option value="Without Food — ₹699">
-                        Without Food — ₹699
-                      </option>
-                      <option value="With Food — ₹999">With Food — ₹999</option>
-                      <option value="Individual Attractions">
-                        Individual Attractions
-                      </option>
-                    </select>
-                  </div>
-
-                  <div className="field-group">
-                    <label
-                      htmlFor="visit"
-                      className={
-                        activeField === "visit" ? "field-label-active" : ""
-                      }
-                    >
-                      Preferred Visit Date (optional)
+                      Your Name
                     </label>
                     <input
-                      id="visit"
-                      type="date"
-                      value={visitDate}
-                      onFocus={() => setActiveField("visit")}
+                      id="name"
+                      placeholder="Enter your name"
+                      value={name}
+                      onFocus={() => setActiveField("name")}
                       onBlur={() => setActiveField(null)}
-                      onChange={(e) => setVisitDate(e.target.value)}
+                      onChange={(e) => setName(e.target.value)}
+                      required
                     />
                   </div>
+                  <div className="field-group">
+                    <label
+                      htmlFor="phone"
+                      className={
+                        activeField === "phone" ? "field-label-active" : ""
+                      }
+                    >
+                      Phone Number
+                    </label>
+                    <input
+                      id="phone"
+                      placeholder="Your number"
+                      inputMode="tel"
+                      value={phone}
+                      onFocus={() => setActiveField("phone")}
+                      onBlur={() => setActiveField(null)}
+                      onChange={(e) => setPhone(e.target.value)}
+                      required
+                    />
+                  </div>
+                </div>
 
-                  <button className="btn btn-yellow" type="submit">
-                    Prepare Email Enquiry{" "}
-                    <ArrowUpRight size={16} className="cta-arrow-icon" />
-                  </button>
+                <div className="field-group">
+                  <label
+                    htmlFor="package"
+                    className={
+                      activeField === "package" ? "field-label-active" : ""
+                    }
+                  >
+                    Interested In
+                  </label>
+                  <select
+                    id="package"
+                    value={selectedPackage}
+                    onFocus={() => setActiveField("package")}
+                    onBlur={() => setActiveField(null)}
+                    onChange={(e) => setSelectedPackage(e.target.value)}
+                  >
+                    <option value="General Enquiry">General Enquiry</option>
+                    <option value="Without Food — ₹699">
+                      Without Food — ₹699
+                    </option>
+                    <option value="With Food — ₹999">With Food — ₹999</option>
+                    <option value="Individual Attractions">
+                      Individual Attractions
+                    </option>
+                  </select>
+                </div>
 
-                  {enquiryPrepared && (
-                    <div className="enquiry-feedback-banner" role="status">
-                      <CheckCircle2 size={16} className="enquiry-feedback-ico" />
-                      <span>
-                        Your email app has been opened with your enquiry details
-                        ready — please press Send in your mail app.
-                      </span>
-                    </div>
-                  )}
+                <div className="field-group">
+                  <label
+                    htmlFor="visit"
+                    className={
+                      activeField === "visit" ? "field-label-active" : ""
+                    }
+                  >
+                    Preferred Visit Date (optional)
+                  </label>
+                  <input
+                    id="visit"
+                    type="date"
+                    value={visitDate}
+                    onFocus={() => setActiveField("visit")}
+                    onBlur={() => setActiveField(null)}
+                    onChange={(e) => setVisitDate(e.target.value)}
+                  />
+                </div>
 
-                  <p className="helper">
-                    Your email application will open; sending is completed from
-                    there.
-                  </p>
-                </form>
-              </div>
+                <button className="btn btn-yellow" type="submit">
+                  Prepare Email Enquiry{" "}
+                  <ArrowUpRight size={16} className="cta-arrow-icon" />
+                </button>
+
+                {enquiryPrepared && (
+                  <div className="enquiry-feedback-banner" role="status">
+                    <CheckCircle2 size={16} className="enquiry-feedback-ico" />
+                    <span>
+                      Your email app has been opened with your enquiry details
+                      ready — please press Send in your mail app.
+                    </span>
+                  </div>
+                )}
+
+                <p className="helper">
+                  Your email application will open; sending is completed from
+                  there.
+                </p>
+              </form>
             </motion.div>
           </div>
         </section>
