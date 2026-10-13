@@ -5,6 +5,7 @@ import {
   Permanent_Marker,
   DM_Sans,
 } from "next/font/google";
+import SmoothScroll from "@/components/providers/SmoothScroll";
 import "./globals.css";
 
 const bowlbyOne = Bowlby_One({
@@ -55,7 +56,9 @@ export default function RootLayout({
       lang="en"
       className={`${bowlbyOne.variable} ${shrikhand.variable} ${permanentMarker.variable} ${dmSans.variable}`}
     >
-      <body>{children}</body>
+      <body>
+        <SmoothScroll>{children}</SmoothScroll>
+      </body>
     </html>
   );
 }

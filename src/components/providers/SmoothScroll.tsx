@@ -15,23 +15,44 @@ export default function SmoothScroll({
 }) {
   useEffect(() => {
     const lenis = new Lenis({
-      duration: 1.2, // Smooth gliding duration
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Silky exponential ease-out
+      lerp: 0.075, // Lower lerp = silkier, longer inertial carry after scrolling stops
+      duration: 1.35,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: "vertical",
       gestureOrientation: "vertical",
-      smoothWheel: true, // Intercept chunky mouse wheel ticks into liquid inertia
-      wheelMultiplier: 1.0, // Natural, responsive speed
+      smoothWheel: true,
+      wheelMultiplier: 1.05,
       touchMultiplier: 1.5,
     });
 
+    let rafId: number;
     function raf(time: number) {
       lenis.raf(time);
-      requestAnimationFrame(raf);
+      rafId = requestAnimationFrame(raf);
     }
 
-    const rafId = requestAnimationFrame(raf);
+    rafId = requestAnimationFrame(raf);
+
+    const handleAnchorClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement | null;
+      const anchor = target?.closest('a[href^="#"]') as HTMLAnchorElement | null;
+      if (!anchor) return;
+      const href = anchor.getAttribute("href");
+      if (!href || href === "#") return;
+      const targetEl = document.querySelector(href);
+      if (targetEl) {
+        e.preventDefault();
+        lenis.scrollTo(targetEl as HTMLElement, {
+          offset: href === "#home" ? 0 : -85,
+          duration: 1.4,
+        });
+      }
+    };
+
+    document.addEventListener("click", handleAnchorClick);
 
     return () => {
+      document.removeEventListener("click", handleAnchorClick);
       cancelAnimationFrame(rafId);
       lenis.destroy();
     };
