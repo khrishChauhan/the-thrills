@@ -801,7 +801,7 @@ export default function HomePage() {
 
       {/* Accessible Left-Side Slide-In Mobile Navigation Drawer */}
       <div
-        className={`drawer-backdrop${menuOpen ? " is-open" : ""}`}
+        className={`mobile-menu-backdrop drawer-backdrop${menuOpen ? " is-open" : ""}`}
         onClick={closeDrawer}
         aria-hidden="true"
       />
@@ -854,9 +854,9 @@ export default function HomePage() {
           <button
             className="drawer-close-btn"
             onClick={closeDrawer}
-            aria-label="Close navigation menu"
+            aria-label="Close menu"
           >
-            <X size={20} />
+            <X size={22} />
           </button>
         </div>
 
@@ -916,11 +916,11 @@ export default function HomePage() {
 
         <div className="drawer-footer">
           <a
-            className="btn btn-yellow drawer-cta"
+            className="btn btn-purple drawer-cta"
             href="#contact"
             onClick={handleNavClick}
           >
-            Plan Your Visit <ArrowRight size={16} />
+            Plan Your Visit →
           </a>
           <p className="drawer-location">
             <MapPin size={13} /> Begusarai, Bihar · Open 10 AM – 7 PM
@@ -982,7 +982,7 @@ export default function HomePage() {
           <button
             ref={menuButtonRef}
             className="menu"
-            aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
             aria-expanded={menuOpen}
             aria-controls="mobile-drawer"
             onClick={() => setMenuOpen((prev) => !prev)}
