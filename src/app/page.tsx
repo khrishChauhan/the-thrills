@@ -424,11 +424,11 @@ export default function HomePage() {
   };
 
   // =========================================================================
-  // Pricing ("Unfold Your Fun") 4-Scene Scroll-Scrubbed Transforms (0.00 -> 1.00)
-  // Scene 1 (0.00 -> 0.22): Package A rises centered; Package B tucked behind
-  // Scene 2 (0.22 -> 0.48): Package B slides right & upward from behind Package A
-  // Scene 3 (0.48 -> 0.78): Both cards unfold smoothly into 2-column grid
-  // Scene 4 (0.78 -> 1.00): Final side-by-side dwell before unpinning to #about
+  // Pricing ("Unfold Your Fun") 4-Phase Scroll-Scrubbed Transforms (0.00 -> 1.00)
+  // Phase 1 (0.00 -> 0.25): Full Centered Card Hold (Package A dead-center, upright)
+  // Phase 2 (0.25 -> 0.48): Package B Peeks Out from Behind (zero negative Y)
+  // Phase 3 (0.48 -> 0.80): Smooth Side-by-Side Unfold into 2-Column Grid
+  // Phase 4 (0.80 -> 1.00): Final 2-Column Side-by-Side Hold Before Unpin
   // =========================================================================
   const shouldUnfoldPricing = !prefersReducedMotion && isDesktopPricing;
 
@@ -440,67 +440,72 @@ export default function HomePage() {
   // Package A (Without Food — ₹699, Left Column, Foreground z-index: 3)
   const pkgAX = useTransform(
     pricingScrollProgress,
-    [0, 0.22, 0.48, 0.78, 1],
-    [243, 243, 196, 0, 0]
+    [0, 0.25, 0.48, 0.8, 1],
+    [238, 238, 175, 0, 0]
   );
   const pkgAY = useTransform(
     pricingScrollProgress,
-    [0, 0.22, 0.48, 0.78, 1],
-    [28, 0, 4, 0, 0]
+    [0, 0.25, 0.48, 0.8, 1],
+    [0, 0, 0, 0, 0]
   );
   const pkgARotateX = useTransform(
     pricingScrollProgress,
-    [0, 0.22, 0.78, 1],
-    [8, 0, 0, 0]
+    [0, 0.25, 0.8, 1],
+    [0, 0, 0, 0]
   );
   const pkgARotateZ = useTransform(
     pricingScrollProgress,
-    [0, 0.22, 0.48, 0.78, 1],
-    [0, 0, -2.5, 0, 0]
+    [0, 0.25, 0.48, 0.8, 1],
+    [0, 0, -1.5, 0, 0]
   );
   const pkgAScale = useTransform(
     pricingScrollProgress,
-    [0, 0.22, 0.48, 0.78, 1],
-    [0.96, 1, 0.99, 1, 1]
+    [0, 0.25, 0.48, 0.8, 1],
+    [1, 1, 1, 1, 1]
   );
 
   // Package B (With Food — ₹999, Right Column, Behind Package A z-index: 2)
   const pkgBX = useTransform(
     pricingScrollProgress,
-    [0, 0.22, 0.48, 0.78, 1],
-    [-216, -216, -112, 0, 0]
+    [0, 0.22, 0.48, 0.8, 1],
+    [-238, -238, -115, 0, 0]
   );
   const pkgBY = useTransform(
     pricingScrollProgress,
-    [0, 0.22, 0.48, 0.78, 1],
-    [24, -6, -14, 0, 0]
+    [0, 0.25, 0.48, 0.8, 1],
+    [0, 0, 0, 0, 0]
   );
   const pkgBRotateZ = useTransform(
     pricingScrollProgress,
-    [0, 0.22, 0.48, 0.78, 1],
-    [2.5, 3, 5.5, 0, 0]
+    [0, 0.25, 0.48, 0.8, 1],
+    [0, 0, 3.5, 0, 0]
   );
   const pkgBScale = useTransform(
     pricingScrollProgress,
-    [0, 0.22, 0.48, 0.78, 1],
-    [0.9, 0.92, 0.97, 1, 1]
+    [0, 0.25, 0.48, 0.8, 1],
+    [0.92, 0.92, 0.97, 1, 1]
+  );
+  const pkgBOpacity = useTransform(
+    pricingScrollProgress,
+    [0, 0.18, 0.28, 1],
+    [0, 0, 1, 1]
   );
 
-  // Decorative 3D Clay Admission Ticket Stub peeking from Package B
+  // Decorative 3D Clay Admission Ticket Stub on the upper-right side edge of Package B
   const admitStubX = useTransform(
     pricingScrollProgress,
-    [0, 0.22, 0.48, 0.78, 1],
-    [-18, -6, 16, 8, 8]
+    [0, 0.25, 0.48, 0.8, 1],
+    [-24, -18, 12, 6, 6]
   );
   const admitStubY = useTransform(
     pricingScrollProgress,
-    [0, 0.22, 0.48, 0.78, 1],
-    [18, 6, -16, -10, -10]
+    [0, 0.25, 0.48, 0.8, 1],
+    [0, 0, 0, 0, 0]
   );
   const admitStubRotate = useTransform(
     pricingScrollProgress,
-    [0, 0.22, 0.48, 0.78, 1],
-    [4, 7, 13, 8, 8]
+    [0, 0.25, 0.48, 0.8, 1],
+    [0, 2, 10, 6, 6]
   );
 
   // Parallax Background Clay Rings & Spheres
@@ -1093,6 +1098,7 @@ export default function HomePage() {
                     y: shouldUnfoldPricing ? pkgBY : 0,
                     rotateZ: shouldUnfoldPricing ? pkgBRotateZ : 0,
                     scale: shouldUnfoldPricing ? pkgBScale : 1,
+                    opacity: shouldUnfoldPricing ? pkgBOpacity : 1,
                     zIndex: 2,
                   }}
                 >
