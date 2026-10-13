@@ -2,10 +2,11 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import {
-   motion,
+  motion,
   useScroll,
   useTransform,
   useMotionValueEvent,
+  useReducedMotion,
 } from "framer-motion";
 import {
   MapPin,
@@ -23,6 +24,7 @@ import {
   Heart,
   Mail,
   Star,
+  Compass,
   Menu,
   X,
   ArrowUpRight,
@@ -134,6 +136,12 @@ export default function HomePage() {
     [string | null, string | null, string | null]
   >([null, null, null]);
 
+  const prefersReducedMotion = useReducedMotion();
+
+  // Hero 3D Clay Fan-Out Scroll State & Refs
+  const heroSectionRef = useRef<HTMLElement>(null);
+  const [fanSpreadFactor, setFanSpreadFactor] = useState(1);
+
   // Pinned Attractions Scroll Reel State & Refs
   const attractionsSectionRef = useRef<HTMLElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
@@ -141,7 +149,18 @@ export default function HomePage() {
   const [maxTranslateX, setMaxTranslateX] = useState(0);
 
   useEffect(() => {
-    const updateScrollDistance = () => {
+    const updateResponsiveMetrics = () => {
+      const vw = window.innerWidth;
+      if (vw <= 480) {
+        setFanSpreadFactor(0.52);
+      } else if (vw <= 740) {
+        setFanSpreadFactor(0.62);
+      } else if (vw <= 950) {
+        setFanSpreadFactor(0.78);
+      } else {
+        setFanSpreadFactor(1);
+      }
+
       if (!trackRef.current) return;
       const cards = trackRef.current.children;
       if (cards.length === 0) return;
@@ -155,14 +174,197 @@ export default function HomePage() {
       setMaxTranslateX(Math.max(0, lastCardCenter - firstCardCenter));
     };
 
-    updateScrollDistance();
-    const timer = setTimeout(updateScrollDistance, 150);
-    window.addEventListener("resize", updateScrollDistance);
+    updateResponsiveMetrics();
+    const timer = setTimeout(updateResponsiveMetrics, 150);
+    window.addEventListener("resize", updateResponsiveMetrics);
     return () => {
       clearTimeout(timer);
-      window.removeEventListener("resize", updateScrollDistance);
+      window.removeEventListener("resize", updateResponsiveMetrics);
     };
   }, []);
+
+  // Hero 4-Scene Scroll Progress (0.00 -> 1.00)
+  const { scrollYProgress: heroScrollProgress } = useScroll({
+    target: heroSectionRef,
+    offset: ["start start", "end end"],
+  });
+
+  // Central Turquoise Card (.ticket-shape): Scene A (tilted 8deg) -> Scene B (levels to 2deg & scales 1.05) -> Scene C (holds) -> Scene D (settles)
+  const centerCardRotate = useTransform(
+    heroScrollProgress,
+    [0, 0.05, 0.55, 0.8, 1],
+    [8, 8, 2, 2, 0]
+  );
+  const centerCardScale = useTransform(
+    heroScrollProgress,
+    [0, 0.05, 0.55, 0.8, 1],
+    [1, 1, 1.05, 1.05, 0.98]
+  );
+  const centerCardY = useTransform(
+    heroScrollProgress,
+    [0, 0.55, 0.8, 1],
+    [0, -6, -6, -18]
+  );
+
+  // Sun & Decorative Clay Objects Parallax
+  const sunScale = useTransform(
+    heroScrollProgress,
+    [0, 0.55, 1],
+    [1, 1.12, 1.04]
+  );
+  const sunRotate = useTransform(heroScrollProgress, [0, 1], [0, 45]);
+  const sunY = useTransform(heroScrollProgress, [0, 0.6, 1], [0, -18, -30]);
+
+  // Satellite 1: Upper-Left ("Thrilling Rides")
+  const satULX = useTransform(
+    heroScrollProgress,
+    [0, 0.05, 0.52, 0.8, 1],
+    [
+      -38 * fanSpreadFactor,
+      -42 * fanSpreadFactor,
+      -172 * fanSpreadFactor,
+      -172 * fanSpreadFactor,
+      -162 * fanSpreadFactor,
+    ]
+  );
+  const satULY = useTransform(
+    heroScrollProgress,
+    [0, 0.05, 0.52, 0.8, 1],
+    [
+      -28 * fanSpreadFactor,
+      -32 * fanSpreadFactor,
+      -126 * fanSpreadFactor,
+      -126 * fanSpreadFactor,
+      -138 * fanSpreadFactor,
+    ]
+  );
+  const satULRotate = useTransform(
+    heroScrollProgress,
+    [0, 0.05, 0.52, 0.8, 1],
+    [-4, -4, -10, -10, -8]
+  );
+  const satULScale = useTransform(
+    heroScrollProgress,
+    [0, 0.05, 0.52, 0.8, 1],
+    [0.82, 0.84, 1, 1, 0.96]
+  );
+
+  // Satellite 2: Upper-Right ("Family Fun")
+  const satURX = useTransform(
+    heroScrollProgress,
+    [0, 0.07, 0.54, 0.8, 1],
+    [
+      38 * fanSpreadFactor,
+      44 * fanSpreadFactor,
+      168 * fanSpreadFactor,
+      168 * fanSpreadFactor,
+      158 * fanSpreadFactor,
+    ]
+  );
+  const satURY = useTransform(
+    heroScrollProgress,
+    [0, 0.07, 0.54, 0.8, 1],
+    [
+      -26 * fanSpreadFactor,
+      -30 * fanSpreadFactor,
+      -118 * fanSpreadFactor,
+      -118 * fanSpreadFactor,
+      -130 * fanSpreadFactor,
+    ]
+  );
+  const satURRotate = useTransform(
+    heroScrollProgress,
+    [0, 0.07, 0.54, 0.8, 1],
+    [5, 5, 9, 9, 7]
+  );
+  const satURScale = useTransform(
+    heroScrollProgress,
+    [0, 0.07, 0.54, 0.8, 1],
+    [0.82, 0.84, 1, 1, 0.96]
+  );
+
+  // Satellite 3: Lower-Left ("Happy Memories")
+  const satLLX = useTransform(
+    heroScrollProgress,
+    [0, 0.09, 0.56, 0.8, 1],
+    [
+      -40 * fanSpreadFactor,
+      -46 * fanSpreadFactor,
+      -174 * fanSpreadFactor,
+      -174 * fanSpreadFactor,
+      -164 * fanSpreadFactor,
+    ]
+  );
+  const satLLY = useTransform(
+    heroScrollProgress,
+    [0, 0.09, 0.56, 0.8, 1],
+    [
+      30 * fanSpreadFactor,
+      36 * fanSpreadFactor,
+      124 * fanSpreadFactor,
+      124 * fanSpreadFactor,
+      110 * fanSpreadFactor,
+    ]
+  );
+  const satLLRotate = useTransform(
+    heroScrollProgress,
+    [0, 0.09, 0.56, 0.8, 1],
+    [-3, -3, -7, -7, -5]
+  );
+  const satLLScale = useTransform(
+    heroScrollProgress,
+    [0, 0.09, 0.56, 0.8, 1],
+    [0.82, 0.84, 1, 1, 0.96]
+  );
+
+  // Satellite 4: Lower-Right ("Day Packages")
+  const satLRX = useTransform(
+    heroScrollProgress,
+    [0, 0.11, 0.58, 0.8, 1],
+    [
+      40 * fanSpreadFactor,
+      46 * fanSpreadFactor,
+      166 * fanSpreadFactor,
+      166 * fanSpreadFactor,
+      156 * fanSpreadFactor,
+    ]
+  );
+  const satLRY = useTransform(
+    heroScrollProgress,
+    [0, 0.11, 0.58, 0.8, 1],
+    [
+      32 * fanSpreadFactor,
+      38 * fanSpreadFactor,
+      126 * fanSpreadFactor,
+      126 * fanSpreadFactor,
+      112 * fanSpreadFactor,
+    ]
+  );
+  const satLRRotate = useTransform(
+    heroScrollProgress,
+    [0, 0.11, 0.58, 0.8, 1],
+    [4, 4, 8, 8, 6]
+  );
+  const satLRScale = useTransform(
+    heroScrollProgress,
+    [0, 0.11, 0.58, 0.8, 1],
+    [0.82, 0.84, 1, 1, 0.96]
+  );
+
+  // Floating Sticker Pills Parallax
+  const floatOneY = useTransform(
+    heroScrollProgress,
+    [0, 0.55, 1],
+    [0, -28 * fanSpreadFactor, -36 * fanSpreadFactor]
+  );
+  const floatTwoY = useTransform(
+    heroScrollProgress,
+    [0, 0.55, 1],
+    [0, 26 * fanSpreadFactor, 18 * fanSpreadFactor]
+  );
+
+  // Left Copy Subtle Scene D Handoff Lift
+  const heroCopyY = useTransform(heroScrollProgress, [0, 0.8, 1], [0, 0, -16]);
 
   const { scrollYProgress } = useScroll({
     target: attractionsSectionRef,
@@ -307,65 +509,212 @@ export default function HomePage() {
       </header>
 
       <main>
-        <section className="hero" id="home">
-          <div className="container hero-main">
-            <div>
-              <div className="eyebrow">
-                <MapPin size={14} /> Begusarai, Bihar &nbsp; • &nbsp; Adventure
-                awaits
-              </div>
-              <h1>
-                LET THE
-                <br />
-                <em>FUN</em> BEGIN!
-              </h1>
-              <p>
-                One destination. Endless excitement. Discover unforgettable
-                experiences, joyful moments, and a whole lot of thrills!
-              </p>
-              <div className="hero-actions">
-                <a className="btn btn-yellow" href="#attractions">
-                  Explore Attractions <ArrowUpRight size={16} />
-                </a>
-                <a className="btn btn-white" href="#pricing">
-                  View Packages
-                </a>
-              </div>
-            </div>
-
-            <div
-              className="hero-art"
-              aria-label="Illustrative amusement park graphics"
-            >
-              <div className="sun"></div>
-              <div className="ticket-shape">
-                <span className="ticket-text">
-                  GOOD VIBES
+        <section
+          ref={heroSectionRef}
+          className={`hero hero-scroll-track${
+            prefersReducedMotion ? " hero-reduced-motion" : ""
+          }`}
+          id="home"
+        >
+          <div className="hero-sticky-viewport">
+            <div className="container hero-main">
+              <motion.div
+                className="hero-copy-col"
+                style={prefersReducedMotion ? undefined : { y: heroCopyY }}
+              >
+                <div className="eyebrow">
+                  <MapPin size={14} /> Begusarai, Bihar &nbsp; • &nbsp; Adventure
+                  awaits
+                </div>
+                <h1>
+                  LET THE
                   <br />
-                  ONLY!
-                </span>
-                <span className="ride2">
-                  <FerrisWheel size={88} strokeWidth={1.8} />
-                </span>
-                <span className="ride">
-                  <Waves size={140} strokeWidth={1.8} />
-                </span>
-              </div>
-              <div className="float one">
-                <b>
-                  <Sparkles size={18} color="var(--purple)" />
-                </b>{" "}
-                Make happy memories
-              </div>
-              <div className="float two">
-                <b>
-                  <Ticket size={18} color="var(--pink)" />
-                </b>{" "}
-                Fun starts here!
+                  <em>FUN</em> BEGIN!
+                </h1>
+                <p>
+                  One destination. Endless excitement. Discover unforgettable
+                  experiences, joyful moments, and a whole lot of thrills!
+                </p>
+                <div className="hero-actions">
+                  <a className="btn btn-yellow" href="#attractions">
+                    Explore Attractions <ArrowUpRight size={16} />
+                  </a>
+                  <a className="btn btn-white" href="#pricing">
+                    View Packages
+                  </a>
+                </div>
+              </motion.div>
+
+              <div
+                className="hero-art"
+                aria-label="3D Claymorphic amusement park card fan-out showcase"
+              >
+                {/* Miniature 3D Clay Sun Sphere & Halo Rings */}
+                <motion.div
+                  className="sun"
+                  style={
+                    prefersReducedMotion
+                      ? undefined
+                      : { scale: sunScale, rotate: sunRotate, y: sunY }
+                  }
+                />
+
+                {/* Miniature Puffy 3D Clay Clouds & Tokens */}
+                <div className="clay-cloud cloud-one" aria-hidden="true" />
+                <div className="clay-cloud cloud-two" aria-hidden="true" />
+                <div className="clay-mini-token token-star" aria-hidden="true">
+                  <Star size={16} fill="currentColor" />
+                </div>
+                <div
+                  className="clay-mini-token token-compass"
+                  aria-hidden="true"
+                >
+                  <Compass size={16} />
+                </div>
+
+                {/* SATELLITE CARD 1: Upper-Left — Thrilling Rides */}
+                <motion.div
+                  className="hero-sat-card sat-ul"
+                  style={
+                    prefersReducedMotion
+                      ? undefined
+                      : {
+                          x: satULX,
+                          y: satULY,
+                          rotate: satULRotate,
+                          scale: satULScale,
+                        }
+                  }
+                >
+                  <div className="sat-icon-box sat-purple">
+                    <Gamepad2 size={20} color="#ffffff" strokeWidth={2.2} />
+                  </div>
+                  <div className="sat-meta">
+                    <span className="sat-badge">₹100 / Ride</span>
+                    <strong>Thrilling Rides</strong>
+                  </div>
+                </motion.div>
+
+                {/* SATELLITE CARD 2: Upper-Right — Family Fun */}
+                <motion.div
+                  className="hero-sat-card sat-ur"
+                  style={
+                    prefersReducedMotion
+                      ? undefined
+                      : {
+                          x: satURX,
+                          y: satURY,
+                          rotate: satURRotate,
+                          scale: satURScale,
+                        }
+                  }
+                >
+                  <div className="sat-icon-box sat-gold">
+                    <FerrisWheel size={20} color="#142054" strokeWidth={2.2} />
+                  </div>
+                  <div className="sat-meta">
+                    <span className="sat-badge">All Ages</span>
+                    <strong>Family Fun</strong>
+                  </div>
+                </motion.div>
+
+                {/* SATELLITE CARD 3: Lower-Left — Happy Memories */}
+                <motion.div
+                  className="hero-sat-card sat-ll"
+                  style={
+                    prefersReducedMotion
+                      ? undefined
+                      : {
+                          x: satLLX,
+                          y: satLLY,
+                          rotate: satLLRotate,
+                          scale: satLLScale,
+                        }
+                  }
+                >
+                  <div className="sat-icon-box sat-pink">
+                    <Camera size={20} color="#ffffff" strokeWidth={2.2} />
+                  </div>
+                  <div className="sat-meta">
+                    <span className="sat-badge">Photo Spots</span>
+                    <strong>Happy Memories</strong>
+                  </div>
+                </motion.div>
+
+                {/* SATELLITE CARD 4: Lower-Right — Day Packages */}
+                <motion.div
+                  className="hero-sat-card sat-lr"
+                  style={
+                    prefersReducedMotion
+                      ? undefined
+                      : {
+                          x: satLRX,
+                          y: satLRY,
+                          rotate: satLRRotate,
+                          scale: satLRScale,
+                        }
+                  }
+                >
+                  <div className="sat-icon-box sat-mint">
+                    <Ticket size={20} color="#142054" strokeWidth={2.2} />
+                  </div>
+                  <div className="sat-meta">
+                    <span className="sat-badge">From ₹699</span>
+                    <strong>Day Packages</strong>
+                  </div>
+                </motion.div>
+
+                {/* CENTRAL TURQUOISE 3D CLAY HERO CARD */}
+                <motion.div
+                  className="ticket-shape"
+                  style={
+                    prefersReducedMotion
+                      ? undefined
+                      : {
+                          rotate: centerCardRotate,
+                          scale: centerCardScale,
+                          y: centerCardY,
+                        }
+                  }
+                >
+                  <span className="ticket-clay-tag">✦ PARK PASS</span>
+                  <span className="ticket-text">
+                    GOOD VIBES
+                    <br />
+                    ONLY!
+                  </span>
+                  <span className="ride2">
+                    <FerrisWheel size={88} strokeWidth={1.8} />
+                  </span>
+                  <span className="ride">
+                    <Waves size={140} strokeWidth={1.8} />
+                  </span>
+                  <span className="ticket-clay-zone-pill">6 ZONES</span>
+                </motion.div>
+
+                {/* Floating Clay Stickers */}
+                <motion.div
+                  className="float one"
+                  style={prefersReducedMotion ? undefined : { y: floatOneY }}
+                >
+                  <b>
+                    <Sparkles size={18} color="var(--purple)" />
+                  </b>{" "}
+                  Make happy memories
+                </motion.div>
+                <motion.div
+                  className="float two"
+                  style={prefersReducedMotion ? undefined : { y: floatTwoY }}
+                >
+                  <b>
+                    <Ticket size={18} color="var(--pink)" />
+                  </b>{" "}
+                  Fun starts here!
+                </motion.div>
               </div>
             </div>
+            <div className="wave"></div>
           </div>
-          <div className="wave"></div>
         </section>
 
         <div className="container featurestrip">
