@@ -1,18 +1,37 @@
 import type { Metadata, Viewport } from "next";
-import { DM_Sans, Outfit } from "next/font/google";
+import {
+  Bowlby_One,
+  Shrikhand,
+  Permanent_Marker,
+  DM_Sans,
+} from "next/font/google";
 import "./globals.css";
+
+const bowlbyOne = Bowlby_One({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-fat-bob",
+  display: "swap",
+});
+
+const shrikhand = Shrikhand({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-cooper-swash",
+  display: "swap",
+});
+
+const permanentMarker = Permanent_Marker({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-palmer-lake",
+  display: "swap",
+});
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800"],
   variable: "--font-dm-sans",
-  display: "swap",
-});
-
-const outfit = Outfit({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800", "900"],
-  variable: "--font-outfit",
   display: "swap",
 });
 
@@ -32,7 +51,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${dmSans.variable} ${outfit.variable}`}>
+    <html
+      lang="en"
+      className={`${bowlbyOne.variable} ${shrikhand.variable} ${permanentMarker.variable} ${dmSans.variable}`}
+    >
       <body>{children}</body>
     </html>
   );

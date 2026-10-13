@@ -9,6 +9,10 @@
   --ink: #1b2450;
   --muted: #64708d;
   --line: #e6eafa;
+  --font-display: "Super Fat Bob", var(--font-fat-bob), "Titan One", Impact, sans-serif;
+  --font-swash: "West Cooper Nouveau Sw", "West Cooper Nouveau", var(--font-cooper-swash), Georgia, serif;
+  --font-marker: "Palmer Lake", var(--font-palmer-lake), cursive, sans-serif;
+  --font-body: var(--font-dm-sans), "DM Sans", Arial, sans-serif;
 }
 
 * {
@@ -19,11 +23,23 @@ html {
   scroll-behavior: smooth;
 }
 
+body,
+p,
+.lede,
+.btn,
+.links,
+input,
+select,
+label,
+li,
+.footer {
+  font-family: var(--font-body);
+}
+
 body {
   margin: 0;
   background: var(--bg);
   color: var(--ink);
-  font-family: var(--font-dm-sans), "DM Sans", Arial, sans-serif;
 }
 
 h1,
@@ -34,11 +50,47 @@ p {
   margin-top: 0;
 }
 
+/* Font 1: Super Fat Bob (Bowlby One) — Primary Headings & Prices */
 h1,
 h2,
 h3,
-.brand {
-  font-family: var(--font-outfit), Outfit, "DM Sans", sans-serif;
+.brand,
+.ticket-text,
+.package .amount,
+.price {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: 0.015em;
+}
+
+/* Font 2: West Cooper Nouveau Sw. (Shrikhand) — Highlighted Accent Words */
+.hero h1 em,
+.section h2 span,
+.attractions-stage-header h2 span,
+.contact h2 span {
+  font-family: var(--font-swash);
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  display: inline-block;
+  transform: rotate(-1.5deg);
+}
+
+/* Font 3: PALMER LAKE (Permanent Marker) — Kickers, Stickers & Badges */
+.kicker,
+.eyebrow,
+.float,
+.label,
+.ribbon,
+.brand small,
+.demo,
+.clay-zone-tag,
+.clay-pill-left,
+.clay-pill-right {
+  font-family: var(--font-marker);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 400;
 }
 
 a {
@@ -67,9 +119,8 @@ button {
   color: #704813;
   text-align: center;
   padding: 9px 16px;
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.07em;
+  font-size: 13px;
+  letter-spacing: 0.09em;
 }
 
 .header {
@@ -92,19 +143,18 @@ button {
   display: flex;
   gap: 11px;
   align-items: center;
-  font-size: 22px;
-  font-weight: 900;
-  letter-spacing: -0.07em;
+  font-size: 20px;
+  letter-spacing: 0.015em;
   color: var(--navy);
-  line-height: 0.83;
+  line-height: 0.92;
 }
 
 .brand small {
   display: block;
-  font: 800 9px var(--font-dm-sans), "DM Sans", sans-serif;
-  letter-spacing: 0.38em;
+  font-size: 11px;
+  letter-spacing: 0.28em;
   color: var(--purple);
-  margin-top: 8px;
+  margin-top: 6px;
 }
 
 .brandmark {
@@ -143,6 +193,7 @@ button {
   padding: 15px 26px;
   font-size: 14px;
   font-weight: 800;
+  letter-spacing: 0.01em;
   transition: transform 0.2s, box-shadow 0.2s;
   box-shadow:
     0 8px 20px rgba(24, 33, 74, 0.14),
@@ -227,11 +278,10 @@ button {
   gap: 8px;
   background: #2f458b;
   border: 2px solid #556db5;
-  padding: 9px 15px;
+  padding: 9px 16px;
   border-radius: 50px;
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
+  font-size: 13px;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
   box-shadow:
     inset 0 2px 4px rgba(255, 255, 255, 0.25),
@@ -239,15 +289,16 @@ button {
 }
 
 .hero h1 {
-  font-size: clamp(56px, 6.8vw, 94px);
-  line-height: 0.99;
-  letter-spacing: -0.065em;
+  font-size: clamp(48px, 6.2vw, 84px);
+  line-height: 1.04;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
   margin: 25px 0 22px;
-  font-weight: 900;
+  font-weight: 400;
+  text-shadow: 0 6px 0 rgba(16, 25, 60, 0.45);
 }
 
 .hero h1 em {
-  font-style: normal;
   color: var(--yellow);
 }
 
@@ -328,7 +379,10 @@ button {
   position: absolute;
   top: 70px;
   left: 22px;
-  font: 900 37px/1 var(--font-outfit), Outfit, sans-serif;
+  font-family: var(--font-display);
+  font-size: 34px;
+  line-height: 1.06;
+  letter-spacing: 0.02em;
   color: #142054;
   transform: rotate(-8deg);
   text-shadow: 2px 2px #fff7;
@@ -341,8 +395,7 @@ button {
   gap: 9px;
   background: white;
   color: var(--ink);
-  font-size: 12px;
-  font-weight: 900;
+  font-size: 13px;
   border-radius: 15px;
   padding: 13px 16px;
   box-shadow:
@@ -400,18 +453,16 @@ button {
 }
 
 .kicker {
-  font-size: 12px;
-  font-weight: 900;
-  letter-spacing: 0.17em;
-  text-transform: uppercase;
+  font-size: 15px;
+  letter-spacing: 0.12em;
   color: #7853d3;
   margin-bottom: 13px;
 }
 
 .section h2 {
-  font-size: clamp(33px, 4.7vw, 51px);
-  line-height: 1.12;
-  letter-spacing: -0.045em;
+  font-size: clamp(30px, 4.3vw, 48px);
+  line-height: 1.14;
+  letter-spacing: 0.015em;
   margin-bottom: 12px;
 }
 
@@ -507,9 +558,9 @@ button {
 }
 
 .attractions-stage-header h2 {
-  font-size: clamp(26px, 3.2vw, 42px);
-  line-height: 1.06;
-  letter-spacing: -0.045em;
+  font-size: clamp(24px, 3vw, 38px);
+  line-height: 1.1;
+  letter-spacing: 0.015em;
   margin-bottom: 4px;
 }
 
@@ -536,9 +587,9 @@ button {
   border-radius: 99px;
   background: #ffffff;
   color: var(--navy);
-  font-family: var(--font-outfit), Outfit, sans-serif;
+  font-family: var(--font-marker);
   font-size: 13px;
-  font-weight: 900;
+  letter-spacing: 0.08em;
   box-shadow:
     0 10px 24px rgba(27, 36, 80, 0.1),
     inset 0 -4px 8px rgba(214, 222, 248, 0.8),
@@ -706,10 +757,7 @@ button {
   left: 18px;
   background: #ffffff;
   color: var(--navy);
-  font-family: var(--font-outfit), Outfit, sans-serif;
-  font-size: 11px;
-  font-weight: 900;
-  letter-spacing: 0.08em;
+  font-size: 12px;
   padding: 8px 14px;
   border-radius: 99px;
   box-shadow:
@@ -725,9 +773,7 @@ button {
   right: 18px;
   background: var(--yellow);
   color: #17204b;
-  font-family: var(--font-outfit), Outfit, sans-serif;
-  font-size: 11px;
-  font-weight: 900;
+  font-size: 12px;
   padding: 8px 14px;
   border-radius: 99px;
   box-shadow:
@@ -785,10 +831,7 @@ button {
   padding: 7px 13px;
   background: #f1ecff;
   color: #644cc7;
-  font-weight: 900;
-  font-size: 11px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font-size: 12px;
   margin-bottom: 14px;
   box-shadow:
     inset 0 3px 5px rgba(255, 255, 255, 0.9),
@@ -797,9 +840,9 @@ button {
 }
 
 .clay-info h3 {
-  font-size: clamp(28px, 3.4vw, 42px);
-  line-height: 1.08;
-  letter-spacing: -0.035em;
+  font-size: clamp(26px, 3.1vw, 38px);
+  line-height: 1.12;
+  letter-spacing: 0.015em;
   color: var(--navy);
   margin: 0 0 12px;
 }
@@ -845,9 +888,7 @@ button {
 }
 
 .price {
-  font-size: 30px;
-  font-weight: 900;
-  font-family: var(--font-outfit), Outfit, sans-serif;
+  font-size: 28px;
   color: #5741c5;
   line-height: 1;
 }
@@ -855,7 +896,8 @@ button {
 .price small {
   font-size: 13px;
   font-weight: 700;
-  font-family: var(--font-dm-sans), "DM Sans", sans-serif;
+  font-family: var(--font-body);
+  letter-spacing: 0;
   color: var(--muted);
 }
 
@@ -865,8 +907,7 @@ button {
   padding: 8px 13px;
   background: #f1ecff;
   color: #644cc7;
-  font-weight: 900;
-  font-size: 12px;
+  font-size: 13px;
   box-shadow:
     inset 0 2px 4px rgba(255, 255, 255, 0.85),
     inset 0 -3px 5px rgba(100, 76, 199, 0.15);
@@ -971,8 +1012,7 @@ button {
   right: 24px;
   top: -14px;
   background: var(--yellow);
-  font-size: 11px;
-  font-weight: 900;
+  font-size: 13px;
   padding: 9px 16px;
   border-radius: 12px;
   box-shadow:
@@ -982,8 +1022,8 @@ button {
 }
 
 .package h3 {
-  font-size: 27px;
-  margin: 8px 0 8px;
+  font-size: 26px;
+  margin: 10px 0 8px;
 }
 
 .package p {
@@ -993,8 +1033,9 @@ button {
 }
 
 .package .amount {
-  font: 900 56px var(--font-outfit), Outfit, sans-serif;
-  letter-spacing: -0.05em;
+  font-family: var(--font-display);
+  font-size: 52px;
+  letter-spacing: 0.015em;
   color: var(--navy);
   margin: 22px 0;
 }
@@ -1203,7 +1244,7 @@ button {
 }
 
 .formbox h3 {
-  font-size: 26px;
+  font-size: 24px;
   margin-bottom: 7px;
 }
 
@@ -1265,6 +1306,8 @@ button {
 
 .footer strong {
   color: white;
+  font-family: var(--font-display);
+  letter-spacing: 0.03em;
 }
 
 .gallerytip {
@@ -1288,7 +1331,7 @@ button {
     grid-template-columns: 1fr 0.85fr;
   }
   .hero h1 {
-    font-size: 60px;
+    font-size: 52px;
   }
   .hero-art {
     transform: scale(0.84);
@@ -1347,7 +1390,7 @@ button {
     margin-right: auto;
   }
   .hero h1 {
-    font-size: clamp(48px, 12vw, 70px);
+    font-size: clamp(40px, 10.5vw, 62px);
   }
   .hero-actions {
     justify-content: center;
@@ -1382,11 +1425,11 @@ button {
     display: none;
   }
   .attractions-stage-header .kicker {
-    font-size: 10px;
+    font-size: 12px;
     margin-bottom: 3px;
   }
   .attractions-stage-header h2 {
-    font-size: 22px;
+    font-size: 20px;
     margin-bottom: 0;
   }
   .clay-counter-pill {
@@ -1443,11 +1486,11 @@ button {
   }
   .clay-zone-tag {
     padding: 4px 9px;
-    font-size: 9px;
+    font-size: 10px;
     margin-bottom: 6px;
   }
   .clay-info h3 {
-    font-size: 22px;
+    font-size: 20px;
     margin-bottom: 4px;
   }
   .clay-info p {
@@ -1473,7 +1516,7 @@ button {
     gap: 10px;
   }
   .price {
-    font-size: 22px;
+    font-size: 20px;
   }
   .price small {
     font-size: 11px;
