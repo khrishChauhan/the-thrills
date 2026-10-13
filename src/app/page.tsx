@@ -1,8 +1,10 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
+import Image from "next/image";
 import {
   motion,
+  AnimatePresence,
   useScroll,
   useTransform,
   useMotionValueEvent,
@@ -30,6 +32,10 @@ import {
   ArrowUpRight,
   ArrowRight,
   CheckCircle2,
+  Maximize2,
+  ChevronLeft,
+  ChevronRight,
+  ImagePlus,
 } from "lucide-react";
 
 interface AttractionItem {
@@ -127,15 +133,105 @@ const ATTRACTIONS_DATA: AttractionItem[] = [
   },
 ];
 
+type GalleryCategory =
+  | "All Photos"
+  | "Park Overview"
+  | "Attractions"
+  | "Water & Pool Area"
+  | "Park Moments";
+
+interface GalleryPhotoItem {
+  id: string;
+  src: string;
+  title: string;
+  subtitle: string;
+  category: Exclude<GalleryCategory, "All Photos">;
+  span: "feature" | "tall" | "wide" | "standard";
+  isCustomUpload?: boolean;
+}
+
+const GALLERY_CATEGORIES: GalleryCategory[] = [
+  "All Photos",
+  "Park Overview",
+  "Attractions",
+  "Water & Pool Area",
+  "Park Moments",
+];
+
+const INITIAL_GALLERY_ITEMS: GalleryPhotoItem[] = [
+  {
+    id: "park-entrance-arch",
+    src: "/images/park-entrance-arch.jpg",
+    title: "The Grand Park Entrance Arch",
+    subtitle: "Welcome gateway to The Thrills Fun Park in Begusarai",
+    category: "Park Overview",
+    span: "feature",
+  },
+  {
+    id: "waterfall-lagoon",
+    src: "/images/waterfall-lagoon.jpg",
+    title: "Waterfall & Pool Lagoon",
+    subtitle: "Refreshing water splashes and poolside family fun",
+    category: "Water & Pool Area",
+    span: "tall",
+  },
+  {
+    id: "attractions-complex",
+    src: "/images/attractions-complex.jpg",
+    title: "The Thrills Attractions Arena",
+    subtitle: "Action-packed rides and playful adventure zones",
+    category: "Attractions",
+    span: "standard",
+  },
+  {
+    id: "concept-facades",
+    src: "/images/concept-facades.jpg",
+    title: "Sensory & Illusion Houses",
+    subtitle: "Mirror House, Horror House, Illusion House & 7D Theatre",
+    category: "Attractions",
+    span: "wide",
+  },
+  {
+    id: "resort-amphitheater",
+    src: "/images/resort-amphitheater.jpg",
+    title: "Open-Air Park Plaza & Promenade",
+    subtitle: "Spacious gathering zones built for group outings",
+    category: "Park Moments",
+    span: "standard",
+  },
+  {
+    id: "thrill-grill-exterior",
+    src: "/images/thrill-grill-exterior.jpg",
+    title: "The Thrill Grill & Dining Courtyard",
+    subtitle: "Delicious meals and refreshments for With-Food package guests",
+    category: "Park Moments",
+    span: "standard",
+  },
+  {
+    id: "vip-reception",
+    src: "/images/vip-reception.jpg",
+    title: "Guest Welcome & Ticketing Pavilion",
+    subtitle: "Smooth entry, free lockers, and complimentary costume pickup",
+    category: "Park Overview",
+    span: "standard",
+  },
+];
+
 export default function HomePage() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [selectedPackage, setSelectedPackage] = useState("General Enquiry");
   const [visitDate, setVisitDate] = useState("");
-  const [galleryPreviews, setGalleryPreviews] = useState<
-    [string | null, string | null, string | null]
-  >([null, null, null]);
+
+  // Editorial Masonry Gallery State & Lightbox
+  const [activeGalleryCategory, setActiveGalleryCategory] =
+    useState<GalleryCategory>("All Photos");
+  const [customGalleryItems, setCustomGalleryItems] = useState<
+    GalleryPhotoItem[]
+  >([]);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const lastFocusedCardRef = useRef<HTMLButtonElement | null>(null);
 
   const prefersReducedMotion = useReducedMotion();
 
@@ -531,8 +627,20 @@ export default function HomePage() {
     setSelectedPackage(value);
   };
 
-  const handlePreviewImage = (
-    index: number,
+  const allGalleryItems = [...customGalleryItems, ...INITIAL_GALLERY_ITEMS];
+  const filteredGalleryItems =
+    activeGalleryCategory === "All Photos"
+      ? allGalleryItems
+      : allGalleryItems.filter(
+          (item) => item.category === activeGalleryCategory
+        );
+
+  const getCategoryCount = (cat: GalleryCategory) => {
+    if (cat === "All Photos") return allGalleryItems.length;
+    return allGalleryItems.filter((item) => item.category === cat).length;
+  };
+
+  const handleCustomGalleryUpload = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     const file = e.target.files && e.target.files[0];
@@ -541,17 +649,80 @@ export default function HomePage() {
     reader.onload = (event) => {
       const result = event.target?.result;
       if (typeof result === "string") {
-        setGalleryPreviews((prev) => {
-          const updated: [string | null, string | null, string | null] = [
-            ...prev,
-          ];
-          updated[index] = result;
-          return updated;
-        });
+        const cleanName = file.name.replace(/\.[^/.]+$/, "");
+        const newItem: GalleryPhotoItem = {
+          id: `custom-${Date.now()}`,
+          src: result,
+          title: cleanName ? `Guest Preview — ${cleanName}` : "Custom Park Photo Preview",
+          subtitle: "Browser preview photo uploaded from your computer",
+          category: "Park Moments",
+          span: "standard",
+          isCustomUpload: true,
+        };
+        setCustomGalleryItems((prev) => [newItem, ...prev]);
+        setActiveGalleryCategory("All Photos");
       }
     };
     reader.readAsDataURL(file);
+    e.target.value = "";
   };
+
+  const openLightbox = (index: number, buttonEl: HTMLButtonElement) => {
+    lastFocusedCardRef.current = buttonEl;
+    setLightboxIndex(index);
+  };
+
+  const closeLightbox = () => {
+    setLightboxIndex(null);
+    setTimeout(() => {
+      lastFocusedCardRef.current?.focus();
+    }, 20);
+  };
+
+  const navigateLightbox = (direction: -1 | 1) => {
+    if (lightboxIndex === null || filteredGalleryItems.length === 0) return;
+    setLightboxIndex(
+      (lightboxIndex + direction + filteredGalleryItems.length) %
+        filteredGalleryItems.length
+    );
+  };
+
+  useEffect(() => {
+    if (lightboxIndex === null) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        setLightboxIndex(null);
+        setTimeout(() => {
+          lastFocusedCardRef.current?.focus();
+        }, 20);
+      } else if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        setLightboxIndex((prev) =>
+          prev === null
+            ? null
+            : (prev - 1 + filteredGalleryItems.length) %
+              filteredGalleryItems.length
+        );
+      } else if (e.key === "ArrowRight") {
+        e.preventDefault();
+        setLightboxIndex((prev) =>
+          prev === null
+            ? null
+            : (prev + 1) % filteredGalleryItems.length
+        );
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [lightboxIndex, filteredGalleryItems.length]);
 
   const handleSendEnquiry = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -1219,7 +1390,7 @@ export default function HomePage() {
 
         <section className="section gallery" id="gallery">
           <div className="container">
-            <div className="sectionhead">
+            <div className="sectionhead gallery-sectionhead">
               <div>
                 <div className="kicker">A glimpse of the fun</div>
                 <h2>
@@ -1227,76 +1398,224 @@ export default function HomePage() {
                   <span style={{ color: "var(--purple)" }}>The Thrills</span>
                 </h2>
                 <p className="lede">
-                  Add your real fun park photographs here — click each box to
-                  select a picture from your computer.
+                  Explore real moments, vibrant attractions, and refreshing
+                  water zones across our Begusarai destination.
                 </p>
               </div>
-            </div>
 
-            <div className="gallerygrid">
-              <label className="photobox">
-                <span>
-                  <Camera size={36} color="var(--navy)" strokeWidth={1.8} />
-                </span>
-                <strong>Park Overview</strong>
-                <small>Click to upload a photo</small>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  alt="Park overview uploaded preview"
-                  src={galleryPreviews[0] || undefined}
-                  style={{ display: galleryPreviews[0] ? "block" : "none" }}
-                />
+              <label className="clay-upload-pill">
+                <ImagePlus size={16} strokeWidth={2.2} />
+                <span>Preview Custom Photo</span>
                 <input
                   type="file"
                   accept="image/*"
-                  onChange={(e) => handlePreviewImage(0, e)}
-                />
-              </label>
-
-              <label className="photobox">
-                <span>
-                  <Waves size={36} color="var(--navy)" strokeWidth={1.8} />
-                </span>
-                <strong>Water &amp; Pool Area</strong>
-                <small>Click to upload a photo</small>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  alt="Pool area uploaded preview"
-                  src={galleryPreviews[1] || undefined}
-                  style={{ display: galleryPreviews[1] ? "block" : "none" }}
-                />
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => handlePreviewImage(1, e)}
-                />
-              </label>
-
-              <label className="photobox">
-                <span>
-                  <FerrisWheel size={36} color="var(--navy)" strokeWidth={1.8} />
-                </span>
-                <strong>Attractions</strong>
-                <small>Click to upload a photo</small>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  alt="Attractions uploaded preview"
-                  src={galleryPreviews[2] || undefined}
-                  style={{ display: galleryPreviews[2] ? "block" : "none" }}
-                />
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => handlePreviewImage(2, e)}
+                  onChange={handleCustomGalleryUpload}
                 />
               </label>
             </div>
+
+            {/* Functional 3D Claymorphic Category Filter Bar */}
+            <div
+              className="gallery-filter-bar"
+              role="toolbar"
+              aria-label="Filter gallery photos by category"
+            >
+              {GALLERY_CATEGORIES.map((category) => {
+                const isActive = activeGalleryCategory === category;
+                const count = getCategoryCount(category);
+                return (
+                  <button
+                    key={category}
+                    type="button"
+                    className={`gallery-filter-pill${
+                      isActive ? " active" : ""
+                    }`}
+                    aria-pressed={isActive}
+                    onClick={() => {
+                      setActiveGalleryCategory(category);
+                      setLightboxIndex(null);
+                    }}
+                  >
+                    <span>{category}</span>
+                    <span className="gallery-filter-count">{count}</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Editorial Asymmetrical Masonry Grid */}
+            <motion.div
+              layout={!prefersReducedMotion}
+              className={`gallerygrid${
+                activeGalleryCategory !== "All Photos"
+                  ? " gallerygrid-filtered"
+                  : ""
+              }`}
+            >
+              <AnimatePresence mode="popLayout">
+                {filteredGalleryItems.map((item, idx) => (
+                  <motion.button
+                    key={item.id}
+                    layout={!prefersReducedMotion}
+                    type="button"
+                    className={`gallery-clay-card gallery-card-${item.span}`}
+                    aria-label={`View ${item.title} in full size`}
+                    onClick={(e) => openLightbox(idx, e.currentTarget)}
+                    initial={
+                      prefersReducedMotion
+                        ? false
+                        : { opacity: 0, y: 24, scale: 0.97 }
+                    }
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={
+                      prefersReducedMotion
+                        ? { opacity: 0 }
+                        : { opacity: 0, scale: 0.95 }
+                    }
+                    transition={{
+                      duration: 0.42,
+                      delay: prefersReducedMotion ? 0 : idx * 0.05,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
+                  >
+                    <div className="gallery-card-frame">
+                      <Image
+                        src={item.src}
+                        alt={`${item.title} — ${item.subtitle}`}
+                        fill
+                        sizes={
+                          item.span === "feature" || item.span === "wide"
+                            ? "(max-width: 740px) 100vw, (max-width: 950px) 100vw, 65vw"
+                            : "(max-width: 740px) 100vw, (max-width: 950px) 50vw, 35vw"
+                        }
+                        className="gallery-card-img"
+                        unoptimized={Boolean(item.isCustomUpload)}
+                      />
+
+                      {/* Top Category Clay Tag */}
+                      <span className="gallery-card-tag">{item.category}</span>
+
+                      {/* Expand 3D Clay Badge */}
+                      <span className="gallery-expand-badge" aria-hidden="true">
+                        <Maximize2 size={16} strokeWidth={2.4} />
+                      </span>
+
+                      {/* Deep Navy Opaque/Gradient Caption Overlay (Zero Backdrop Blur) */}
+                      <div className="gallery-card-caption">
+                        <strong>{item.title}</strong>
+                        <small>{item.subtitle}</small>
+                      </div>
+                    </div>
+                  </motion.button>
+                ))}
+              </AnimatePresence>
+            </motion.div>
 
             <p className="gallerytip">
-              Note: Photo uploads are for this browser preview only. They are
-              not saved into the downloaded HTML file.
+              Click any photograph to open the full-size lightbox view, or use
+              &ldquo;Preview Custom Photo&rdquo; to test your own park images in
+              this browser preview.
             </p>
           </div>
+
+          {/* Accessible Full-Size Lightbox Modal (Zero Glassmorphism) */}
+          <AnimatePresence>
+            {lightboxIndex !== null &&
+              filteredGalleryItems[lightboxIndex] && (
+                <motion.div
+                  className="gallery-lightbox-backdrop"
+                  role="dialog"
+                  aria-modal="true"
+                  aria-label="Photo Lightbox"
+                  initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0 }}
+                  transition={{ duration: 0.22 }}
+                  onClick={closeLightbox}
+                >
+                  <div
+                    className="gallery-lightbox-shell"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    {/* Lightbox Top Bar */}
+                    <div className="gallery-lightbox-topbar">
+                      <div className="gallery-lightbox-meta">
+                        <span className="gallery-lightbox-counter">
+                          {lightboxIndex + 1} of {filteredGalleryItems.length}
+                        </span>
+                        <span className="gallery-lightbox-cat">
+                          {filteredGalleryItems[lightboxIndex].category}
+                        </span>
+                      </div>
+
+                      <button
+                        type="button"
+                        className="gallery-lightbox-close"
+                        aria-label="Close lightbox"
+                        onClick={closeLightbox}
+                      >
+                        <X size={20} strokeWidth={2.5} />
+                      </button>
+                    </div>
+
+                    {/* Lightbox Main Stage + Prev/Next Clay Buttons */}
+                    <div className="gallery-lightbox-stage">
+                      {filteredGalleryItems.length > 1 && (
+                        <button
+                          type="button"
+                          className="gallery-lightbox-nav prev"
+                          aria-label="Previous photograph"
+                          onClick={() => navigateLightbox(-1)}
+                        >
+                          <ChevronLeft size={24} strokeWidth={2.5} />
+                        </button>
+                      )}
+
+                      <motion.div
+                        key={filteredGalleryItems[lightboxIndex].id}
+                        className="gallery-lightbox-card"
+                        initial={
+                          prefersReducedMotion
+                            ? false
+                            : { opacity: 0, scale: 0.96, y: 10 }
+                        }
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+                      >
+                        <div className="gallery-lightbox-img-wrap">
+                          <Image
+                            src={filteredGalleryItems[lightboxIndex].src}
+                            alt={`${filteredGalleryItems[lightboxIndex].title} — ${filteredGalleryItems[lightboxIndex].subtitle}`}
+                            fill
+                            sizes="90vw"
+                            className="gallery-lightbox-img"
+                            unoptimized={Boolean(
+                              filteredGalleryItems[lightboxIndex].isCustomUpload
+                            )}
+                            priority
+                          />
+                        </div>
+                        <div className="gallery-lightbox-caption">
+                          <h3>{filteredGalleryItems[lightboxIndex].title}</h3>
+                          <p>{filteredGalleryItems[lightboxIndex].subtitle}</p>
+                        </div>
+                      </motion.div>
+
+                      {filteredGalleryItems.length > 1 && (
+                        <button
+                          type="button"
+                          className="gallery-lightbox-nav next"
+                          aria-label="Next photograph"
+                          onClick={() => navigateLightbox(1)}
+                        >
+                          <ChevronRight size={24} strokeWidth={2.5} />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+          </AnimatePresence>
         </section>
 
         <section
