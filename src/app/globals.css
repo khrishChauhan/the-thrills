@@ -2016,21 +2016,52 @@ button {
   align-items: center;
 }
 
+/* 3D Clay About Visual Stage (Real Photo Integration) */
 .aboutimage {
-  min-height: 380px;
-  background: linear-gradient(145deg, #f7c95d 0%, #f5928f 58%, #d270c8 100%);
+  min-height: 440px;
   border-radius: 32px;
-  display: grid;
-  place-items: center;
+  display: block;
   position: relative;
   overflow: hidden;
+  background: var(--navy);
   box-shadow:
-    0 24px 52px rgba(125, 46, 74, 0.16),
+    0 24px 52px rgba(20, 29, 71, 0.16),
     inset 0 10px 22px rgba(255, 255, 255, 0.45),
-    inset 0 -12px 24px rgba(80, 20, 50, 0.18);
+    inset 0 -14px 24px rgba(20, 29, 71, 0.22);
 }
 
-/* Layer 2: Translucent Floating Rings */
+.about-visual-media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.about-visual-img {
+  object-fit: cover;
+  object-position: center 36%;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.aboutimage:hover .about-visual-img {
+  transform: scale(1.05);
+}
+
+/* Atmospheric Tonal Tint & Dark Contrast Vignette */
+.about-visual-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(16, 23, 60, 0.65) 0%,
+    rgba(20, 29, 71, 0.12) 40%,
+    rgba(16, 23, 60, 0.75) 100%
+  );
+  pointer-events: none;
+}
+
+/* Subtle Layer 2: Translucent Floating Rings for Depth */
 .about-ring {
   position: absolute;
   border-radius: 50%;
@@ -2041,67 +2072,113 @@ button {
 .about-ring-primary {
   height: 330px;
   width: 330px;
-  border: 45px solid rgba(255, 255, 255, 0.25);
-  left: -80px;
-  bottom: -130px;
+  border: 40px solid rgba(255, 255, 255, 0.14);
+  left: -90px;
+  bottom: -140px;
+  box-shadow: inset 0 6px 12px rgba(255, 255, 255, 0.2);
 }
 
 .about-ring-secondary {
   height: 220px;
   width: 220px;
-  border: 26px solid rgba(255, 246, 224, 0.2);
-  right: -64px;
-  top: -68px;
+  border: 24px solid rgba(255, 255, 255, 0.12);
+  right: -70px;
+  top: -70px;
 }
 
-/* Layer 3: Soft Ambient Radial Glow Behind Central Symbol */
-.about-central-glow {
+/* Top Clay Badges */
+.about-pill-left {
   position: absolute;
-  width: 260px;
-  height: 260px;
+  top: 20px;
+  left: 20px;
+  background: #ffffff;
+  color: var(--navy);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  padding: 8px 16px;
+  border-radius: 99px;
+  box-shadow:
+    0 8px 18px rgba(20, 29, 71, 0.16),
+    inset 0 -3px 6px rgba(214, 222, 248, 0.8),
+    inset 0 2px 4px rgba(255, 255, 255, 1);
+  z-index: 4;
+}
+
+.about-pill-right {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: var(--yellow);
+  color: #17204b;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  padding: 8px 16px;
+  border-radius: 99px;
+  box-shadow:
+    0 8px 18px rgba(20, 29, 71, 0.16),
+    inset 0 -3px 6px rgba(180, 125, 0, 0.25),
+    inset 0 3px 5px rgba(255, 255, 255, 0.75);
+  z-index: 4;
+}
+
+/* Floating 3D Clay Icon Token (Corner Anchor) */
+.about-visual-icon-token {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  width: 62px;
+  height: 62px;
   border-radius: 50%;
-  background: radial-gradient(
-    circle,
-    rgba(255, 250, 232, 0.36) 0%,
-    rgba(255, 250, 232, 0) 70%
-  );
-  pointer-events: none;
-  will-change: transform;
-}
-
-/* Layer 4: Subtle Amusement-Park Orbital Arch & Light Nodes */
-.about-arch-svg {
-  position: absolute;
-  width: 290px;
-  height: 290px;
-  pointer-events: none;
-  z-index: 1;
-}
-
-/* Layer 5: Central Ferris-Wheel Symbol & Soft Medallion */
-.aboutimage .illustration {
-  display: inline-flex;
+  background: #ffffff;
+  color: var(--purple);
+  display: flex;
   align-items: center;
   justify-content: center;
-  color: #ffffff;
-  filter: drop-shadow(0 16px 14px rgba(125, 46, 74, 0.28));
-  position: relative;
-  z-index: 2;
+  z-index: 4;
+  box-shadow:
+    0 12px 26px rgba(20, 29, 71, 0.24),
+    inset 0 3px 6px #ffffff,
+    inset 0 -4px 8px rgba(214, 222, 248, 0.9);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-.about-wheel-medallion {
+.aboutimage:hover .about-visual-icon-token {
+  transform: scale(1.08) translateY(-2px);
+  box-shadow:
+    0 16px 32px rgba(20, 29, 71, 0.28),
+    inset 0 3px 6px #ffffff,
+    inset 0 -4px 8px rgba(214, 222, 248, 0.9);
+}
+
+/* Bottom Clay Caption Badge */
+.about-visual-badge {
   position: absolute;
-  width: 176px;
-  height: 176px;
+  bottom: 20px;
+  left: 20px;
+  z-index: 4;
+  background: #ffffff;
+  color: var(--navy);
+  font-size: 13px;
+  font-weight: 700;
+  padding: 8px 16px;
+  border-radius: 99px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow:
+    0 8px 20px rgba(20, 29, 71, 0.16),
+    inset 0 -3px 6px rgba(214, 222, 248, 0.8),
+    inset 0 2px 4px rgba(255, 255, 255, 1);
+}
+
+.about-badge-dot {
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  background: radial-gradient(
-    circle at 35% 30%,
-    rgba(255, 255, 255, 0.22) 0%,
-    rgba(255, 255, 255, 0.08) 70%,
-    rgba(255, 255, 255, 0) 100%
-  );
-  border: 1.5px solid rgba(255, 255, 255, 0.32);
-  pointer-events: none;
+  background: #10b981;
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
 }
 
 .about .lede {
@@ -3419,19 +3496,48 @@ button {
   }
   .aboutimage {
     width: 100%;
-    max-width: 360px;
-    min-height: 290px;
+    max-width: 380px;
+    min-height: 270px;
+    aspect-ratio: 4 / 3;
     margin: 0 auto;
-    border-radius: 28px;
+    border-radius: 24px;
     overflow: hidden;
   }
-  .about-arch-svg {
-    width: 210px;
-    height: 210px;
+  .about-visual-img {
+    object-position: center 32%;
   }
-  .about-wheel-medallion {
-    width: 136px;
-    height: 136px;
+  .about-pill-left,
+  .about-pill-right {
+    top: 10px;
+    padding: 6px 10px;
+    font-size: 9px;
+    max-width: 48%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .about-pill-left {
+    left: 10px;
+  }
+  .about-pill-right {
+    right: 10px;
+  }
+  .about-visual-icon-token {
+    width: 44px;
+    height: 44px;
+    bottom: 10px;
+    right: 10px;
+  }
+  .about-visual-icon-token svg {
+    width: 22px;
+    height: 22px;
+  }
+  .about-visual-badge {
+    bottom: 10px;
+    left: 10px;
+    font-size: 10.5px;
+    padding: 5px 10px;
+    gap: 6px;
   }
   .about-copy-col h2 {
     font-size: 26px;
