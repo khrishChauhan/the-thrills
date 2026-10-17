@@ -42,6 +42,7 @@ interface AttractionItem {
   id: number;
   icon: React.ReactNode;
   visualClass: string;
+  image: string;
   indexLabel: string;
   topBadge: string;
   zoneTag: string;
@@ -55,8 +56,9 @@ interface AttractionItem {
 const ATTRACTIONS_DATA: AttractionItem[] = [
   {
     id: 1,
-    icon: <Gamepad2 size={88} strokeWidth={1.8} />,
+    icon: <Gamepad2 size={36} strokeWidth={2.2} />,
     visualClass: "clay-visual-1",
+    image: "/images/attractions/fun-zone.jpg",
     indexLabel: "#01 ATTRACTION",
     topBadge: "POPULAR",
     zoneTag: "✦ THRILLS ADVENTURE ZONE",
@@ -68,8 +70,9 @@ const ATTRACTIONS_DATA: AttractionItem[] = [
   },
   {
     id: 2,
-    icon: <Sparkles size={88} strokeWidth={1.8} />,
+    icon: <Sparkles size={36} strokeWidth={2.2} />,
     visualClass: "clay-visual-2",
+    image: "/images/attractions/mirror-house.jpg",
     indexLabel: "#02 ATTRACTION",
     topBadge: "₹100 ENTRY",
     zoneTag: "✦ OPTICAL WONDER ZONE",
@@ -81,8 +84,9 @@ const ATTRACTIONS_DATA: AttractionItem[] = [
   },
   {
     id: 3,
-    icon: <Ghost size={88} strokeWidth={1.8} />,
+    icon: <Ghost size={36} strokeWidth={2.2} />,
     visualClass: "clay-visual-3",
+    image: "/images/attractions/horror-house.jpg",
     indexLabel: "#03 ATTRACTION",
     topBadge: "THRILL SEEKERS",
     zoneTag: "✦ SPOOKY MYSTERY ZONE",
@@ -94,8 +98,9 @@ const ATTRACTIONS_DATA: AttractionItem[] = [
   },
   {
     id: 4,
-    icon: <Orbit size={88} strokeWidth={1.8} />,
+    icon: <Orbit size={36} strokeWidth={2.2} />,
     visualClass: "clay-visual-4",
+    image: "/images/attractions/illusion-house.jpg",
     indexLabel: "#04 ATTRACTION",
     topBadge: "MUST VISIT",
     zoneTag: "✦ MIND-BENDING ZONE",
@@ -107,8 +112,9 @@ const ATTRACTIONS_DATA: AttractionItem[] = [
   },
   {
     id: 5,
-    icon: <Clapperboard size={88} strokeWidth={1.8} />,
+    icon: <Clapperboard size={36} strokeWidth={2.2} />,
     visualClass: "clay-visual-5",
+    image: "/images/attractions/7d-theatre.jpg",
     indexLabel: "#05 ATTRACTION",
     topBadge: "7D MOTION",
     zoneTag: "✦ IMMERSIVE CINEMA ZONE",
@@ -120,8 +126,9 @@ const ATTRACTIONS_DATA: AttractionItem[] = [
   },
   {
     id: 6,
-    icon: <Palmtree size={88} strokeWidth={1.8} />,
+    icon: <Palmtree size={36} strokeWidth={2.2} />,
     visualClass: "clay-visual-6",
+    image: "/images/attractions/more-fun.jpg",
     indexLabel: "#06 FULL PARK",
     topBadge: "ALL-DAY JOY",
     zoneTag: "✦ COMPLETE PARK EXPERIENCE",
@@ -1354,18 +1361,36 @@ export default function HomePage() {
                       }`}
                     >
                       <div className="clay-card-inner">
-                        {/* Left / Top: 3D Clay Visual Stage */}
+                        {/* Left / Top: 3D Clay Visual Stage with Real Photography */}
                         <div className={`clay-visual ${item.visualClass}`}>
+                          {/* Real Photo Media Layer */}
+                          <div className="clay-visual-media">
+                            <Image
+                              src={item.image}
+                              alt={item.title}
+                              fill
+                              sizes="(max-width: 740px) 90vw, 42vw"
+                              className="clay-visual-img"
+                            />
+                            {/* Tonal Theme Tint & Dark Contrast Vignette */}
+                            <div className="clay-visual-overlay" />
+                          </div>
+                          {/* Decorative Clay Rings (Subtle Depth) */}
                           <div className="clay-ring-1" />
                           <div className="clay-ring-2" />
+                          {/* Top Clay Badges */}
                           <span className="clay-pill-left">
                             {item.indexLabel}
                           </span>
                           <span className="clay-pill-right">
                             {item.topBadge}
                           </span>
-                          <div className="clay-emoji-pedestal">
-                            <span className="clay-emoji">{item.icon}</span>
+                          {/* Refined Floating 3D Clay Icon Token (Corner Anchor) */}
+                          <div
+                            className="clay-visual-icon-token"
+                            aria-hidden="true"
+                          >
+                            {item.icon}
                           </div>
                         </div>
 
