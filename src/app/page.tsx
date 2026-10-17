@@ -36,13 +36,6 @@ import {
   ChevronLeft,
   ChevronRight,
   ImagePlus,
-  UtensilsCrossed,
-  Smile,
-  Users,
-  Flame,
-  Clock,
-  Award,
-  ChefHat,
 } from "lucide-react";
 
 interface AttractionItem {
@@ -264,18 +257,6 @@ export default function HomePage() {
   const [enquiryPrepared, setEnquiryPrepared] = useState(false);
   const [activeField, setActiveField] = useState<string | null>(null);
 
-  // Thrill & Grill Dining Modal State
-  const [diningMenuOpen, setDiningMenuOpen] = useState(false);
-
-  useEffect(() => {
-    if (!diningMenuOpen) return;
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setDiningMenuOpen(false);
-    };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [diningMenuOpen]);
-
   useEffect(() => {
     const updateMetrics = () => {
       const vw = window.innerWidth;
@@ -322,6 +303,10 @@ export default function HomePage() {
     target: heroSectionRef,
     offset: ["start start", "end end"],
   });
+
+  // Subtle Hero Background Parallax & Depth
+  const heroBgY = useTransform(heroScrollProgress, [0, 1], [0, 48]);
+  const heroBgScale = useTransform(heroScrollProgress, [0, 1], [1.04, 1.12]);
 
   // Central Turquoise Card (.ticket-shape): Scene A (tilted 8deg) -> Scene B (levels to 2deg & scales 1.05) -> Scene C (holds) -> Scene D (settles)
   const centerCardRotate = useTransform(
@@ -913,14 +898,6 @@ export default function HomePage() {
             <span className="drawer-link-arrow">→</span>
           </a>
           <a
-            href="#dining"
-            onClick={handleNavClick}
-            className="drawer-link"
-          >
-            <span>Dining</span>
-            <span className="drawer-link-arrow">→</span>
-          </a>
-          <a
             href="#about"
             onClick={handleNavClick}
             className="drawer-link"
@@ -1001,7 +978,6 @@ export default function HomePage() {
             <a href="#home">Home</a>
             <a href="#attractions">Attractions</a>
             <a href="#pricing">Packages</a>
-            <a href="#dining">Dining</a>
             <a href="#about">About Us</a>
             <a href="#gallery">Gallery</a>
             <a href="#contact">Contact</a>
@@ -1034,6 +1010,36 @@ export default function HomePage() {
           id="home"
         >
           <div className="hero-sticky-viewport">
+            {/* CINEMATIC COMPOSITE BACKGROUND: Authentic Park & Restaurant Facade */}
+            <div className="hero-bg-container" aria-hidden="true">
+              <motion.div
+                className="hero-bg-media"
+                style={
+                  prefersReducedMotion
+                    ? undefined
+                    : { y: heroBgY, scale: heroBgScale }
+                }
+              >
+                <Image
+                  src="/images/hero-park-facade.png"
+                  alt=""
+                  fill
+                  priority
+                  sizes="100vw"
+                  quality={88}
+                  className="hero-bg-img"
+                />
+              </motion.div>
+              {/* Tonal Brand Blend Overlay (Harmonizes photo with #141d47 navy & #6650ac purple) */}
+              <div className="hero-bg-brand-overlay" />
+              {/* Left-Side Contrast Vignette (Ensures 100% WCAG AAA text legibility) */}
+              <div className="hero-bg-text-vignette" />
+              {/* Warm Golden Neon Ambient Glow (Echoes the building's illuminated arches) */}
+              <div className="hero-bg-neon-glow" />
+              {/* Bottom Wave Transition Gradient */}
+              <div className="hero-bg-bottom-fade" />
+            </div>
+
             <div className="container hero-main">
               <motion.div
                 className="hero-copy-col"
@@ -1575,366 +1581,6 @@ export default function HomePage() {
               </p>
             </div>
           </div>
-        </section>
-
-        {/* ========================================================================= */}
-        {/* THRILL & GRILL DINING EXPERIENCE (#dining) — ZERO GLASSMORPHISM            */}
-        {/* ========================================================================= */}
-        <section id="dining" className="section thrill-grill-section">
-          {/* Atmospheric Twilight Facade Backdrop with Double Gradient */}
-          <div className="thrill-grill-backdrop" aria-hidden="true">
-            <Image
-              src="/images/thrill-grill-hero.png"
-              alt="Thrill & Grill Restaurant Facade"
-              fill
-              sizes="100vw"
-              priority={false}
-              className="thrill-grill-bg-img"
-            />
-            <div className="thrill-grill-overlay" />
-            <div className="thrill-grill-ambient-glow" />
-          </div>
-
-          <div className="container thrill-grill-content">
-            {/* Section Header */}
-            <motion.div
-              className="thrill-grill-header"
-              initial={prefersReducedMotion ? false : { opacity: 0, y: 22 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <div className="thrill-grill-kicker-pill">
-                <Flame size={14} className="thrill-grill-kicker-icon" />
-                <span>Dining &amp; Refreshments</span>
-              </div>
-              <h2 className="thrill-grill-title">
-                Thrill &amp; Grill{" "}
-                <span className="thrill-grill-title-accent">Restaurant</span>
-              </h2>
-              <p className="thrill-grill-lede">
-                Classic Taste. Premium Experience. Recharge your adventure with
-                sizzling multi-cuisine dining, open-air twilight seating, and
-                family buffet packages.
-              </p>
-            </motion.div>
-
-            {/* Three 3D Clay Feature Cards Matching Facade Signage: Good Food, Good Mood, Good Times */}
-            <motion.div
-              className="thrill-grill-grid"
-              initial={prefersReducedMotion ? false : "hidden"}
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.15 }}
-              variants={{
-                hidden: {},
-                visible: {
-                  transition: {
-                    staggerChildren: 0.1,
-                  },
-                },
-              }}
-            >
-              {/* Card 1: Good Food */}
-              <motion.article
-                className="thrill-grill-card"
-                variants={{
-                  hidden: { opacity: 0, y: 24 },
-                  visible: {
-                    opacity: 1,
-                    y: 0,
-                    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
-                  },
-                }}
-              >
-                <div className="thrill-grill-card-badge thrill-grill-badge-amber">
-                  <Flame size={13} />
-                  <span>Fresh &amp; Sizzling</span>
-                </div>
-                <div className="thrill-grill-card-icon-wrap thrill-grill-icon-amber">
-                  <UtensilsCrossed size={32} />
-                </div>
-                <h3 className="thrill-grill-card-title">Good Food</h3>
-                <span className="thrill-grill-card-pillar">
-                  Live Kitchen &bull; Multi-Cuisine
-                </span>
-                <p className="thrill-grill-card-desc">
-                  Multi-cuisine delicacies, hot grilled specialties, fast snacks,
-                  and sweet treats crafted by expert chefs right before your eyes.
-                </p>
-                <div className="thrill-grill-chips">
-                  <span className="thrill-grill-chip">Live Kitchen Counters</span>
-                  <span className="thrill-grill-chip">Pure Veg &amp; Non-Veg</span>
-                  <span className="thrill-grill-chip">Fresh Tandoor</span>
-                </div>
-              </motion.article>
-
-              {/* Card 2: Good Mood */}
-              <motion.article
-                className="thrill-grill-card is-featured"
-                variants={{
-                  hidden: { opacity: 0, y: 24 },
-                  visible: {
-                    opacity: 1,
-                    y: 0,
-                    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
-                  },
-                }}
-              >
-                <div className="thrill-grill-card-badge thrill-grill-badge-purple">
-                  <Sparkles size={13} />
-                  <span>Premium Ambience</span>
-                </div>
-                <div className="thrill-grill-card-icon-wrap thrill-grill-icon-purple">
-                  <Smile size={32} />
-                </div>
-                <h3 className="thrill-grill-card-title">Good Mood</h3>
-                <span className="thrill-grill-card-pillar">
-                  Twilight Glow &bull; Patio Seating
-                </span>
-                <p className="thrill-grill-card-desc">
-                  Choose between the air-conditioned indoor banquet hall or the
-                  twilight garden patio surrounded by glowing golden neon arches
-                  and palm trees.
-                </p>
-                <div className="thrill-grill-chips">
-                  <span className="thrill-grill-chip">Family Patio Seating</span>
-                  <span className="thrill-grill-chip">AC Banquet Hall</span>
-                  <span className="thrill-grill-chip">Neon Archway Views</span>
-                </div>
-              </motion.article>
-
-              {/* Card 3: Good Times */}
-              <motion.article
-                className="thrill-grill-card"
-                variants={{
-                  hidden: { opacity: 0, y: 24 },
-                  visible: {
-                    opacity: 1,
-                    y: 0,
-                    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
-                  },
-                }}
-              >
-                <div className="thrill-grill-card-badge thrill-grill-badge-coral">
-                  <Award size={13} />
-                  <span>Package Value</span>
-                </div>
-                <div className="thrill-grill-card-icon-wrap thrill-grill-icon-coral">
-                  <Users size={32} />
-                </div>
-                <h3 className="thrill-grill-card-title">Good Times</h3>
-                <span className="thrill-grill-card-pillar">
-                  Included with &bull; ₹899 Fun Pass
-                </span>
-                <p className="thrill-grill-card-desc">
-                  Included directly with our ₹899 &ldquo;With Food&rdquo; Fun Pass
-                  (unlimited rides + full meal), or available &agrave; la carte
-                  for all park guests.
-                </p>
-                <div className="thrill-grill-chips">
-                  <span className="thrill-grill-chip">
-                    Complimentary with ₹899 Pass
-                  </span>
-                  <span className="thrill-grill-chip">Unlimited Food Refills</span>
-                  <span className="thrill-grill-chip">Skip-the-Line Feasting</span>
-                </div>
-              </motion.article>
-            </motion.div>
-
-            {/* Interactive Buffet Pass Banner / Showcase */}
-            <motion.div
-              className="thrill-grill-buffet-banner"
-              initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <div className="thrill-grill-buffet-left">
-                <div className="thrill-grill-buffet-tag">
-                  <Sparkles size={14} />
-                  <span>Signature All-Day Buffet Offer</span>
-                </div>
-                <h4 className="thrill-grill-buffet-title">
-                  Unlimited Rides + Full Meal for Only <strong>₹899</strong>
-                </h4>
-                <p className="thrill-grill-buffet-sub">
-                  Pair thrilling coasters with a lavish unlimited buffet.
-                  Includes main courses, starters, desserts, and bottomless
-                  refreshments.
-                </p>
-                <div className="thrill-grill-buffet-perks">
-                  <span>
-                    <CheckCircle2 size={15} /> Unlimited Starters &amp; Mains
-                  </span>
-                  <span>
-                    <CheckCircle2 size={15} /> Bottomless Beverages
-                  </span>
-                  <span>
-                    <CheckCircle2 size={15} /> Priority Garden Patio Seating
-                  </span>
-                </div>
-              </div>
-              <div className="thrill-grill-buffet-actions">
-                <a
-                  href="#pricing"
-                  className="btn btn-yellow thrill-grill-cta-primary"
-                >
-                  Book With-Food Pass (₹899) <ArrowUpRight size={17} />
-                </a>
-                <button
-                  type="button"
-                  onClick={() => setDiningMenuOpen(true)}
-                  className="btn btn-white thrill-grill-cta-secondary"
-                >
-                  View Dining Menu &amp; Timings
-                </button>
-              </div>
-            </motion.div>
-
-            {/* Section Footer Timing & Info Pill */}
-            <div className="thrill-grill-footer-pill">
-              <Clock size={15} />
-              <span>
-                Open Daily 11:00 AM – 9:00 PM &bull; Pure Veg &amp; Multi-Cuisine
-                Available &bull; Dine-in &amp; Takeaway
-              </span>
-            </div>
-          </div>
-
-          {/* Accessible 3D Clay Dining Menu & Timings Modal (Zero-Glassmorphism) */}
-          <AnimatePresence>
-            {diningMenuOpen && (
-              <motion.div
-                className="thrill-grill-modal-backdrop"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                onClick={() => setDiningMenuOpen(false)}
-                role="dialog"
-                aria-modal="true"
-                aria-labelledby="dining-modal-title"
-              >
-                <motion.div
-                  className="thrill-grill-modal-card"
-                  initial={{ scale: 0.94, opacity: 0, y: 16 }}
-                  animate={{ scale: 1, opacity: 1, y: 0 }}
-                  exit={{ scale: 0.94, opacity: 0, y: 16 }}
-                  transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <div className="thrill-grill-modal-header">
-                    <div>
-                      <div className="thrill-grill-modal-badge">
-                        <UtensilsCrossed size={13} />
-                        <span>Restaurant Guide</span>
-                      </div>
-                      <h3
-                        id="dining-modal-title"
-                        className="thrill-grill-modal-title"
-                      >
-                        Thrill &amp; Grill Menu &amp; Timings
-                      </h3>
-                    </div>
-                    <button
-                      type="button"
-                      className="thrill-grill-modal-close"
-                      aria-label="Close menu modal"
-                      onClick={() => setDiningMenuOpen(false)}
-                    >
-                      <X size={20} />
-                    </button>
-                  </div>
-
-                  <div className="thrill-grill-modal-body">
-                    {/* Buffet Pass Included Items */}
-                    <div className="thrill-grill-menu-section">
-                      <div className="thrill-grill-menu-section-head">
-                        <ChefHat size={18} />
-                        <h4>Included with ₹899 &ldquo;With Food&rdquo; Fun Pass</h4>
-                        <span className="thrill-grill-pill-green">Unlimited</span>
-                      </div>
-                      <p className="thrill-grill-menu-note">
-                        Enjoy all-you-can-eat access at the main buffet pavilion during your park visit:
-                      </p>
-                      <ul className="thrill-grill-menu-list">
-                        <li>
-                          <strong>Starters:</strong> Crispy Veg Manchurian, Paneer Tikka Bites, Golden French Fries, and Tossed Garden Salad.
-                        </li>
-                        <li>
-                          <strong>Main Course:</strong> Signature Dal Makhani, Paneer Butter Masala, Mixed Seasonal Veggies, and Steam Jeera Rice.
-                        </li>
-                        <li>
-                          <strong>Breads:</strong> Fresh Tandoori Roti and Butter Naan served hot to your table.
-                        </li>
-                        <li>
-                          <strong>Desserts &amp; Drinks:</strong> Hot Gulab Jamun, Vanilla Ice Cream, and Unlimited Chilled Beverages.
-                        </li>
-                      </ul>
-                    </div>
-
-                    {/* À La Carte & Live Counters */}
-                    <div className="thrill-grill-menu-section">
-                      <div className="thrill-grill-menu-section-head">
-                        <Flame size={18} />
-                        <h4>À La Carte &amp; Live Sizzler Counters</h4>
-                        <span className="thrill-grill-pill-yellow">From ₹99</span>
-                      </div>
-                      <ul className="thrill-grill-menu-list">
-                        <li>
-                          <strong>Live Grill Specials:</strong> Tandoori Sizzler Platters, Wood-Fired Personal Pizzas, and Cheesy Nachos.
-                        </li>
-                        <li>
-                          <strong>Fast Bites:</strong> Classic Butter Pav Bhaji, Chole Bhature, Kathi Rolls, and Masala Sweet Corn.
-                        </li>
-                        <li>
-                          <strong>Beverages:</strong> Fresh Fruit Mocktails, Masala Chai, Cold Coffee with Ice Cream, and Thick Shakes.
-                        </li>
-                      </ul>
-                    </div>
-
-                    {/* Dining Hours */}
-                    <div className="thrill-grill-menu-section">
-                      <div className="thrill-grill-menu-section-head">
-                        <Clock size={18} />
-                        <h4>Dining &amp; Kitchen Hours</h4>
-                      </div>
-                      <div className="thrill-grill-timings-grid">
-                        <div className="thrill-grill-timing-card">
-                          <span className="thrill-grill-timing-label">Lunch Buffet</span>
-                          <strong>12:30 PM – 4:00 PM</strong>
-                        </div>
-                        <div className="thrill-grill-timing-card">
-                          <span className="thrill-grill-timing-label">Snacks &amp; Sizzlers</span>
-                          <strong>4:30 PM – 7:00 PM</strong>
-                        </div>
-                        <div className="thrill-grill-timing-card">
-                          <span className="thrill-grill-timing-label">Dinner Buffet</span>
-                          <strong>7:00 PM – 9:30 PM</strong>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="thrill-grill-modal-footer">
-                    <a
-                      href="#pricing"
-                      className="btn btn-yellow"
-                      onClick={() => setDiningMenuOpen(false)}
-                    >
-                      Book With-Food Pass (₹899) <ArrowUpRight size={16} />
-                    </a>
-                    <button
-                      type="button"
-                      className="btn btn-white"
-                      onClick={() => setDiningMenuOpen(false)}
-                    >
-                      Close
-                    </button>
-                  </div>
-                </motion.div>
-              </motion.div>
-            )}
-          </AnimatePresence>
         </section>
 
         <section
